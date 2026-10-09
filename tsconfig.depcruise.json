@@ -1,0 +1,8 @@
+{
+  "extends": "./packages/config-typescript/base.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "paths": { "@/*": ["./apps/web/src/*"] }
+  },
+  "include": ["apps/*/src", "packages/*/src", "packages/ui/.storybook"]
+}

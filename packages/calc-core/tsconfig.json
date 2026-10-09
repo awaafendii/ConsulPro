@@ -1,0 +1,4 @@
+{
+  "extends": "@consulpro/config-typescript/base.json",
+  "include": ["src", "vitest.config.ts"]
+}

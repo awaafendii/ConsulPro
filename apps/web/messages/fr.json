@@ -1,0 +1,196 @@
+{
+  "common": {
+    "appName": "ConsulPro",
+    "tagline": "La plateforme métier des professionnels de la construction.",
+    "cancel": "Annuler",
+    "retry": "Réessayer",
+    "loading": "Chargement…",
+    "unexpectedError": "Erreur inattendue.",
+    "availableInPhase": "Disponible en Phase {phase}",
+    "signOut": "Se déconnecter",
+    "theme": "Thème d’affichage"
+  },
+  "roles": {
+    "OWNER": "Propriétaire",
+    "ADMIN": "Administrateur",
+    "ENGINEER": "Ingénieur",
+    "TECHNICIAN": "Technicien",
+    "COLLABORATOR": "Collaborateur",
+    "VIEWER": "Lecteur"
+  },
+  "nav": {
+    "sections": {
+      "workspace": "Espace de travail",
+      "trades": "Métiers",
+      "organization": "Organisation"
+    },
+    "modules": {
+      "dashboard": "Tableau de bord",
+      "projects": "Projets",
+      "library": "Bibliothèque technique",
+      "btp": "BTP / Génie civil",
+      "electricity": "Électricité",
+      "plumbing": "Plomberie & Sanitaire",
+      "topography": "Topographie",
+      "members": "Membres",
+      "audit": "Journal d’audit"
+    },
+    "myOrganizations": "Mes organisations",
+    "allOrganizations": "Toutes mes organisations",
+    "switchOrganization": "Changer d’organisation",
+    "accountMenu": "Menu du compte",
+    "shortcuts": "Raccourcis clavier",
+    "commandsActions": "Actions",
+    "commandsOrganizations": "Organisations",
+    "toggleTheme": "Basculer le thème clair / sombre"
+  },
+  "auth": {
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "passwordNew": "Mot de passe (12 caractères minimum)",
+    "passwordConfirm": "Confirmer le mot de passe",
+    "fullName": "Nom complet",
+    "signIn": {
+      "title": "Connexion",
+      "description": "Accédez à vos organisations et à vos projets.",
+      "submit": "Se connecter",
+      "pending": "Connexion…",
+      "createAccount": "Créer un compte",
+      "forgot": "Mot de passe oublié ?",
+      "unverified": "Adresse e-mail non vérifiée : ouvrez le lien reçu par e-mail.",
+      "tooMany": "Trop de tentatives. Réessayez dans quelques minutes.",
+      "invalid": "Adresse e-mail ou mot de passe incorrect."
+    },
+    "signUp": {
+      "title": "Créer un compte",
+      "description": "Un e-mail de confirmation vous sera envoyé.",
+      "submit": "Créer mon compte",
+      "pending": "Création…",
+      "already": "Déjà inscrit ? Se connecter",
+      "sent": "Un e-mail de confirmation a été envoyé à {email}. Ouvrez le lien qu’il contient pour activer votre compte.",
+      "tooMany": "Trop de tentatives. Réessayez plus tard.",
+      "failed": "Inscription impossible."
+    },
+    "forgot": {
+      "title": "Mot de passe oublié",
+      "description": "Recevez un lien de réinitialisation par e-mail.",
+      "submit": "Envoyer le lien",
+      "done": "Si un compte existe pour cette adresse, un lien de réinitialisation vient d’être envoyé.",
+      "tooMany": "Trop de demandes. Réessayez dans quelques minutes.",
+      "back": "Retour à la connexion"
+    },
+    "reset": {
+      "title": "Nouveau mot de passe",
+      "submit": "Enregistrer",
+      "incomplete": "Lien de réinitialisation incomplet.",
+      "invalid": "Lien invalide ou expiré. Refaites une demande de réinitialisation.",
+      "done": "Mot de passe modifié. Toutes vos sessions ont été fermées.",
+      "signIn": "Se connecter"
+    },
+    "validation": {
+      "email": "Adresse e-mail invalide.",
+      "passwordLength": "Le mot de passe doit comporter entre 12 et 128 caractères.",
+      "passwordMismatch": "Les deux mots de passe ne correspondent pas.",
+      "nameLength": "Le nom doit comporter entre 2 et 120 caractères."
+    }
+  },
+  "invitation": {
+    "title": "Invitation à rejoindre une organisation",
+    "signedInAs": "Connecté en tant que {email}.",
+    "accept": "Accepter l’invitation",
+    "accepting": "Acceptation…",
+    "notFound": "Invitation introuvable pour {email}. Vérifiez que vous êtes connecté avec l’adresse invitée.",
+    "needAccount": "Connectez-vous avec l’adresse e-mail qui a reçu l’invitation, ou créez votre compte avec cette adresse."
+  },
+  "organizations": {
+    "title": "Mes organisations",
+    "description": "Choisissez l’organisation dans laquelle travailler.",
+    "signedInAs": "Connecté en tant que {email}",
+    "emptyTitle": "Aucune organisation",
+    "emptyDescription": "Créez une organisation ou acceptez une invitation reçue par e-mail.",
+    "createTitle": "Créer une organisation",
+    "name": "Nom (bureau d’études, entreprise…)",
+    "slug": "Identifiant d’URL",
+    "slugHelp": "Minuscules, chiffres et tirets. Il apparaît dans l’adresse : /{slug}/…",
+    "create": "Créer l’organisation",
+    "creating": "Création…",
+    "created": "Organisation « {name} » créée.",
+    "validation": {
+      "name": "Le nom doit comporter entre 2 et 120 caractères.",
+      "slug": "3 à 48 caractères : minuscules, chiffres et tirets."
+    }
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "description": "Vue d’ensemble de {organization}.",
+    "modulesTitle": "Modules",
+    "modulesDescription": "Les modules s’activent au fil des phases de livraison.",
+    "available": "Disponible",
+    "open": "Ouvrir"
+  },
+  "members": {
+    "title": "Membres",
+    "description": "Personnes ayant accès à {organization}.",
+    "table": "Membres de l’organisation",
+    "filter": "Filtrer par nom ou e-mail…",
+    "name": "Nom",
+    "email": "E-mail",
+    "role": "Rôle",
+    "since": "Membre depuis",
+    "actions": "Actions",
+    "remove": "Retirer",
+    "removeTitle": "Retirer {name} de l’organisation ?",
+    "removeDescription": "{name} perdra immédiatement l’accès à tous les projets de l’organisation. Cette action est enregistrée dans le journal d’audit.",
+    "removed": "{name} a été retiré de l’organisation.",
+    "roleOf": "Rôle de {name}",
+    "roleChanged": "Rôle de {name} : {role}.",
+    "you": "vous",
+    "inviteTitle": "Inviter une personne",
+    "inviteDescription": "Un lien valable 7 jours est envoyé par e-mail.",
+    "inviteEmail": "Adresse e-mail",
+    "inviteRole": "Rôle",
+    "invite": "Envoyer l’invitation",
+    "inviting": "Envoi…",
+    "invited": "Invitation envoyée à {email}.",
+    "pendingTitle": "Invitations en attente",
+    "pendingTable": "Invitations en attente",
+    "pendingEmpty": "Aucune invitation en attente.",
+    "expires": "Expire le",
+    "revoke": "Révoquer",
+    "revokeTitle": "Révoquer l’invitation de {email} ?",
+    "revokeDescription": "Le lien envoyé ne fonctionnera plus.",
+    "revoked": "Invitation de {email} révoquée."
+  },
+  "audit": {
+    "title": "Journal d’audit",
+    "description": "Journal en ajout seul : aucune entrée ne peut être modifiée ni supprimée.",
+    "table": "Journal d’audit",
+    "date": "Date",
+    "action": "Action",
+    "actor": "Auteur",
+    "details": "Détails",
+    "unknownActor": "Utilisateur {id}",
+    "empty": "Aucune entrée.",
+    "actions": {
+      "organization": {
+        "created": "Organisation créée"
+      },
+      "member": {
+        "role_changed": "Rôle modifié",
+        "removed": "Membre retiré"
+      },
+      "invitation": {
+        "created": "Invitation envoyée",
+        "revoked": "Invitation révoquée",
+        "accepted": "Invitation acceptée"
+      }
+    }
+  },
+  "errors": {
+    "notFoundTitle": "Page introuvable",
+    "notFoundDescription": "Cette page n’existe pas ou vous n’y avez pas accès.",
+    "backHome": "Retour à mes organisations",
+    "errorTitle": "Une erreur est survenue",
+    "errorDescription": "L’affichage de cette page a échoué. Vous pouvez réessayer."
+  }
+}

@@ -1,0 +1,30 @@
+# Environnement de développement local. Ne pas utiliser en production.
+name: consulpro
+
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: consulpro
+      POSTGRES_PASSWORD: consulpro
+      POSTGRES_DB: consulpro
+    ports:
+      - '5434:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U consulpro -d consulpro']
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  # Capture les e-mails envoyés en développement : interface sur http://localhost:8025
+  mailpit:
+    image: axllent/mailpit:v1.27
+    ports:
+      - '1025:1025'
+      - '8025:8025'
+
+volumes:
+  pgdata:

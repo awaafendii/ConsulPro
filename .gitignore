@@ -1,0 +1,31 @@
+node_modules/
+.pnpm-store/
+.turbo/
+.next/
+dist/
+build/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+
+.env
+.env.*
+!.env.example
+
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Fichiers générés
+next-env.d.ts
+packages/db/src/generated/
+storybook-static/
+
+# E2E (sessions et rapports générés)
+apps/web/e2e/.auth/
+apps/web/playwright-report/
+apps/web/test-results/

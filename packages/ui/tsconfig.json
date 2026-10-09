@@ -1,0 +1,16 @@
+{
+  "extends": "@consulpro/config-typescript/base.json",
+  "compilerOptions": {
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "types": ["node", "@testing-library/jest-dom", "vite/client"],
+    "paths": { "@/*": ["./src/*"] }
+  },
+  "include": [
+    "src",
+    ".storybook/main.ts",
+    ".storybook/preview.tsx",
+    "vitest.config.ts",
+    "vitest.setup.ts"
+  ]
+}

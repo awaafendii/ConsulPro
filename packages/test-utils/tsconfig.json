@@ -1,0 +1,4 @@
+{
+  "extends": "@consulpro/config-typescript/node.json",
+  "include": ["src"]
+}
