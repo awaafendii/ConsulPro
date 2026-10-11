@@ -3,6 +3,7 @@ import { join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import {
+  activityPageSchema,
   auditLogPageSchema,
   invitationSchema,
   memberListSchema,
@@ -10,6 +11,11 @@ import {
   organizationListSchema,
   organizationSchema,
   problemSchema,
+  projectListSchema,
+  projectMemberListSchema,
+  projectSchema,
+  projectStandardsSchema,
+  standardListSchema,
 } from '@consulpro/contracts';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
@@ -49,7 +55,7 @@ describe('câblage Next.js ↔ registre', () => {
       const dir = relative(root, file).split(sep).slice(0, -1);
       const path = `/${dir.map((s) => s.replace(/^\[(\w+)\]$/, ':$1')).join('/')}`;
       for (const match of readFileSync(file, 'utf8').matchAll(
-        /export const (GET|POST|PATCH|DELETE) = handlerFor\('([\w.]+)'\)/g,
+        /export const (GET|POST|PUT|PATCH|DELETE) = handlerFor\('([\w.]+)'\)/g,
       )) {
         wired.set(match[2] ?? '', { method: match[1] ?? '', path });
       }
@@ -296,5 +302,133 @@ describe('règles de gestion des membres via l’API', () => {
       404,
       'NOT_FOUND',
     );
+  });
+});
+
+describe('projets via l’API (Phase 3)', () => {
+  it('création, lecture avec ETag, liste filtrée par appartenance, contrats respectés', async () => {
+    const projectId = await h.createProject(orgSlug, owner);
+    const got = await h.call('projects.get', { actor: owner, params: { orgSlug, projectId } });
+    expect(got.status).toBe(200);
+    expect(got.headers.get('etag')).toBe('"1"');
+    expect(projectSchema.parse(await got.json())).toMatchObject({
+      role: 'OWNER',
+      status: 'ACTIVE',
+    });
+
+    const technician = await h.addMember(orgSlug, owner, 'TECHNICIAN');
+    const before = await h.call('projects.list', { actor: technician, params: { orgSlug } });
+    expect(projectListSchema.parse(await before.json()).items).toEqual([]);
+    await h.addProjectMember(orgSlug, owner, projectId, technician.userId, 'TECHNICIAN');
+    const after = await h.call('projects.list', { actor: technician, params: { orgSlug } });
+    expect(projectListSchema.parse(await after.json()).items.map((p) => p.id)).toEqual([projectId]);
+
+    const members = await h.call('projectMembers.list', {
+      actor: technician,
+      params: { orgSlug, projectId },
+    });
+    expect(projectMemberListSchema.parse(await members.json()).items).toHaveLength(1);
+    const activity = await h.call('projects.activity', {
+      actor: technician,
+      params: { orgSlug, projectId },
+    });
+    expect(activityPageSchema.parse(await activity.json()).items.map((a) => a.type)).toEqual([
+      'project.member_added',
+      'project.created',
+    ]);
+    const standards = await h.call('projectStandards.list', {
+      actor: owner,
+      params: { orgSlug, projectId },
+    });
+    expect(projectStandardsSchema.parse(await standards.json()).items[0]?.discipline).toBe('BTP');
+    const library = await h.call('library.standards', { actor: technician, params: { orgSlug } });
+    expect(standardListSchema.parse(await library.json()).items).toBeInstanceOf(Array);
+  });
+
+  it('projet archivé : écriture refusée (422), désarchivage possible', async () => {
+    const projectId = await h.createProject(orgSlug, owner);
+    const archived = await h.call('projects.archive', {
+      actor: owner,
+      params: { orgSlug, projectId },
+      headers: { 'if-match': '"1"' },
+    });
+    expect(archived.headers.get('etag')).toBe('"2"');
+    await expectProblem(
+      await h.call('projects.update', {
+        actor: owner,
+        params: { orgSlug, projectId },
+        body: { code: 'ARCH-1', name: 'Archivé', disciplines: ['BTP'] },
+        headers: { 'if-match': '"2"' },
+      }),
+      422,
+      'PROJECT_ARCHIVED',
+    );
+    await expectProblem(
+      await h.call('projects.archive', {
+        actor: owner,
+        params: { orgSlug, projectId },
+        headers: { 'if-match': '"2"' },
+      }),
+      409,
+      'PROJECT_ALREADY_ARCHIVED',
+    );
+    const reopened = await h.call('projects.unarchive', {
+      actor: owner,
+      params: { orgSlug, projectId },
+      headers: { 'if-match': '"2"' },
+    });
+    expect(reopened.status).toBe(200);
+  });
+
+  it('métier inconnu dans l’URL : 404 ; code de projet en double : 409', async () => {
+    const projectId = await h.createProject(orgSlug, owner);
+    const unknown = await h.call('projectStandards.set', {
+      actor: owner,
+      params: { orgSlug, projectId, discipline: 'CHIMIE' },
+      body: { standardVersionIds: [] },
+    });
+    expect(unknown.status).toBe(404);
+    const body = { code: 'DOUBLON-1', name: 'Doublon', disciplines: ['BTP'] };
+    expect(
+      (await h.call('projects.create', { actor: owner, params: { orgSlug }, body })).status,
+    ).toBe(201);
+    await expectProblem(
+      await h.call('projects.create', { actor: owner, params: { orgSlug }, body }),
+      409,
+      'PROJECT_CODE_TAKEN',
+    );
+  });
+});
+
+describe('données de projet via l’API', () => {
+  it('une révision de 5 000 lignes est acceptée ; un corps démesuré est refusé (413)', async () => {
+    const projectId = await h.createProject(orgSlug, owner);
+    const created = await h.call('datasets.create', {
+      actor: owner,
+      params: { orgSlug, projectId },
+      body: { kind: 'ROOMS', title: 'Grand bâtiment' },
+    });
+    const { id: datasetId } = (await created.json()) as { id: string };
+    const rows = Array.from({ length: 5000 }, (_, i) => ({
+      name: `Pièce ${String(i + 1)}`,
+      level: 'R+1',
+      area: { value: 12.5, unit: 'm2' },
+      height: { value: 2.7, unit: 'm' },
+    }));
+    const saved = await h.call('datasets.saveRevision', {
+      actor: owner,
+      params: { orgSlug, projectId, datasetId },
+      body: { rows },
+      headers: { 'if-match': '"1"' },
+    });
+    expect(saved.status, await saved.clone().text()).toBe(201);
+    expect(saved.headers.get('etag')).toBe('"2"');
+    const tooLarge = await h.call('datasets.saveRevision', {
+      actor: owner,
+      params: { orgSlug, projectId, datasetId },
+      rawBody: JSON.stringify({ rows, note: 'x'.repeat(2_000_000) }),
+      headers: { 'if-match': '"2"' },
+    });
+    await expectProblem(tooLarge, 413, 'PAYLOAD_TOO_LARGE');
   });
 });

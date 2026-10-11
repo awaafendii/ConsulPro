@@ -23,8 +23,8 @@ référentiels versionnés.
 | ----- | --------------------- | --------------------------- |
 | 0     | Architecture          | Validée                     |
 | 1     | Foundation            | Validée                     |
-| 2     | Design System         | **Terminée — en revue**     |
-| 3     | Projets               | À faire                     |
+| 2     | Design System         | Validée                     |
+| 3     | Projets               | **Terminée — en revue**     |
 | 4     | BTP                   | À faire                     |
 | 5     | Électricité           | À faire                     |
 | 6     | Plomberie / Sanitaire | À faire                     |
@@ -33,11 +33,14 @@ référentiels versionnés.
 | 9     | Rapports              | À faire                     |
 | 10    | Production            | À faire                     |
 
-Aujourd'hui, l'application permet : inscription avec vérification d'e-mail, connexion,
-réinitialisation du mot de passe, création d'organisations, invitation et gestion des
-membres (rôles), journal d'audit ; le tout dans l'interface du design system
-(thèmes clair et sombre, palette Ctrl+K, raccourcis clavier, mobile). Les modules métier
-sont affichés comme « Disponible en Phase N ».
+Aujourd'hui, l'application permet : comptes (vérification d'e-mail, double authentification
+facultative, fuseau horaire), organisations, membres et transfert de propriété, journal d'audit ;
+**projets** (membres, métiers, archivage, fil d'activité), **référentiels versionnés** (bibliothèque,
+surcharges justifiées par organisation ou par projet), **études et calculs** exécutés par le serveur
+en révisions immuables (comparaison, dépendances et obsolescence), contrôle à deux niveaux (l'auteur
+valide, un autre ingénieur vérifie), données de projet versionnées, notifications et recherche.
+Les seuls moteurs disponibles sont des moteurs de **démonstration, sans valeur technique**
+(développement et test) ; les moteurs métier arrivent à partir de la Phase 4.
 
 ## Démarrage local
 
@@ -55,6 +58,14 @@ cp packages/db/.env.example packages/db/.env
 cp apps/web/.env.example apps/web/.env.local # puis remplacer BETTER_AUTH_SECRET
 pnpm db:deploy                               # applique les migrations
 pnpm dev                                     # http://localhost:3000
+```
+
+Pour essayer les calculs en développement (`CONSULPRO_DEMO_ENGINES="true"` dans `.env.local`),
+créez votre compte, puis publiez le référentiel de démonstration :
+
+```bash
+pnpm platform:grant-admin vous@exemple.com
+pnpm standards:load packages/standards/seeds/demo/demo-1.json --publish-as vous@exemple.com
 ```
 
 Les e-mails envoyés en développement (vérification, invitations, réinitialisation)
@@ -75,6 +86,8 @@ sont visibles dans Mailpit : <http://localhost:8025>.
 | `pnpm --filter @consulpro/ui storybook` | Storybook du design system (http://localhost:6006)  |
 | `pnpm --filter @consulpro/web test:e2e` | Tests E2E Playwright (après `pnpm build` ; base et Mailpit démarrés) |
 | `pnpm db:migrate`       | Crée et applique une migration (développement)                        |
+| `pnpm standards:load`   | Charge (et publie avec `--publish-as`) un référentiel JSON validé       |
+| `pnpm platform:grant-admin` | Attribue le rôle d'administrateur de la plateforme              |
 
 ### Bases de données et rôles
 

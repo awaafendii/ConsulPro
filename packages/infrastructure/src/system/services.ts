@@ -1,6 +1,6 @@
 import { createHash, randomBytes } from 'node:crypto';
 
-import type { Clock, IdGenerator, TokenService } from '@consulpro/application';
+import type { Clock, Hasher, IdGenerator, TokenService } from '@consulpro/application';
 import { v7 as uuidv7 } from 'uuid';
 
 export const systemClock: Clock = { now: () => new Date() };
@@ -16,6 +16,9 @@ export const tokenService: TokenService = {
   },
   hash: sha256,
 };
+
+/** Empreinte des snapshots de paramètres (traçabilité des révisions de calcul). */
+export const sha256Hasher: Hasher = { sha256 };
 
 function sha256(value: string): string {
   return createHash('sha256').update(value, 'utf8').digest('hex');

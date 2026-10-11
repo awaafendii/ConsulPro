@@ -3,9 +3,21 @@
 import * as React from 'react';
 import { cn } from '../../lib/utils';
 
-function Table({ className, ...props }: React.ComponentProps<'table'>) {
+/**
+ * `regionLabel` : le conteneur défilant devient une région nommée, atteignable au clavier
+ * (nécessaire dès que le tableau peut déborder horizontalement).
+ */
+function Table({
+  className,
+  regionLabel,
+  ...props
+}: React.ComponentProps<'table'> & { regionLabel?: string }) {
   return (
-    <div data-slot="table-container" className="relative w-full overflow-x-auto">
+    <div
+      data-slot="table-container"
+      className="relative w-full overflow-x-auto focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+      {...(regionLabel ? { role: 'region', 'aria-label': regionLabel, tabIndex: 0 } : {})}
+    >
       <table
         data-slot="table"
         className={cn('w-full caption-bottom text-sm', className)}

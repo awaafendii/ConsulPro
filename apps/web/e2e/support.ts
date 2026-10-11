@@ -1,3 +1,5 @@
+import { createHmac } from 'node:crypto';
+
 import AxeBuilder from '@axe-core/playwright';
 import { expect, type Page } from '@playwright/test';
 
@@ -10,6 +12,15 @@ export interface Fixture {
   readonly ownerName: string;
   readonly orgSlug: string;
   readonly orgName: string;
+  /** Projet de référence (BTP) créé par le propriétaire. */
+  readonly projectId: string;
+  readonly projectCode: string;
+  /** Version publiée du référentiel de démonstration. */
+  readonly demoVersionId: string;
+  /** Étude, calcul (une révision) et jeu de données du projet de référence. */
+  readonly studyId: string;
+  readonly calculationId: string;
+  readonly datasetId: string;
 }
 
 /** Dernier lien reçu par une adresse dans Mailpit (vérification, invitation…). */
@@ -53,4 +64,20 @@ export async function expectNoHorizontalScroll(page: Page, label: string): Promi
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );
   expect(overflow, `${label} : débordement horizontal de ${overflow} px`).toBeLessThanOrEqual(0);
+}
+
+/** Code TOTP (RFC 6238, SHA-1, 30 s, 6 chiffres) à partir d'une clé base32 — tests uniquement. */
+export function totp(secretBase32: string, at = Date.now()): string {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+  let bits = '';
+  for (const char of secretBase32.replace(/=+$/, '').toUpperCase()) {
+    bits += alphabet.indexOf(char).toString(2).padStart(5, '0');
+  }
+  const key = Buffer.from((bits.match(/.{8}/g) ?? []).map((byte) => Number.parseInt(byte, 2)));
+  const counter = Buffer.alloc(8);
+  counter.writeBigUInt64BE(BigInt(Math.floor(at / 1000 / 30)));
+  const hmac = createHmac('sha1', key).update(counter).digest();
+  const offset = (hmac[hmac.length - 1] ?? 0) & 0x0f;
+  const code = (hmac.readUInt32BE(offset) & 0x7fffffff) % 1_000_000;
+  return code.toString().padStart(6, '0');
 }

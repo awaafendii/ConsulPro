@@ -66,6 +66,14 @@ export const testSlabEngine: EngineDefinition<SlabInput, SlabOutput> = {
     },
   ],
   hypotheses: [{ code: 'TEST.RECTANGULAR', text: 'Dalle rectangulaire d’épaisseur constante.' }],
+  presentation: {
+    description: 'Moteur de test.',
+    inputs: [
+      { key: 'length', label: 'Longueur', kind: 'quantity', unitKind: 'length', units: ['m'] },
+      { key: 'thickness', label: 'Épaisseur', kind: 'quantity', unitKind: 'length', units: ['m'] },
+    ],
+    outputs: [{ key: 'areaM2', label: 'Surface', unit: 'm2', precision: 2 }],
+  },
   calculate(input, ctx) {
     if (input.mode === 'FAIL')
       return err({ code: 'NON_CONVERGENCE', message: 'Pas de convergence (test).' });

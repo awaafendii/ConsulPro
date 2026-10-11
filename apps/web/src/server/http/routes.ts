@@ -16,6 +16,8 @@ import {
   organizationRefDto,
 } from './presenters';
 import { orgRoute, userRoute, type RouteDefinition, type ServerDeps } from './route';
+import { createCalculationRoutes } from './routes-calculations';
+import { createProjectRoutes } from './routes-projects';
 
 const ORG = '/api/v1/organizations/:orgSlug';
 
@@ -172,5 +174,8 @@ export function createRoutes(deps: ServerDeps): RouteDefinition[] {
           : result;
       },
     }),
+
+    ...createProjectRoutes(deps),
+    ...createCalculationRoutes(deps),
   ];
 }

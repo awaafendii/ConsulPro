@@ -21,7 +21,12 @@ test('Ctrl+K : palette, recherche et navigation au clavier', async ({ page }) =>
   await page.keyboard.press('Control+k');
   const palette = page.getByRole('dialog', { name: 'Palette de commandes' });
   await expect(palette).toBeVisible();
-  await expect(palette.getByRole('option', { name: /Projets/ })).toHaveAttribute(
+  // Projets : livré en Phase 3 ; BTP : module métier de la Phase 4, affiché inactif.
+  await expect(palette.getByRole('option', { name: /^Projets/ })).not.toHaveAttribute(
+    'aria-disabled',
+    'true',
+  );
+  await expect(palette.getByRole('option', { name: /BTP/ })).toHaveAttribute(
     'aria-disabled',
     'true',
   );

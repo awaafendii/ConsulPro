@@ -7,13 +7,19 @@ import type { Auth } from '@consulpro/infrastructure';
 import type { Logger } from 'pino';
 import type { z } from 'zod';
 
+import { actorFromSession } from '../actor';
 import { problem, problemFromAppError, type FieldIssue } from './problem';
 
-export type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE';
+export type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 /** Déclaration d'accès : utilisée par l'adaptateur et par les tests de la matrice RBAC. */
 export type Access =
-  { readonly kind: 'user' } | { readonly kind: 'organization'; readonly permission: Permission };
+  | { readonly kind: 'user' }
+  /** Administrateur de la plateforme (rôle vérifié par l'application, puis par la base). */
+  | { readonly kind: 'platform' }
+  | { readonly kind: 'organization'; readonly permission: Permission }
+  /** Route d'un projet : la permission s'évalue sur le rôle effectif dans le projet. */
+  | { readonly kind: 'project'; readonly permission: Permission };
 
 export type RawParams = Readonly<Record<string, string | string[] | undefined>>;
 
@@ -59,10 +65,12 @@ interface Spec<C, P, B, Q> {
   readonly body?: z.ZodType<B>;
   readonly query?: z.ZodType<Q>;
   readonly ifMatch?: boolean;
+  /** Taille maximale du corps (100 ko par défaut ; plus pour la saisie tabulaire). */
+  readonly maxBodyBytes?: number;
   run(input: Input<C, P, B, Q>): Promise<Result<Reply, AppError>>;
 }
 
-const MUTATING = new Set<Method>(['POST', 'PATCH', 'DELETE']);
+const MUTATING = new Set<Method>(['POST', 'PUT', 'PATCH', 'DELETE']);
 const MAX_BODY_BYTES = 100_000;
 const REQUEST_ID = /^[A-Za-z0-9._-]{8,128}$/;
 const IF_MATCH = /^(?:W\/)?"(\d+)"$/;
@@ -87,9 +95,13 @@ function clientIp(request: Request): string | null {
   return forwarded ?? request.headers.get('x-real-ip') ?? null;
 }
 
-async function readBody(request: Request, requestId: string): Promise<unknown> {
+async function readBody(
+  request: Request,
+  requestId: string,
+  maxBytes = MAX_BODY_BYTES,
+): Promise<unknown> {
   const text = await request.text();
-  if (text.length > MAX_BODY_BYTES) {
+  if (Buffer.byteLength(text, 'utf8') > maxBytes) {
     throw new Halt(
       problem(413, 'PAYLOAD_TOO_LARGE', 'Corps de requête trop volumineux.', requestId),
     );
@@ -155,12 +167,7 @@ function build<C, P, B, Q>(
         if (!session) return problem(401, 'UNAUTHENTICATED', 'Veuillez vous connecter.', requestId);
 
         const user: UserContext = {
-          actor: {
-            userId: session.user.id,
-            email: session.user.email,
-            name: session.user.name,
-            emailVerified: session.user.emailVerified,
-          },
+          actor: actorFromSession(session.user),
           meta: { requestId, ip: clientIp(request), userAgent: request.headers.get('user-agent') },
         };
         const params = single(rawParams);
@@ -181,7 +188,12 @@ function build<C, P, B, Q>(
           requestId,
         );
         const body = spec.body
-          ? parse(spec.body, await readBody(request, requestId), 'body', requestId)
+          ? parse(
+              spec.body,
+              await readBody(request, requestId, spec.maxBodyBytes),
+              'body',
+              requestId,
+            )
           : (undefined as B);
 
         let version = 0;
@@ -230,6 +242,22 @@ export function userRoute<P, B, Q>(
   return build(deps, spec, { kind: 'user' }, (user) => Promise.resolve(user));
 }
 
+/** Route réservée aux administrateurs de la plateforme (référentiels système). */
+export function platformRoute<P, B, Q>(
+  deps: ServerDeps,
+  spec: Spec<UserContext, P, B, Q>,
+): RouteDefinition {
+  return build(deps, spec, { kind: 'platform' }, (user) => Promise.resolve(user));
+}
+
+function organizationOf(deps: ServerDeps) {
+  return async (user: UserContext, params: Record<string, string>, requestId: string) => {
+    const resolved = await deps.app.organizations.resolveContext(user, params.orgSlug ?? '');
+    if (!resolved.ok) throw new Halt(problemFromAppError(resolved.error, requestId));
+    return resolved.value;
+  };
+}
+
 /**
  * Route d'organisation : le contexte (organisation, rôle) est résolu côté serveur
  * depuis `:orgSlug` ; un non-membre reçoit 404. La permission déclarée documente
@@ -240,14 +268,17 @@ export function orgRoute<P, B, Q>(
   permission: Permission,
   spec: Spec<OrgContext, P, B, Q>,
 ): RouteDefinition {
-  return build(
-    deps,
-    spec,
-    { kind: 'organization', permission },
-    async (user, params, requestId) => {
-      const resolved = await deps.app.organizations.resolveContext(user, params.orgSlug ?? '');
-      if (!resolved.ok) throw new Halt(problemFromAppError(resolved.error, requestId));
-      return resolved.value;
-    },
-  );
+  return build(deps, spec, { kind: 'organization', permission }, organizationOf(deps));
+}
+
+/**
+ * Route de projet (`…/projects/:projectId/…`) : contexte d'organisation résolu ici ; l'accès
+ * au projet et le rôle effectif sont contrôlés par l'application (404 pour un non-membre).
+ */
+export function projectRoute<P, B, Q>(
+  deps: ServerDeps,
+  permission: Permission,
+  spec: Spec<OrgContext, P, B, Q>,
+): RouteDefinition {
+  return build(deps, spec, { kind: 'project', permission }, organizationOf(deps));
 }

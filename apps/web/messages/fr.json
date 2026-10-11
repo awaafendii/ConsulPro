@@ -42,7 +42,9 @@
     "shortcuts": "Raccourcis clavier",
     "commandsActions": "Actions",
     "commandsOrganizations": "Organisations",
-    "toggleTheme": "Basculer le thème clair / sombre"
+    "toggleTheme": "Basculer le thème clair / sombre",
+    "myAccount": "Mon compte",
+    "search": "Rechercher"
   },
   "auth": {
     "email": "Adresse e-mail",
@@ -92,6 +94,13 @@
       "passwordLength": "Le mot de passe doit comporter entre 12 et 128 caractères.",
       "passwordMismatch": "Les deux mots de passe ne correspondent pas.",
       "nameLength": "Le nom doit comporter entre 2 et 120 caractères."
+    },
+    "twoFactor": {
+      "title": "Vérification en deux étapes",
+      "description": "Saisissez le code à 6 chiffres affiché par votre application d’authentification.",
+      "code": "Code de vérification",
+      "submit": "Vérifier",
+      "invalid": "Code invalide."
     }
   },
   "invitation": {
@@ -159,7 +168,12 @@
     "revoke": "Révoquer",
     "revokeTitle": "Révoquer l’invitation de {email} ?",
     "revokeDescription": "Le lien envoyé ne fonctionnera plus.",
-    "revoked": "Invitation de {email} révoquée."
+    "revoked": "Invitation de {email} révoquée.",
+    "transfer": "Transférer la propriété",
+    "transferOf": "Transférer la propriété à {name}",
+    "transferTitle": "Transférer la propriété à {name} ?",
+    "transferDescription": "{name} deviendra propriétaire de l’organisation ; vous deviendrez administrateur. Cette action ne s’annule que par un nouveau transfert.",
+    "transferred": "Propriété transférée à {name}."
   },
   "audit": {
     "title": "Journal d’audit",
@@ -173,7 +187,8 @@
     "empty": "Aucune entrée.",
     "actions": {
       "organization": {
-        "created": "Organisation créée"
+        "created": "Organisation créée",
+        "ownership_transferred": "Propriété transférée"
       },
       "member": {
         "role_changed": "Rôle modifié",
@@ -183,6 +198,45 @@
         "created": "Invitation envoyée",
         "revoked": "Invitation révoquée",
         "accepted": "Invitation acceptée"
+      },
+      "project": {
+        "created": "Projet créé",
+        "updated": "Projet modifié",
+        "archived": "Projet archivé",
+        "unarchived": "Projet désarchivé",
+        "member_added": "Membre ajouté au projet",
+        "member_role_changed": "Rôle de projet modifié",
+        "member_removed": "Membre retiré du projet",
+        "standards_changed": "Référentiels du projet modifiés"
+      },
+      "parameter": {
+        "overridden": "Paramètre surchargé",
+        "override_removed": "Surcharge supprimée"
+      },
+      "standard": {
+        "published": "Référentiel publié",
+        "deprecated": "Référentiel déprécié"
+      },
+      "auth": {
+        "sign_up": "Inscription",
+        "sign_in": "Connexion",
+        "sign_in_failed": "Échec de connexion",
+        "sign_out": "Déconnexion",
+        "two_factor_enabled": "Double authentification activée",
+        "two_factor_disabled": "Double authentification désactivée"
+      },
+      "study": {
+        "created": "Étude créée"
+      },
+      "calculation": {
+        "created": "Calcul créé",
+        "revision_created": "Révision de calcul enregistrée",
+        "validated": "Calcul validé par son auteur",
+        "verified": "Calcul vérifié",
+        "rejected": "Calcul rejeté"
+      },
+      "dataset": {
+        "revision_created": "Révision de données enregistrée"
       }
     }
   },
@@ -192,5 +246,465 @@
     "backHome": "Retour à mes organisations",
     "errorTitle": "Une erreur est survenue",
     "errorDescription": "L’affichage de cette page a échoué. Vous pouvez réessayer."
+  },
+  "disciplines": {
+    "BTP": "BTP / Génie civil",
+    "ELEC": "Électricité",
+    "PLUMBING": "Plomberie & Sanitaire",
+    "TOPO": "Topographie"
+  },
+  "projectStatus": {
+    "ACTIVE": "Actif",
+    "ARCHIVED": "Archivé"
+  },
+  "projects": {
+    "title": "Projets",
+    "description": "Les projets de {organization} auxquels vous avez accès.",
+    "table": "Projets",
+    "filter": "Filtrer les projets…",
+    "new": "Nouveau projet",
+    "code": "Code",
+    "name": "Nom",
+    "client": "Client",
+    "disciplines": "Métiers",
+    "status": "État",
+    "role": "Votre rôle",
+    "createdAt": "Créé le",
+    "show": {
+      "ACTIVE": "Actifs",
+      "ARCHIVED": "Archivés",
+      "ALL": "Tous"
+    },
+    "showLabel": "Afficher",
+    "emptyTitle": "Aucun projet",
+    "emptyDescription": "Les projets auxquels vous êtes affecté apparaîtront ici.",
+    "createTitle": "Nouveau projet",
+    "createDescription": "Le code identifie le projet dans l’organisation ; les métiers activés déterminent les référentiels retenus.",
+    "created": "Projet {code} créé."
+  },
+  "projectForm": {
+    "code": "Code du projet",
+    "codeHelp": "Majuscules, chiffres et tirets (ex. IMM-R3-2026).",
+    "name": "Nom",
+    "client": "Client (facultatif)",
+    "location": "Localisation (facultatif)",
+    "startDate": "Début (facultatif)",
+    "endDate": "Fin prévue (facultatif)",
+    "description": "Description (facultatif)",
+    "disciplines": "Métiers activés",
+    "disciplinesHelp": "Au moins un métier. Les référentiels publiés du métier sont retenus par défaut.",
+    "create": "Créer le projet",
+    "creating": "Création…",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "validation": {
+      "code": "Code : 2 à 24 caractères, majuscules, chiffres et tirets.",
+      "name": "Le nom doit comporter entre 2 et 160 caractères.",
+      "disciplines": "Activez au moins un métier.",
+      "dates": "La date de fin précède la date de début."
+    }
+  },
+  "project": {
+    "tabs": {
+      "label": "Sections du projet",
+      "overview": "Vue d’ensemble",
+      "members": "Membres",
+      "standards": "Référentiels",
+      "activity": "Activité",
+      "settings": "Paramètres",
+      "documents": "Documents",
+      "reports": "Rapports",
+      "studies": "Études",
+      "data": "Données"
+    },
+    "archivedNotice": "Ce projet est archivé : il est en lecture seule. Désarchivez-le depuis l’onglet Paramètres pour le modifier.",
+    "role": "Votre rôle : {role}",
+    "overview": {
+      "details": "Informations",
+      "client": "Client",
+      "location": "Localisation",
+      "period": "Période",
+      "from": "À partir du {date}",
+      "until": "Jusqu’au {date}",
+      "range": "Du {start} au {end}",
+      "disciplines": "Métiers activés",
+      "description": "Description",
+      "none": "Non renseigné",
+      "createdAt": "Créé le"
+    },
+    "members": {
+      "description": "Les propriétaires et administrateurs de l’organisation accèdent à tous les projets ; les autres membres doivent y être affectés.",
+      "table": "Membres du projet",
+      "name": "Nom",
+      "email": "E-mail",
+      "role": "Rôle sur le projet",
+      "orgRole": "Rôle dans l’organisation",
+      "actions": "Actions",
+      "roleOf": "Rôle de {name} sur le projet",
+      "roleChanged": "{name} : rôle {role} sur le projet.",
+      "remove": "Retirer",
+      "removeTitle": "Retirer {name} du projet ?",
+      "removeDescription": "{name} n’aura plus accès à ce projet. Ses contributions restent dans l’historique.",
+      "removed": "{name} a été retiré du projet.",
+      "empty": "Aucun membre affecté.",
+      "addTitle": "Affecter un membre",
+      "addDescription": "Le rôle sur le projet ne peut pas dépasser le rôle de la personne dans l’organisation.",
+      "person": "Membre de l’organisation",
+      "personPlaceholder": "Choisir…",
+      "noCandidate": "Tous les membres pouvant être affectés le sont déjà.",
+      "add": "Affecter",
+      "adding": "Affectation…",
+      "added": "{name} a été affecté au projet."
+    },
+    "standards": {
+      "description": "Versions de référentiels retenues pour chaque métier. Toute valeur surchargée est marquée « à vérifier » et sa justification est conservée.",
+      "edit": "Modifier la sélection",
+      "editTitle": "Référentiels retenus — {discipline}",
+      "editDescription": "Une seule version par référentiel ; seules les versions publiées du métier sont proposées.",
+      "save": "Enregistrer la sélection",
+      "saved": "Sélection enregistrée.",
+      "none": "Aucun référentiel retenu pour ce métier.",
+      "noneAvailable": "Aucun référentiel publié pour ce métier.",
+      "parameters": "Paramètres de {standard}",
+      "label": "Paramètre",
+      "value": "Valeur appliquée",
+      "reference": "Valeur du référentiel",
+      "origin": "Origine",
+      "source": "Source",
+      "verification": "Vérification",
+      "actions": "Actions",
+      "origins": {
+        "STANDARD": "Référentiel",
+        "ORGANIZATION": "Organisation",
+        "PROJECT": "Projet"
+      },
+      "table": "Table ({count} valeurs)",
+      "tableUnsupported": "Les tables se surchargent par l’API uniquement."
+    },
+    "activity": {
+      "description": "Historique des actions sur le projet, du plus récent au plus ancien.",
+      "empty": "Aucune activité.",
+      "more": "Afficher plus",
+      "unknownActor": "Utilisateur supprimé",
+      "types": {
+        "project": {
+          "created": "a créé le projet",
+          "updated": "a modifié le projet",
+          "archived": "a archivé le projet",
+          "unarchived": "a désarchivé le projet",
+          "member_added": "a affecté un membre",
+          "member_role_changed": "a changé le rôle d’un membre",
+          "member_removed": "a retiré un membre",
+          "disciplines_changed": "a modifié les métiers",
+          "standards_changed": "a modifié les référentiels retenus",
+          "parameter_overridden": "a surchargé un paramètre",
+          "parameter_override_removed": "a supprimé une surcharge"
+        },
+        "study": {
+          "created": "a créé une étude",
+          "updated": "a modifié une étude"
+        },
+        "calculation": {
+          "created": "a créé un calcul",
+          "computed": "a calculé une nouvelle révision",
+          "validated": "a validé un calcul",
+          "verified": "a vérifié un calcul",
+          "rejected": "a rejeté un calcul"
+        },
+        "dataset": {
+          "created": "a créé un jeu de données",
+          "revised": "a enregistré une révision de données"
+        }
+      }
+    },
+    "settings": {
+      "editTitle": "Informations du projet",
+      "saved": "Projet enregistré.",
+      "archiveTitle": "Archivage",
+      "archiveDescription": "Un projet archivé reste consultable mais n’est plus modifiable.",
+      "archive": "Archiver le projet",
+      "archiveConfirmTitle": "Archiver {code} ?",
+      "archiveConfirmDescription": "Le projet passera en lecture seule pour tous ses membres. Vous pourrez le désarchiver.",
+      "archived": "Projet archivé.",
+      "unarchive": "Désarchiver le projet",
+      "unarchived": "Projet désarchivé.",
+      "readOnly": "Votre rôle ne permet pas de modifier ce projet."
+    }
+  },
+  "overrides": {
+    "create": "Surcharger",
+    "edit": "Modifier",
+    "remove": "Supprimer",
+    "createOf": "Surcharger {label}",
+    "editOf": "Modifier la surcharge de {label}",
+    "removeOf": "Supprimer la surcharge de {label}",
+    "titleCreate": "Surcharger « {label} »",
+    "titleEdit": "Modifier la surcharge de « {label} »",
+    "description": "Valeur du référentiel : {reference}. La valeur surchargée sera marquée « à vérifier ».",
+    "value": "Nouvelle valeur",
+    "justification": "Justification",
+    "justificationHelp": "Obligatoire : elle accompagne chaque calcul qui utilise cette valeur.",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "saved": "Surcharge enregistrée.",
+    "removeTitle": "Supprimer la surcharge de « {label} » ?",
+    "removeDescription": "La valeur de niveau inférieur s’appliquera de nouveau.",
+    "removed": "Surcharge supprimée.",
+    "validation": {
+      "value": "Saisissez un nombre.",
+      "justification": "La justification doit comporter au moins 3 caractères."
+    }
+  },
+  "library": {
+    "title": "Bibliothèque technique",
+    "description": "Référentiels versionnés : paramètres sourcés et règles appliquées par les moteurs de calcul.",
+    "table": "Référentiels",
+    "filter": "Filtrer les référentiels…",
+    "code": "Code",
+    "titleColumn": "Intitulé",
+    "discipline": "Métier",
+    "allDisciplines": "Transversal",
+    "scope": "Portée",
+    "scopes": {
+      "SYSTEM": "ConsulPro",
+      "ORGANIZATION": "Organisation"
+    },
+    "versions": "Versions",
+    "toVerify": "{count, plural, =0 {Tous vérifiés} other {# à vérifier}}",
+    "empty": "Aucun référentiel disponible.",
+    "emptyDescription": "Les référentiels sont chargés par l’administrateur de la plateforme.",
+    "statuses": {
+      "DRAFT": "Brouillon",
+      "PUBLISHED": "Publiée",
+      "DEPRECATED": "Dépréciée"
+    },
+    "version": "Version {label}",
+    "publishedAt": "Publiée le {date}",
+    "sourceNotes": "Notes de version",
+    "parameters": "Paramètres",
+    "parametersTable": "Paramètres de la version",
+    "rules": "Règles",
+    "rulesTable": "Règles de la version",
+    "ruleCode": "Code",
+    "ruleDescription": "Description",
+    "severity": "Gravité",
+    "severities": {
+      "BLOCKING": "Bloquante",
+      "WARNING": "Avertissement",
+      "INFO": "Information"
+    },
+    "clause": "Article",
+    "noRules": "Aucune règle.",
+    "orgOverrides": "Surcharges de l’organisation",
+    "orgOverridesDescription": "Elles s’appliquent à tous les projets, sauf surcharge propre à un projet.",
+    "deprecatedNotice": "Version dépréciée : elle n’accepte plus de nouvelle surcharge.",
+    "draftNotice": "Brouillon : non utilisable dans les projets tant qu’il n’est pas publié.",
+    "publish": "Publier",
+    "publishTitle": "Publier {code} {label} ?",
+    "publishDescription": "Une version publiée est immuable : ses paramètres ne pourront plus être modifiés.",
+    "published": "Version publiée.",
+    "deprecate": "Déprécier",
+    "deprecateTitle": "Déprécier {code} {label} ?",
+    "deprecateDescription": "Les projets qui l’utilisent la conservent ; elle ne sera plus proposée.",
+    "deprecated": "Version dépréciée.",
+    "open": "Consulter {code} version {label}"
+  },
+  "workflow": {
+    "COMPUTED": "Calculé",
+    "VALIDATED": "Validé par l’auteur",
+    "VERIFIED": "Vérifié",
+    "REJECTED": "Rejeté"
+  },
+  "studies": {
+    "description": "Les études regroupent les calculs d’un métier.",
+    "empty": "Aucune étude.",
+    "emptyDescription": "Créez une étude pour y rattacher des calculs.",
+    "calculations": "{count, plural, =0 {Aucun calcul} one {# calcul} other {# calculs}}",
+    "createTitle": "Nouvelle étude",
+    "discipline": "Métier",
+    "title": "Intitulé",
+    "description2": "Description (facultatif)",
+    "create": "Créer l’étude",
+    "creating": "Création…",
+    "created": "Étude « {title} » créée.",
+    "open": "Ouvrir l’étude {title}",
+    "by": "Créée par {name}",
+    "validation": {
+      "title": "L’intitulé doit comporter entre 2 et 160 caractères."
+    }
+  },
+  "calculations": {
+    "table": "Calculs de l’étude",
+    "title": "Calcul",
+    "engine": "Moteur",
+    "status": "Résultat",
+    "workflow": "Contrôle",
+    "revision": "Révision",
+    "author": "Auteur",
+    "none": "Pas encore calculé",
+    "empty": "Aucun calcul dans cette étude.",
+    "obsolete": "Obsolète",
+    "obsoleteNotice": "Une révision reprise par ce calcul a été remplacée : recalculez pour utiliser les valeurs à jour.",
+    "engineUnavailable": "Le moteur de ce calcul n’est pas disponible sur ce serveur : calcul impossible.",
+    "createTitle": "Nouveau calcul",
+    "createTitleField": "Intitulé du calcul",
+    "engineField": "Moteur de calcul",
+    "noEngine": "Aucun moteur de calcul disponible pour ce métier.",
+    "create": "Créer le calcul",
+    "creating": "Création…",
+    "created": "Calcul « {title} » créé.",
+    "backToStudy": "Étude : {title}",
+    "inputsTitle": "Saisie et exécution",
+    "inputsDescription": "Le calcul est exécuté sur le serveur ; chaque exécution crée une révision immuable.",
+    "value": "Valeur",
+    "unit": "Unité",
+    "unitOf": "Unité de {label}",
+    "source": "Source de la valeur",
+    "sourceManual": "Saisie",
+    "sourceLink": "Sortie d’un autre calcul",
+    "linkOf": "Calcul repris pour {label}",
+    "linkPlaceholder": "Choisir une sortie…",
+    "noLink": "Aucune sortie compatible dans le projet.",
+    "run": "Calculer",
+    "running": "Calcul…",
+    "computed": "Révision {number} enregistrée.",
+    "inputErrors": "Entrées refusées : aucune révision n’a été enregistrée.",
+    "resultTitle": "Résultat — révision {number}",
+    "noResult": "Aucune révision : saisissez les données puis lancez le calcul.",
+    "olderRevision": "Vous consultez la révision {number}, qui n’est plus la révision courante.",
+    "showCurrent": "Revenir à la révision courante",
+    "meta": {
+      "author": "Calculé par {name} le {date}",
+      "hash": "Empreinte des paramètres : {hash}",
+      "engine": "Moteur {id} version {version}"
+    },
+    "dependencies": "Valeurs reprises",
+    "dependency": "{input} : sortie « {output} » de « {title} » (révision {number})",
+    "dependencyObsolete": "remplacée depuis",
+    "reviewsTitle": "Contrôle",
+    "reviewsEmpty": "Pas encore contrôlé.",
+    "reviewTypes": {
+      "VALIDATION": "Validation",
+      "VERIFICATION": "Vérification"
+    },
+    "decisions": {
+      "APPROVED": "approuvée",
+      "REJECTED": "rejetée"
+    },
+    "review": "{type} {decision} par {name} le {date}",
+    "validate": "Valider",
+    "validateTitle": "Valider la révision {number} ?",
+    "validateDescription": "En tant qu’auteur, vous attestez avoir relu ce calcul. Une autre personne devra le vérifier.",
+    "validated": "Révision validée : les vérificateurs sont notifiés.",
+    "verify": "Vérifier",
+    "verifyTitle": "Vérifier la révision {number}",
+    "verifyDescription": "Approuvez le calcul ou rejetez-le en indiquant le motif. L’auteur sera notifié.",
+    "approve": "Approuver",
+    "reject": "Rejeter",
+    "comment": "Commentaire",
+    "commentRequired": "Motif obligatoire pour un rejet (3 caractères au moins).",
+    "verified": "Révision vérifiée.",
+    "rejected": "Révision rejetée.",
+    "history": "Historique des révisions",
+    "historyTable": "Révisions du calcul",
+    "show": "Afficher la révision {number}",
+    "current": "courante",
+    "compareTitle": "Comparer deux révisions",
+    "compareBefore": "Révision de référence",
+    "compareAfter": "Révision comparée",
+    "compare": "Comparer",
+    "compareTable": "Différences entre révisions",
+    "compareEmpty": "Aucune différence.",
+    "section": "Section",
+    "path": "Élément",
+    "before": "Avant",
+    "after": "Après",
+    "sections": {
+      "status": "Statut",
+      "inputs": "Entrées",
+      "parameters": "Paramètres",
+      "outputs": "Résultats",
+      "checks": "Vérifications"
+    },
+    "date": "Date"
+  },
+  "datasets": {
+    "description": "Jeux de données typés et versionnés : chaque enregistrement crée une révision immuable.",
+    "table": "Jeux de données",
+    "title": "Intitulé",
+    "kind": "Type",
+    "revision": "Révision",
+    "rows": "Lignes",
+    "updatedBy": "Dernière révision",
+    "none": "Aucune révision",
+    "empty": "Aucun jeu de données.",
+    "createTitle": "Nouveau jeu de données",
+    "noKind": "Aucun type de données disponible pour les métiers du projet.",
+    "create": "Créer",
+    "created": "Jeu de données « {title} » créé.",
+    "open": "Ouvrir {title}",
+    "editorTable": "Lignes du jeu de données",
+    "addRow": "Ajouter une ligne",
+    "removeRow": "Supprimer la ligne {row}",
+    "cellOf": "{column}, ligne {row}",
+    "note": "Note de révision (facultatif)",
+    "save": "Enregistrer une nouvelle révision",
+    "saving": "Enregistrement…",
+    "saved": "Révision {number} enregistrée.",
+    "readOnly": "Lecture seule : révision {number}.",
+    "history": "Révisions",
+    "historyItem": "Révision {number} — {rows} lignes, par {name} le {date}",
+    "viewing": "Révision {number} affichée.",
+    "backToCurrent": "Revenir à la révision courante",
+    "rowErrors": "Lignes invalides : rien n’a été enregistré.",
+    "actions": "Actions"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "open": "Notifications ({count, plural, =0 {aucune non lue} one {# non lue} other {# non lues}})",
+    "empty": "Aucune notification.",
+    "markAll": "Tout marquer comme lu",
+    "unread": "Non lue"
+  },
+  "search": {
+    "title": "Recherche",
+    "description": "Projets, études et calculs dont l’intitulé contient le texte (accents ignorés).",
+    "label": "Rechercher",
+    "placeholder": "Code, nom ou intitulé…",
+    "submit": "Rechercher",
+    "results": "{count, plural, =0 {Aucun résultat} one {# résultat} other {# résultats}}",
+    "minLength": "Saisissez au moins 2 caractères.",
+    "types": {
+      "project": "Projet",
+      "study": "Étude",
+      "calculation": "Calcul"
+    },
+    "open": "Rechercher dans les projets"
+  },
+  "account": {
+    "title": "Mon compte",
+    "description": "Préférences d’affichage et sécurité de connexion.",
+    "timeZoneTitle": "Fuseau horaire",
+    "timeZoneDescription": "Les dates et heures sont affichées dans ce fuseau.",
+    "timeZone": "Fuseau horaire",
+    "timeZoneDefault": "Fuseau de l’application ({zone})",
+    "timeZoneSaved": "Fuseau horaire enregistré.",
+    "save": "Enregistrer",
+    "twoFactorTitle": "Double authentification (facultative)",
+    "twoFactorDescription": "Un code à 6 chiffres, produit par une application d’authentification, est demandé à chaque connexion.",
+    "twoFactorOn": "Activée",
+    "twoFactorOff": "Désactivée",
+    "password": "Mot de passe actuel",
+    "enable": "Activer",
+    "disable": "Désactiver",
+    "disabled": "Double authentification désactivée.",
+    "setupTitle": "Configurer votre application d’authentification",
+    "setupUri": "Ajoutez ce compte dans votre application (lien ou clé ci-dessous), puis saisissez le code affiché.",
+    "secret": "Clé de configuration",
+    "backupCodes": "Codes de secours (à conserver en lieu sûr, utilisables une seule fois)",
+    "code": "Code à 6 chiffres",
+    "confirm": "Confirmer",
+    "enabled": "Double authentification activée.",
+    "back": "Retour à mes organisations"
   }
 }

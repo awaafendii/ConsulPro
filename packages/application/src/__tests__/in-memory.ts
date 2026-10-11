@@ -10,27 +10,62 @@ import type {
   ApplicationDeps,
   AuditEntry,
   AuditRecord,
+  DbScope,
   InvitationRecord,
   MembershipRecord,
   OrganizationRecord,
   Repositories,
   UnitOfWork,
 } from '../ports';
+import { EngineRegistry } from '@consulpro/calc-core';
+import { DEMO_ENGINES } from '@consulpro/calc-demo';
 
-interface State {
-  users: { id: string; email: string; name: string }[];
+import { calculationRepositories, type CalculationState } from './in-memory-calculations';
+import { projectRepositories, type ProjectState } from './in-memory-projects';
+
+interface State extends ProjectState, CalculationState {
+  users: CalculationState['users'];
   organizations: OrganizationRecord[];
   memberships: MembershipRecord[];
   invitations: InvitationRecord[];
   audit: AuditRecord[];
 }
 
+const emptyState = (): State => ({
+  users: [],
+  organizations: [],
+  memberships: [],
+  invitations: [],
+  audit: [],
+  projects: [],
+  projectMembers: [],
+  projectDisciplines: [],
+  projectStandards: [],
+  activity: [],
+  standardVersions: [],
+  overrides: [],
+  studies: [],
+  calculations: [],
+  revisions: [],
+  reviews: [],
+  dependencies: [],
+  datasets: [],
+  datasetRevisions: [],
+  notifications: [],
+});
+
 export class InMemoryStore {
-  state: State = { users: [], organizations: [], memberships: [], invitations: [], audit: [] };
+  state: State = emptyState();
   sentMail: { to: string; subject: string; text: string }[] = [];
   failMail = false;
   private seq = 0;
   now = new Date('2026-10-08T08:00:00.000Z');
+  /** Moteurs de démonstration, comme en développement et en test. */
+  readonly engines = (() => {
+    const registry = new EngineRegistry();
+    for (const engine of DEMO_ENGINES) registry.register(engine);
+    return registry;
+  })();
 
   nextId(): string {
     this.seq += 1;
@@ -40,17 +75,27 @@ export class InMemoryStore {
   addUser(
     email: string,
     name = email.split('@')[0] ?? email,
-  ): { id: string; email: string; name: string } {
-    const user = { id: this.nextId(), email, name };
+    platformAdmin = false,
+  ): { id: string; email: string; name: string; platformAdmin: boolean } {
+    const user = { id: this.nextId(), email, name, platformAdmin };
     this.state.users.push(user);
     return user;
   }
 
-  repositories(): Repositories {
+  repositories(
+    scope: DbScope = { organizationId: null, userId: null, userEmail: null },
+  ): Repositories {
     const s = this.state;
     const now = () => this.now;
     const userOf = (id: string) => s.users.find((u) => u.id === id);
     return {
+      ...calculationRepositories(s, now, () => this.nextId()),
+      ...projectRepositories(
+        s,
+        now,
+        () => this.nextId(),
+        () => scope.userId,
+      ),
       organizations: {
         create: async ({ id, name, slug }) => {
           if (s.organizations.some((o) => o.slug === slug)) return err('SLUG_TAKEN');
@@ -106,11 +151,16 @@ export class InMemoryStore {
           return found;
         },
         delete: async (organizationId, id, version) => {
-          const before = s.memberships.length;
-          s.memberships = s.memberships.filter(
-            (m) => !(m.organizationId === organizationId && m.id === id && m.version === version),
+          const target = s.memberships.find(
+            (m) => m.organizationId === organizationId && m.id === id && m.version === version,
           );
-          return s.memberships.length < before;
+          if (!target) return false;
+          s.memberships = s.memberships.filter((m) => m !== target);
+          // Comme le trigger en base : retirer de l'organisation retire de ses projets.
+          s.projectMembers = s.projectMembers.filter(
+            (m) => !(m.organizationId === organizationId && m.userId === target.userId),
+          );
+          return true;
         },
       },
       invitations: {
@@ -169,10 +219,10 @@ export class InMemoryStore {
 
   unitOfWork(): UnitOfWork {
     return {
-      run: async (_scope, work) => {
+      run: async (scope, work) => {
         const snapshot = structuredClone(this.state);
         try {
-          const result = await work(this.repositories());
+          const result = await work(this.repositories(scope));
           if (!result.ok) this.state = snapshot;
           return result;
         } catch (error) {
@@ -201,14 +251,29 @@ export class InMemoryStore {
       },
       clock: { now: () => this.now },
       ids: { next: () => this.nextId() },
+      // Empreinte déterministe et lisible pour les tests (SHA-256 en exploitation).
+      hasher: { sha256: (text) => `h${String(text.length)}:${text.slice(0, 24)}` },
+      engines: this.engines,
+      defaultTimeZone: 'Africa/Abidjan',
       appUrl: 'https://consulpro.test',
     };
   }
 }
 
-export function userContext(user: { id: string; email: string; name: string }): UserContext {
+export function userContext(user: {
+  id: string;
+  email: string;
+  name: string;
+  platformAdmin?: boolean;
+}): UserContext {
   return {
-    actor: { userId: user.id, email: user.email, name: user.name, emailVerified: true },
+    actor: {
+      userId: user.id,
+      email: user.email,
+      name: user.name,
+      emailVerified: true,
+      platformAdmin: user.platformAdmin === true,
+    },
     meta: { requestId: 'req-test', ip: '127.0.0.1', userAgent: 'vitest' },
   };
 }

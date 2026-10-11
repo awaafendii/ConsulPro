@@ -73,7 +73,7 @@ Points où le cahier des charges laisse une marge d'interprétation. Ces choix s
 
 | #   | Question                                                                                                                            | Phase concernée |
 | --- | ----------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| Q1  | Confirmer I1 (sens de Validation / Vérification) et s'il faut un troisième niveau « Approuvé par ».                                  | 3               |
+| Q1  | ~~Confirmer I1 et un éventuel troisième niveau « Approuvé par »~~ — **Tranché (2026-10-09)** : 2 niveaux (validation par l'auteur, vérification par un second utilisateur). | 3 |
 | Q2  | Le dimensionnement structurel (BAEL 91 mod. 99) est-il attendu à terme ?                                                              | 4               |
 | Q3  | Pays cibles prioritaires (Sénégal, Côte d'Ivoire, Cameroun, Mali…) : certaines normes nationales dérivent de la NF C 15-100.         | 5               |
 | Q4  | Version de la NF C 15-100 à retenir comme référence (version 2002 et amendements, ou révision plus récente) ?                       | 5               |

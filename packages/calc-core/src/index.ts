@@ -5,7 +5,10 @@ export {
   type CalcContext,
   type Discipline,
   type EngineDefinition,
+  type EnginePresentation,
   type FormulaDoc,
+  type InputPresentation,
+  type OutputPresentation,
   type VerifyContext,
 } from './engine';
 export type {

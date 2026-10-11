@@ -78,3 +78,18 @@ export function checkInvitation(
 
 /** Durée de validité d'une invitation. */
 export const INVITATION_TTL_DAYS = 7;
+
+/**
+ * Transfert de propriété : réservé au propriétaire, vers un autre membre. Le bénéficiaire
+ * devient propriétaire ; l'ancien propriétaire devient administrateur (un seul propriétaire).
+ */
+export function checkOwnershipTransfer(change: MemberChange): Result<void, DomainError> {
+  if (!can(change.actorRole, 'org.transfer')) return err(forbidden);
+  if (change.actorUserId === change.targetUserId) {
+    return err({
+      code: 'SELF_TRANSFER',
+      message: 'Choisissez un autre membre que vous-même.',
+    });
+  }
+  return ok(undefined);
+}

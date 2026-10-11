@@ -10,7 +10,7 @@ import { expectAccessible, expectNoHorizontalScroll } from './support';
 const WIDTHS = [360, 768, 1280, 1920] as const;
 const THEMES = ['light', 'dark'] as const;
 
-const publicPages = [
+const publicPages: { name: string; path: string; heading: string | RegExp }[] = [
   { name: 'connexion', path: '/connexion', heading: 'Connexion' },
   { name: 'inscription', path: '/inscription', heading: 'Créer un compte' },
   { name: 'mot de passe oublié', path: '/mot-de-passe-oublie', heading: 'Mot de passe oublié' },
@@ -18,8 +18,31 @@ const publicPages = [
 ];
 
 const privatePages = () => {
-  const { orgSlug } = fixture();
+  const { orgSlug, projectId, projectCode, demoVersionId, studyId, calculationId, datasetId } =
+    fixture();
+  const project = `/${orgSlug}/projets/${projectId}`;
+  const projectHeading = `${projectCode} — Immeuble R+3 Plateau`;
   return [
+    { name: 'projets', path: `/${orgSlug}/projets`, heading: 'Projets' },
+    { name: 'nouveau projet', path: `/${orgSlug}/projets/nouveau`, heading: 'Nouveau projet' },
+    { name: 'projet', path: project, heading: projectHeading },
+    { name: 'membres du projet', path: `${project}/membres`, heading: projectHeading },
+    { name: 'référentiels du projet', path: `${project}/referentiels`, heading: projectHeading },
+    { name: 'activité du projet', path: `${project}/activite`, heading: projectHeading },
+    { name: 'paramètres du projet', path: `${project}/parametres`, heading: projectHeading },
+    { name: 'études', path: `${project}/etudes`, heading: projectHeading },
+    { name: 'étude', path: `${project}/etudes/${studyId}`, heading: projectHeading },
+    { name: 'calcul', path: `${project}/calculs/${calculationId}`, heading: projectHeading },
+    { name: 'données', path: `${project}/donnees`, heading: projectHeading },
+    { name: 'jeu de données', path: `${project}/donnees/${datasetId}`, heading: projectHeading },
+    { name: 'recherche', path: `/${orgSlug}/recherche?q=immeuble`, heading: 'Recherche' },
+    { name: 'mon compte', path: '/compte', heading: 'Mon compte' },
+    { name: 'bibliothèque', path: `/${orgSlug}/bibliotheque`, heading: 'Bibliothèque technique' },
+    {
+      name: 'version de référentiel',
+      path: `/${orgSlug}/bibliotheque/${demoVersionId}`,
+      heading: /^DEMO — /,
+    },
     { name: 'mes organisations', path: '/organisations', heading: 'Mes organisations' },
     // Organisation inconnue ou dont on n'est pas membre : 404, existence non révélée.
     {

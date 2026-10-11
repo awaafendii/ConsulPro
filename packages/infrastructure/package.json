@@ -9,13 +9,16 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
-    "test:integration": "vitest run"
+    "test:integration": "vitest run",
+    "cli": "tsx src/cli/main.ts"
   },
   "dependencies": {
     "@consulpro/application": "workspace:*",
     "@consulpro/calc-core": "workspace:*",
+    "@consulpro/calc-demo": "workspace:*",
     "@consulpro/db": "workspace:*",
     "@consulpro/domain": "workspace:*",
+    "@consulpro/standards": "workspace:*",
     "better-auth": "1.7.7",
     "nodemailer": "10.0.16",
     "uuid": "14.0.2"
@@ -26,6 +29,7 @@
     "@consulpro/test-utils": "workspace:*",
     "@types/nodemailer": "8.0.2",
     "eslint": "10.12.0",
+    "tsx": "4.23.15",
     "typescript": "6.0.3",
     "vitest": "5.0.3"
   }

@@ -21,6 +21,7 @@ const renderLink: RenderLink = ({ href, children, className, onClick, ...rest })
   <Link
     href={href}
     aria-current={rest['aria-current']}
+    aria-label={rest['aria-label']}
     {...(className ? { className } : {})}
     {...(onClick ? { onClick } : {})}
   >

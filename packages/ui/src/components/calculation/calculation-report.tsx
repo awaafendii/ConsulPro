@@ -61,7 +61,13 @@ function Table({
   children: ReactNode;
 }) {
   return (
-    <div className="overflow-x-auto rounded-lg border">
+    // Région défilante atteignable au clavier (petits écrans) : WCAG 2.1.1.
+    <div
+      role="region"
+      aria-label={caption}
+      tabIndex={0}
+      className="overflow-x-auto rounded-lg border focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
       <table className="w-full text-sm">
         <caption className="sr-only">{caption}</caption>
         <thead className="bg-muted/50 text-left text-muted-foreground">

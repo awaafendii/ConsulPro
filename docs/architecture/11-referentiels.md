@@ -59,7 +59,8 @@ interface Rule {
 Les règles sont **implémentées en code** dans les moteurs (typées, testées) et
 **décrites** dans le référentiel (article, sévérité, seuils). On écarte un langage de
 règles en base : il serait moins testable et pourrait diverger du moteur. La CI vérifie
-que chaque `Rule` d'une version publiée a une implémentation enregistrée, et inversement.
+que chaque `Rule` d'une version publiée a une implémentation enregistrée, et inversement
+(test du référentiel de démonstration dans `packages/calc-demo` ; un test par moteur métier ensuite).
 
 ## 4. Résolution des paramètres
 
@@ -69,7 +70,9 @@ Pour un calcul donné :
 valeur = surcharge projet  ??  surcharge organisation  ??  valeur de la StandardVersion
 ```
 
-- Le **profil** du projet (par discipline) détermine la `StandardVersion` utilisée.
+- Le **profil** du projet (par discipline) détermine les `StandardVersion` utilisées : par défaut
+  les dernières versions publiées du métier, modifiables dans l'onglet Référentiels du projet. Un
+  même paramètre défini par deux versions retenues rend le calcul impossible (`PARAMETER_AMBIGUOUS`).
 - Une surcharge exige une **justification**, est auditée, et apparaît sur le résultat
   (« valeur de référence 5 % — valeur utilisée 4 % — justification : exigence du maître d'ouvrage »).
 - Le résultat de la résolution est un `ResolvedParameterSet` **figé**. Il est sérialisé
@@ -83,6 +86,11 @@ valeur = surcharge projet  ??  surcharge organisation  ??  valeur de la Standard
 | Publier                        | idem, après contrôle de complétude         | Immuable (trigger). Utilisable par les calculs.                                            |
 | Déprécier                      | idem                                       | Toujours lisible, plus proposée pour les nouveaux calculs. Les révisions existantes restent valides. |
 | Passer un paramètre à `VERIFIED` | Deux personnes distinctes                | Seulement dans une nouvelle version (une version publiée est immuable)                     |
+
+Chargement : `pnpm standards:load <fichier.json> [--publish-as <e-mail>]` (connexion propriétaire),
+après validation par `standardFileSchema`. Le rôle d'administrateur de la plateforme s'attribue par
+`pnpm platform:grant-admin <e-mail>` ; un trigger interdit à l'application de le modifier. Une version
+publiée se recharge sans effet (immuable) ; un brouillon est remplacé.
 
 ## 6. Profil initial « Afrique francophone »
 

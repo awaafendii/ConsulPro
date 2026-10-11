@@ -38,7 +38,8 @@ If-Match obligatoire sur PATCH et DELETE).
 
 `pnpm db:up` (PostgreSQL sur le port **5434**, Mailpit sur 8025) · `pnpm dev` ·
 `pnpm check` · `pnpm test:integration` (Docker requis) · `pnpm build` · `pnpm db:migrate` ·
-`pnpm --filter @consulpro/ui storybook` · `pnpm --filter @consulpro/web test:e2e` (après `pnpm build`).
+`pnpm --filter @consulpro/ui storybook` · `pnpm --filter @consulpro/web test:e2e` (après `pnpm build`) ·
+`pnpm standards:load <json> [--publish-as <e-mail>]` · `pnpm platform:grant-admin <e-mail>`.
 
 ## Pièges connus
 
@@ -51,6 +52,15 @@ If-Match obligatoire sur PATCH et DELETE).
 - Un nouveau module : l'ajouter au registre `packages/domain/src/modules/registry.ts` ; relever
   `LATEST_DELIVERED_PHASE` à la fin de chaque phase (un test E2E vérifie chaque module disponible).
 - Testing Library normalise les espaces du DOM : écrire les textes attendus avec des espaces simples.
+- Radix Select peut émettre une valeur vide quand sa liste d'options change : ignorer `''` dans `onValueChange`.
+- Une route de projet (`projectRoute`) déclare sa permission pour la matrice ; l'accès au projet et le
+  rôle effectif sont contrôlés par `inProject` (application), puis par la RLS.
+- Révisions, avis, dépendances et révisions de données : insertion seule (pas d'UPDATE pour le rôle
+  applicatif) ; ne jamais « corriger » une révision, en calculer une nouvelle.
+- Moteurs de démonstration : `CONSULPRO_DEMO_ENGINES=true` (dev/test) ; refusés si l'environnement
+  (`APP_ENV`, sinon `NODE_ENV`) est la production. Ils n'ont aucune valeur technique.
+- Sous Git Bash, les longs heredocs contenant des apostrophes échouent parfois : écrire le script
+  dans un fichier puis l'exécuter.
 
 ## État des phases
 
@@ -58,7 +68,8 @@ If-Match obligatoire sur PATCH et DELETE).
 | ----- | ---- |
 | 0 — Architecture | Validée (2026-10-08) |
 | 1 — Foundation   | Validée (2026-10-08) |
-| 2 — Design System | Terminée, en revue (2026-10-09) |
-| 3 à 10           | À faire |
+| 2 — Design System | Validée (2026-10-09) |
+| 3 — Projets, calcul, référentiels | Terminée, en revue (2026-10-09) |
+| 4 à 10           | À faire |
 
 Critères de sortie de chaque phase : `docs/architecture/07-roadmap.md`.

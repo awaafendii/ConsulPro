@@ -5,7 +5,7 @@
 | Sujet                 | Décision                                                                                                                          |
 | --------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | Bibliothèque          | Better Auth (proposé, [ADR-0009](../adr/0009-authentification.md))                                                                |
-| Méthodes              | E-mail + mot de passe avec vérification d'e-mail (Phase 1). TOTP (2FA) disponible pour tous, **obligatoire** pour Owner et Admin : Phase 3. |
+| Méthodes              | E-mail + mot de passe avec vérification d'e-mail (Phase 1). TOTP (2FA) **facultative** pour tous (décision du 2026-10-09), livrée en Phase 3 (plugin Better Auth, codes de secours, activation et désactivation auditées). |
 | Mots de passe         | Hachage fort (scrypt ou argon2id selon la bibliothèque), longueur minimale 12, refus des mots de passe compromis connus (liste locale). |
 | Sessions              | Stockées en base, cookie `HttpOnly`, `Secure`, `SameSite=Lax`, rotation à la connexion, révocation (déconnexion de toutes les sessions). |
 | CSRF                  | `SameSite=Lax` + vérification de l'en-tête `Origin` sur toute requête mutante.                                                    |

@@ -6,7 +6,8 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { MemoryMailer } from '../mail/smtp-mailer';
 import { createUnitOfWork } from '../persistence/unit-of-work';
-import { systemClock, tokenService, uuidV7Generator } from '../system/services';
+import { createEngineRegistry } from '../index';
+import { sha256Hasher, systemClock, tokenService, uuidV7Generator } from '../system/services';
 import { createUser, ctxOf, database, type TestUser } from './helpers';
 
 let db: Database;
@@ -51,6 +52,9 @@ beforeAll(async () => {
     tokens: tokenService,
     clock: systemClock,
     ids: uuidV7Generator,
+    hasher: sha256Hasher,
+    engines: createEngineRegistry({ demoEngines: true }),
+    defaultTimeZone: 'Africa/Abidjan',
     appUrl: 'http://localhost:3000',
   });
   alice = await createUser('alice');

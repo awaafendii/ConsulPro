@@ -39,6 +39,8 @@ export function getServer(): Server {
       appUrl: env.APP_URL,
       authSecret: env.BETTER_AUTH_SECRET,
       mailer,
+      demoEngines: env.CONSULPRO_DEMO_ENGINES,
+      defaultTimeZone: env.APP_TIME_ZONE,
     });
     const routes = createRoutes({ app: infra.app, auth: infra.auth, appUrl: env.APP_URL, logger });
     globalStore.__consulproServer = {

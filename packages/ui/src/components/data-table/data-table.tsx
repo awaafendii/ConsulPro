@@ -274,7 +274,8 @@ export function DataTable<T>({
         </div>
       )}
 
-      <div className="overflow-x-auto rounded-lg border">
+      {/* relative : contient les éléments positionnés des cellules (ex. textes sr-only). */}
+      <div className="relative overflow-x-auto rounded-lg border">
         <table
           ref={gridRef}
           role="grid"

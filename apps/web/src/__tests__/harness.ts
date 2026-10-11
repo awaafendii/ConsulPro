@@ -43,6 +43,7 @@ export class Harness {
       authSecret: 'y'.repeat(48),
       mailer: this.mailer,
       rateLimit: false,
+      demoEngines: true,
     });
     const routes = createRoutes({
       app: this.infra.app,
@@ -142,6 +143,39 @@ export class Harness {
     };
     const membershipId = list.items.find((m) => m.userId === member.userId)?.id ?? '';
     return { ...member, membershipId };
+  }
+
+  /** Crée un projet BTP (le référentiel de démonstration publié est retenu par défaut). */
+  async createProject(orgSlug: string, owner: Actor): Promise<string> {
+    const code = unique('P')
+      .replaceAll(/[^A-Za-z0-9]/g, '')
+      .slice(-20)
+      .toUpperCase();
+    const response = await this.call('projects.create', {
+      actor: owner,
+      params: { orgSlug },
+      body: { code, name: `Projet ${code}`, disciplines: ['BTP'] },
+    });
+    if (response.status !== 201)
+      throw new Error(`projet non créé : ${response.status} ${await response.text()}`);
+    return ((await response.json()) as { id: string }).id;
+  }
+
+  async addProjectMember(
+    orgSlug: string,
+    manager: Actor,
+    projectId: string,
+    userId: string,
+    role: Exclude<OrgRole, 'OWNER' | 'ADMIN'>,
+  ): Promise<string> {
+    const response = await this.call('projectMembers.add', {
+      actor: manager,
+      params: { orgSlug, projectId },
+      body: { userId, role },
+    });
+    if (response.status !== 201)
+      throw new Error(`membre de projet refusé : ${response.status} ${await response.text()}`);
+    return ((await response.json()) as { id: string }).id;
   }
 
   async invite(orgSlug: string, owner: Actor): Promise<string> {

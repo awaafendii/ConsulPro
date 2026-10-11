@@ -20,7 +20,10 @@
     "db:up": "docker compose -f docker/compose.dev.yml up -d --wait",
     "db:down": "docker compose -f docker/compose.dev.yml down",
     "db:migrate": "pnpm --filter @consulpro/db migrate:dev",
-    "db:deploy": "pnpm --filter @consulpro/db migrate:deploy"
+    "db:deploy": "pnpm --filter @consulpro/db migrate:deploy",
+    "platform:grant-admin": "pnpm --silent --filter @consulpro/infrastructure cli platform:grant-admin",
+    "platform:revoke-admin": "pnpm --silent --filter @consulpro/infrastructure cli platform:revoke-admin",
+    "standards:load": "pnpm --silent --filter @consulpro/infrastructure cli standards:load"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

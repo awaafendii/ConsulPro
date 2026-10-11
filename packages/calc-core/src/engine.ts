@@ -5,7 +5,7 @@ import type { ParameterReader } from './params/resolved-parameter-set';
 import type { CalcFailure, Check } from './result/calculation-result';
 import type { Result } from './result/result';
 import type { HypothesisRecorder, TraceRecorder, WarningRecorder } from './trace/recorders';
-import type { UnitSymbol } from './units/registry';
+import type { UnitKind, UnitSymbol } from './units/registry';
 
 export type Discipline = 'BTP' | 'ELEC' | 'PLUMBING' | 'TOPO';
 
@@ -20,6 +20,44 @@ export interface FormulaDoc {
     readonly unit?: UnitSymbol;
   }[];
   readonly source: string;
+}
+
+/**
+ * Présentation d'une entrée : construit le formulaire de saisie (aucun calcul dans l'interface).
+ * Une grandeur se saisit `{ value, unit }` dans l'une des unités proposées.
+ */
+export type InputPresentation =
+  | {
+      readonly key: string;
+      readonly label: string;
+      readonly kind: 'quantity';
+      readonly unitKind: UnitKind;
+      /** Unités proposées à la saisie ; la première est l'unité par défaut. */
+      readonly units: readonly UnitSymbol[];
+      readonly optional?: boolean;
+      readonly help?: string;
+    }
+  | {
+      readonly key: string;
+      readonly label: string;
+      readonly kind: 'enum';
+      readonly options: readonly { readonly value: string; readonly label: string }[];
+      readonly optional?: boolean;
+      readonly help?: string;
+    };
+
+/** Présentation d'une sortie : la valeur stockée est en SI (`unit`), affichée avec `precision` décimales. */
+export interface OutputPresentation {
+  readonly key: string;
+  readonly label: string;
+  readonly unit: UnitSymbol;
+  readonly precision: number;
+}
+
+export interface EnginePresentation {
+  readonly description: string;
+  readonly inputs: readonly InputPresentation[];
+  readonly outputs: readonly OutputPresentation[];
 }
 
 export interface CalcContext {
@@ -50,6 +88,8 @@ export interface EngineDefinition<I, O> {
   readonly formulas: readonly FormulaDoc[];
   /** Hypothèses de méthode toujours applicables. */
   readonly hypotheses: readonly { readonly code: string; readonly text: string }[];
+  /** Libellés et précisions d'affichage (le serveur construit la vue du résultat). */
+  readonly presentation: EnginePresentation;
   calculate(input: I, ctx: CalcContext): Result<O, CalcFailure>;
   verify(input: I, output: O, ctx: VerifyContext): readonly Check[];
 }

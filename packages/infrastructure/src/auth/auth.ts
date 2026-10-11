@@ -3,6 +3,7 @@ import type { Database } from '@consulpro/db';
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { createAuthMiddleware, isAPIError } from 'better-auth/api';
+import { twoFactor } from 'better-auth/plugins';
 
 export interface AuthConfig {
   readonly db: Database;
@@ -50,6 +51,14 @@ export function createAuth(config: AuthConfig) {
       cookiePrefix: 'consulpro',
       // Identifiants UUID v7 générés par Prisma (@default(uuid(7))).
       database: { generateId: false },
+    },
+    user: {
+      // Champs propres à ConsulPro, lus dans la session ; jamais modifiables par l'utilisateur
+      // via Better Auth (input: false). Le rôle plateforme est en outre protégé par un trigger.
+      additionalFields: {
+        platformRole: { type: 'string', required: false, input: false },
+        timeZone: { type: 'string', required: false, input: false },
+      },
     },
     session: {
       expiresIn: 7 * 24 * 3600,
@@ -125,8 +134,25 @@ export function createAuth(config: AuthConfig) {
         '/send-verification-email': { window: RATE_WINDOW_S, max: 5 },
       },
     },
+    // Double authentification TOTP facultative (décision du 2026-10-09), codes de secours.
+    plugins: [twoFactor({ issuer: 'ConsulPro' })],
     databaseHooks: {
       user: {
+        update: {
+          async after(user, ctx) {
+            // Seuls ces deux endpoints modifient l'activation de la 2FA.
+            const path = ctx?.path;
+            if (path !== '/two-factor/verify-totp' && path !== '/two-factor/disable') return;
+            await audit.recordAuthEvent({
+              actorUserId: user.id,
+              userEmail: user.email,
+              action:
+                path === '/two-factor/disable'
+                  ? 'auth.two_factor_disabled'
+                  : 'auth.two_factor_enabled',
+            });
+          },
+        },
         create: {
           async after(user) {
             await audit.recordAuthEvent({

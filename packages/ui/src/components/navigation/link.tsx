@@ -7,6 +7,7 @@ export interface AppLinkProps {
   readonly className?: string | undefined;
   readonly children?: ReactNode;
   readonly 'aria-current'?: 'page' | undefined;
+  readonly 'aria-label'?: string | undefined;
   readonly onClick?: (() => void) | undefined;
 }
 

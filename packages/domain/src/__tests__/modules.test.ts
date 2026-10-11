@@ -17,8 +17,8 @@ describe('registre des modules', () => {
 
   it('disponibilité selon la phase livrée', () => {
     const available = MODULES.filter((m) => isModuleAvailable(m)).map((m) => m.id);
-    expect(available).toEqual(['dashboard', 'members', 'audit']);
+    expect(available).toEqual(['dashboard', 'projects', 'library', 'members', 'audit']);
     expect(isModuleAvailable({ id: 'x', section: 'workspace', path: 'x', phase: 3 }, 3)).toBe(true);
-    expect(LATEST_DELIVERED_PHASE).toBe(2);
+    expect(LATEST_DELIVERED_PHASE).toBe(3);
   });
 });

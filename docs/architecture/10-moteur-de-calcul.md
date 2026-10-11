@@ -77,6 +77,13 @@ export function run<I, O>(
 | **HYPOTHESES**   | Hypothèses déclarées par le moteur (ex. « régime permanent ») + une hypothèse automatique par valeur par défaut appliquée.                                                                                                              | —                          |
 | **HISTORY**      | *Application* : calcule le hash du snapshot, crée une `CalculationRevision` immuable, écrit l'audit, met à jour la révision courante, signale les calculs dépendants obsolètes.                                                         | —                          |
 
+L'étape HISTORY est écrite dans `packages/application/src/calculations/calculation-service.ts` :
+entrées liées résolues (sortie de la révision courante d'un autre calcul du projet), paramètres
+résolus et figés, empreinte, révision, dépendances, révision courante, fil d'activité et audit,
+dans une seule transaction. Le présentateur `toCalculationView` reconstruit l'affichage à partir
+du résultat enregistré. Les moteurs de démonstration (`packages/calc-demo`) n'ont aucune valeur
+technique et ne sont enregistrés que si `CONSULPRO_DEMO_ENGINES=true` (refusé en production).
+
 Statut global (`result_status`), par ordre de priorité :
 
 1. `INVALID` : entrées ou paramètres refusés (aucune sortie) ;

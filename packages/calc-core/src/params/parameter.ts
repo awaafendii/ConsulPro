@@ -5,9 +5,9 @@ export type VerificationStatus = 'VERIFIED' | 'TO_VERIFY';
 /** Origine documentaire d'un paramètre (principe P10 : aucune valeur sans source). */
 export interface ParameterSource {
   readonly document: string;
-  readonly clause?: string;
-  readonly table?: string;
-  readonly note?: string;
+  readonly clause?: string | undefined;
+  readonly table?: string | undefined;
+  readonly note?: string | undefined;
 }
 
 export interface CategoryAxis {

@@ -4,6 +4,7 @@ import type { OrgContext, UserContext } from '@consulpro/application';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
 
+import { actorFromSession } from './actor';
 import { getServer } from './container';
 
 /** Utilisateur de la session courante (Server Components), ou `null`. */
@@ -12,12 +13,7 @@ export async function currentUserContext(): Promise<UserContext | null> {
   const session = await getServer().infra.auth.api.getSession({ headers: requestHeaders });
   if (!session) return null;
   return {
-    actor: {
-      userId: session.user.id,
-      email: session.user.email,
-      name: session.user.name,
-      emailVerified: session.user.emailVerified,
-    },
+    actor: actorFromSession(session.user),
     meta: {
       requestId: randomUUID(),
       ip: requestHeaders.get('x-forwarded-for')?.split(',')[0]?.trim() ?? null,

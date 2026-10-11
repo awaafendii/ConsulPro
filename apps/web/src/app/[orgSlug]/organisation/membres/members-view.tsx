@@ -26,7 +26,7 @@ import {
 } from '@consulpro/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { MailPlus, UserMinus, Users } from 'lucide-react';
+import { Crown, MailPlus, UserMinus, Users } from 'lucide-react';
 import { useFormatter, useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
@@ -42,6 +42,8 @@ interface Props {
   readonly orgSlug: string;
   readonly currentUserId: string;
   readonly canManage: boolean;
+  /** Propriétaire : peut transférer la propriété à un autre membre. */
+  readonly canTransfer: boolean;
   readonly initialMembers: readonly MemberDto[];
   readonly initialInvitations: readonly InvitationDto[];
 }
@@ -50,6 +52,7 @@ export function MembersView({
   orgSlug,
   currentUserId,
   canManage,
+  canTransfer,
   initialMembers,
   initialInvitations,
 }: Props) {
@@ -119,6 +122,17 @@ export function MembersView({
     onError,
   });
 
+  const transfer = useMutation({
+    mutationFn: (member: MemberDto) =>
+      api(`${base}/ownership-transfer`, { method: 'POST', json: { membershipId: member.id } }),
+    onSuccess: (_data, member) => {
+      toast.success(t('transferred', { name: member.name }));
+      // Le rôle courant change : la page entière est rechargée.
+      window.location.reload();
+    },
+    onError,
+  });
+
   const editable = (m: MemberDto) => canManage && m.role !== 'OWNER' && m.userId !== currentUserId;
 
   const memberColumns: DataColumn<MemberDto>[] = [
@@ -179,24 +193,46 @@ export function MembersView({
             align: 'end' as const,
             cell: (m: MemberDto) =>
               editable(m) ? (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  aria-label={`${t('remove')} ${m.name}`}
-                  onClick={() => {
-                    void confirm({
-                      title: t('removeTitle', { name: m.name }),
-                      description: t('removeDescription', { name: m.name }),
-                      confirmLabel: t('remove'),
-                      tone: 'destructive',
-                    }).then((ok) => {
-                      if (ok) remove.mutate(m);
-                    });
-                  }}
-                >
-                  <UserMinus aria-hidden />
-                  {t('remove')}
-                </Button>
+                <span className="flex flex-wrap justify-end gap-1">
+                  {canTransfer && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      aria-label={t('transferOf', { name: m.name })}
+                      onClick={() => {
+                        void confirm({
+                          title: t('transferTitle', { name: m.name }),
+                          description: t('transferDescription', { name: m.name }),
+                          confirmLabel: t('transfer'),
+                          tone: 'destructive',
+                        }).then((ok) => {
+                          if (ok) transfer.mutate(m);
+                        });
+                      }}
+                    >
+                      <Crown aria-hidden />
+                      {t('transfer')}
+                    </Button>
+                  )}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    aria-label={`${t('remove')} ${m.name}`}
+                    onClick={() => {
+                      void confirm({
+                        title: t('removeTitle', { name: m.name }),
+                        description: t('removeDescription', { name: m.name }),
+                        confirmLabel: t('remove'),
+                        tone: 'destructive',
+                      }).then((ok) => {
+                        if (ok) remove.mutate(m);
+                      });
+                    }}
+                  >
+                    <UserMinus aria-hidden />
+                    {t('remove')}
+                  </Button>
+                </span>
               ) : null,
           },
         ]

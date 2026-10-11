@@ -10,6 +10,7 @@ import {
   FormLabel,
   FormMessage,
   Input,
+  Label,
 } from '@consulpro/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
@@ -68,9 +69,11 @@ export function SignInForm({ redirectTo }: { redirectTo: string | null }) {
     defaultValues: { email: '', password: '' },
   });
 
+  const [twoFactor, setTwoFactor] = useState(false);
+
   const onSubmit = form.handleSubmit(async (values) => {
     setError(null);
-    const { error: failure } = await authClient.signIn.email(values);
+    const { data, error: failure } = await authClient.signIn.email(values);
     if (failure) {
       setError(
         failure.status === 403
@@ -81,9 +84,16 @@ export function SignInForm({ redirectTo }: { redirectTo: string | null }) {
       );
       return;
     }
+    // Double authentification activée : la session n'est ouverte qu'après le code TOTP.
+    if ('twoFactorRedirect' in data && data.twoFactorRedirect) {
+      setTwoFactor(true);
+      return;
+    }
     router.push(safeRedirect(redirectTo));
     router.refresh();
   });
+
+  if (twoFactor) return <TwoFactorStep redirectTo={redirectTo} />;
 
   return (
     <Form {...form}>
@@ -108,6 +118,59 @@ export function SignInForm({ redirectTo }: { redirectTo: string | null }) {
         </Button>
       </form>
     </Form>
+  );
+}
+
+/** Second facteur : code à 6 chiffres de l'application d'authentification. */
+function TwoFactorStep({ redirectTo }: { redirectTo: string | null }) {
+  const t = useTranslations('auth.twoFactor');
+  const router = useRouter();
+  const [code, setCode] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+
+  return (
+    <form
+      noValidate
+      className="grid gap-4"
+      onSubmit={(e) => {
+        e.preventDefault();
+        setPending(true);
+        void authClient.twoFactor.verifyTotp({ code: code.trim() }).then(({ error: failure }) => {
+          setPending(false);
+          if (failure) {
+            setError(t('invalid'));
+            return;
+          }
+          router.push(safeRedirect(redirectTo));
+          router.refresh();
+        });
+      }}
+    >
+      <div className="space-y-1">
+        <h2 className="font-semibold">{t('title')}</h2>
+        <p className="text-sm text-muted-foreground">{t('description')}</p>
+      </div>
+      {error && <Callout tone="destructive">{error}</Callout>}
+      <div className="space-y-2">
+        <Label htmlFor="two-factor-code">{t('code')}</Label>
+        <Input
+          id="two-factor-code"
+          inputMode="numeric"
+          autoComplete="one-time-code"
+          pattern="[0-9]*"
+          maxLength={6}
+          value={code}
+          aria-invalid={error ? true : undefined}
+          onChange={(e) => {
+            setCode(e.target.value);
+          }}
+        />
+      </div>
+      <Button type="submit" loading={pending}>
+        {t('submit')}
+      </Button>
+    </form>
   );
 }
 

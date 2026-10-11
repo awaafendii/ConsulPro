@@ -2,7 +2,9 @@
 
 import { isModuleAvailable, MODULES, type ModuleSection } from '@consulpro/domain';
 import {
+  AppLink,
   AppShell,
+  Button,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbList,
@@ -25,8 +27,10 @@ import {
   LibraryBig,
   LogOut,
   Mountain,
+  Search,
   ShowerHead,
   SunMoon,
+  UserCog,
   Users,
   Zap,
   type LucideIcon,
@@ -36,6 +40,8 @@ import { usePathname, useRouter } from 'next/navigation';
 import type { ReactNode } from 'react';
 
 import { useSignOut } from '@/components/sign-out-button';
+
+import { NotificationsBell } from './notifications-bell';
 
 const ICONS: Readonly<Record<string, LucideIcon>> = {
   dashboard: LayoutDashboard,
@@ -81,6 +87,7 @@ export function WorkspaceShell({
   const t = useTranslations('nav');
   const tCommon = useTranslations('common');
   const tRoles = useTranslations('roles');
+  const tSearch = useTranslations('search');
   const pathname = usePathname();
   const router = useRouter();
   const signOut = useSignOut();
@@ -129,6 +136,22 @@ export function WorkspaceShell({
     {
       heading: t('commandsActions'),
       entries: [
+        {
+          id: 'search',
+          label: tSearch('open'),
+          icon: Search,
+          onSelect: () => {
+            router.push(`${base}/recherche`);
+          },
+        },
+        {
+          id: 'account',
+          label: t('myAccount'),
+          icon: UserCog,
+          onSelect: () => {
+            router.push('/compte');
+          },
+        },
         {
           id: 'theme',
           label: t('toggleTheme'),
@@ -184,6 +207,7 @@ export function WorkspaceShell({
               icon: Building2,
               href: '/organisations',
             },
+            { id: 'account', label: t('myAccount'), icon: UserCog, href: '/compte' },
             { id: 'shortcuts', label: t('shortcuts'), icon: Keyboard, onSelect: openHelp },
             { id: 'sign-out', label: tCommon('signOut'), icon: LogOut, onSelect: signOut },
           ]}
@@ -206,7 +230,17 @@ export function WorkspaceShell({
           </BreadcrumbList>
         </Breadcrumb>
       }
-      headerEnd={<ThemeToggle label={tCommon('theme')} />}
+      headerEnd={
+        <>
+          <Button asChild variant="ghost" size="icon">
+            <AppLink href={`${base}/recherche`} aria-label={t('search')}>
+              <Search aria-hidden />
+            </AppLink>
+          </Button>
+          <NotificationsBell />
+          <ThemeToggle label={tCommon('theme')} />
+        </>
+      }
     >
       {children}
     </AppShell>

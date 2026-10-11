@@ -14,9 +14,11 @@
   "dependencies": {
     "@consulpro/calc-core": "workspace:*",
     "@consulpro/contracts": "workspace:*",
-    "@consulpro/domain": "workspace:*"
+    "@consulpro/domain": "workspace:*",
+    "@consulpro/standards": "workspace:*"
   },
   "devDependencies": {
+    "@consulpro/calc-demo": "workspace:*",
     "@consulpro/config-eslint": "workspace:*",
     "@consulpro/config-typescript": "workspace:*",
     "@vitest/coverage-v8": "5.0.3",

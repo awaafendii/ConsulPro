@@ -1,0 +1,48 @@
+{
+  "standard": {
+    "code": "DEMO",
+    "title": "Référentiel de démonstration — sans valeur technique",
+    "publisher": "ConsulPro",
+    "discipline": "BTP",
+    "nature": "PRACTICE"
+  },
+  "version": {
+    "label": "1",
+    "sourceNotes": "Valeurs fictives destinées au moteur de démonstration (développement et tests uniquement). Ne jamais utiliser pour un ouvrage réel."
+  },
+  "parameters": [
+    {
+      "key": "demo.waste_rate",
+      "label": "Taux de pertes (démonstration)",
+      "kind": "SCALAR",
+      "value": 5,
+      "unit": "%",
+      "source": {
+        "document": "Démonstration ConsulPro",
+        "note": "Valeur fictive, sans portée normative"
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "demo.max_area",
+      "label": "Surface maximale (démonstration)",
+      "kind": "SCALAR",
+      "value": 500,
+      "unit": "m2",
+      "source": {
+        "document": "Démonstration ConsulPro",
+        "note": "Valeur fictive, sans portée normative"
+      },
+      "verification": "TO_VERIFY"
+    }
+  ],
+  "rules": [
+    {
+      "code": "demo.max-area",
+      "description": "La surface ne dépasse pas la surface maximale de démonstration.",
+      "severity": "BLOCKING",
+      "parameterKeys": ["demo.max_area"],
+      "implementation": "demo.slab-volume/max-area"
+    }
+  ]
+}

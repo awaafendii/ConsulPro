@@ -9,6 +9,9 @@ import type {
 } from '@consulpro/application';
 import type { Prisma } from '@consulpro/db';
 
+import { createCalculationRepositories } from './calculation-repositories';
+import { createProjectRepositories } from './project-repositories';
+
 type Tx = Prisma.TransactionClient;
 
 interface OrganizationRow {
@@ -68,6 +71,8 @@ function isUniqueViolation(error: unknown): boolean {
  */
 export function createRepositories(tx: Tx): Repositories {
   return {
+    ...createProjectRepositories(tx),
+    ...createCalculationRepositories(tx),
     organizations: {
       async create({ id, name, slug }) {
         try {

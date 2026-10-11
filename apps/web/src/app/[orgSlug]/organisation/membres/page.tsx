@@ -34,6 +34,7 @@ export default async function MembersPage({ params }: { params: Promise<{ orgSlu
           orgSlug={ctx.organization.slug}
           currentUserId={ctx.actor.userId}
           canManage={canManage}
+          canTransfer={can(ctx.role, 'org.transfer')}
           initialMembers={members.value.map(memberDto)}
           initialInvitations={invitations?.ok ? invitations.value.map(invitationDto) : []}
         />

@@ -1,15 +1,18 @@
 import { createApplication, type Application, type Mailer } from '@consulpro/application';
+import { EngineRegistry } from '@consulpro/calc-core';
+import { DEMO_ENGINES } from '@consulpro/calc-demo';
 import { createDatabase, type Database } from '@consulpro/db';
 
 import { createAuth, type Auth } from './auth/auth';
 import { createUnitOfWork } from './persistence/unit-of-work';
-import { systemClock, tokenService, uuidV7Generator } from './system/services';
+import { sha256Hasher, systemClock, tokenService, uuidV7Generator } from './system/services';
 
 export { createAuth, type Auth, type AuthConfig } from './auth/auth';
 export { createSmtpMailer, MemoryMailer, type SmtpConfig } from './mail/smtp-mailer';
 export { createRepositories } from './persistence/repositories';
 export { createUnitOfWork } from './persistence/unit-of-work';
-export { systemClock, tokenService, uuidV7Generator } from './system/services';
+export { loadStandard, setPlatformAdmin, type LoadResult } from './standards/load-standard';
+export { sha256Hasher, systemClock, tokenService, uuidV7Generator } from './system/services';
 
 export interface InfrastructureConfig {
   /** Connexion du rôle applicatif restreint (RLS). */
@@ -18,6 +21,20 @@ export interface InfrastructureConfig {
   readonly authSecret: string;
   readonly mailer: Mailer;
   readonly rateLimit?: boolean;
+  /**
+   * Moteurs de démonstration (sans valeur technique) : développement et test uniquement
+   * (CONSULPRO_DEMO_ENGINES=true). Les moteurs métier arrivent avec leur phase.
+   */
+  readonly demoEngines?: boolean;
+  /** Fuseau horaire par défaut (IANA). */
+  readonly defaultTimeZone?: string;
+}
+
+/** Registre des moteurs disponibles sur ce serveur. */
+export function createEngineRegistry(options: { demoEngines: boolean }): EngineRegistry {
+  const registry = new EngineRegistry();
+  if (options.demoEngines) for (const engine of DEMO_ENGINES) registry.register(engine);
+  return registry;
 }
 
 export interface Infrastructure {
@@ -35,6 +52,9 @@ export function createInfrastructure(config: InfrastructureConfig): Infrastructu
     tokens: tokenService,
     clock: systemClock,
     ids: uuidV7Generator,
+    hasher: sha256Hasher,
+    engines: createEngineRegistry({ demoEngines: config.demoEngines === true }),
+    defaultTimeZone: config.defaultTimeZone ?? 'Africa/Abidjan',
     appUrl: config.appUrl,
   });
   const auth = createAuth({

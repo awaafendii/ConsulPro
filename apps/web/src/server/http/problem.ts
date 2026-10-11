@@ -60,5 +60,5 @@ export function problem(
 }
 
 export function problemFromAppError(error: AppError, requestId: string): Response {
-  return problem(STATUS[error.kind], error.reason, error.message, requestId);
+  return problem(STATUS[error.kind], error.reason, error.message, requestId, error.issues);
 }

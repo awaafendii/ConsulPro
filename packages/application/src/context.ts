@@ -1,13 +1,15 @@
 import { err, ok, type Result } from '@consulpro/calc-core';
 import { can, type OrgRole, type Permission } from '@consulpro/domain';
 
-import { appError, type AppError } from './errors';
+import { forbidden, type AppError } from './errors';
 
 export interface Actor {
   readonly userId: string;
   readonly email: string;
   readonly name: string;
   readonly emailVerified: boolean;
+  /** Administrateur de la plateforme (publication des référentiels système). La base le revérifie. */
+  readonly platformAdmin?: boolean;
 }
 
 export interface RequestMeta {
@@ -29,18 +31,20 @@ export interface OrgContext extends UserContext {
   readonly role: OrgRole;
 }
 
+/** Exécute `run` si le rôle accorde la permission ; sinon 403. */
+export function guarded<T>(
+  ctx: OrgContext,
+  permission: Permission,
+  run: () => Promise<Result<T, AppError>>,
+): Promise<Result<T, AppError>> {
+  const allowed = authorize(ctx, permission);
+  return allowed.ok ? run() : Promise.resolve(allowed);
+}
+
 export function authorize(
   ctx: OrgContext,
   permission: Permission,
   options: { isOwnResource?: boolean } = {},
 ): Result<void, AppError> {
-  return can(ctx.role, permission, options)
-    ? ok(undefined)
-    : err(
-        appError(
-          'FORBIDDEN',
-          'FORBIDDEN',
-          'Vous n’avez pas la permission d’effectuer cette action.',
-        ),
-      );
+  return can(ctx.role, permission, options) ? ok(undefined) : err(forbidden());
 }

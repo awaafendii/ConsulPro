@@ -110,6 +110,12 @@ COMPUTED ──(auteur valide)──▶ VALIDATED ──(vérificateur ≠ auteu
     └────────── nouvelle révision ◀┴── REJECTED (motif obligatoire)
 ```
 
+Mise en œuvre (Phase 3) : la révision stocke les références de toutes les versions de
+référentiels utilisées (`standards`), la saisie d'origine (`raw_inputs`, entrées liées comprises),
+les entrées normalisées, les erreurs et la présentation du moteur (libellés, précisions) au moment
+du calcul. Une exécution `INVALID` n'est pas enregistrée. Tables du lot D : `notifications`
+(visibles de leur seul destinataire) et `two_factors` (plugin TOTP de Better Auth).
+
 `result_status` est fixé par le moteur : `OK`, `OK_WITH_WARNINGS`, `NON_COMPLIANT`,
 `INVALID` (entrées refusées) ou `ERROR` (défaut interne, jamais présenté comme un résultat).
 

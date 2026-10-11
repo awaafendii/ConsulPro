@@ -79,7 +79,7 @@ flowchart LR
 
 ---
 
-## Phase 2 — Design System *(terminée le 2026-10-09, en revue)*
+## Phase 2 — Design System *(validée le 2026-10-09)*
 
 **Livrables** (détail : [14 — Design system](14-design-system.md))
 - `packages/ui` : tokens (couleurs, typographie, rayons, mouvement), thèmes clair et sombre, composants shadcn/ui adaptés.
@@ -109,7 +109,7 @@ flowchart LR
 
 ---
 
-## Phase 3 — Projets + socle calcul et référentiels *(ajustement I4)*
+## Phase 3 — Projets + socle calcul et référentiels *(terminée le 2026-10-09, en revue)*
 
 **Livrables**
 - Projets : création, modification, archivage, métiers activés, membres, permissions projet, fil d'activité.
@@ -120,16 +120,45 @@ flowchart LR
 - Référentiels : modèle `Standard` / `StandardVersion` / `Parameter` / `Rule`, profils,
   surcharges organisation / projet avec justification, interface de la bibliothèque (consultation).
 - Rôle `PlatformAdmin` : publication des référentiels système.
-- Double authentification TOTP (obligatoire pour Owner et Admin), transfert de propriété.
+- Double authentification TOTP **facultative** (décision du 2026-10-09), transfert de propriété.
+- Moteur de **démonstration** (sans valeur technique) activé uniquement en développement et en test
+  (`CONSULPRO_DEMO_ENGINES=true`), pour éprouver le socle de calcul avant le premier moteur métier (Phase 4).
 - Centre de notifications in-app ; fuseau horaire par utilisateur ; passage `CalculationResult` → `CalculationView` (présentateur).
 - Recherche globale sur les données (projets, études, calculs).
 - Onglets Documents et Rapports présents mais désactivés, avec la mention « Disponible en Phase 8 / 9 ».
 
 **Critères de sortie**
-- [ ] Tests d'intégration : immuabilité des révisions (trigger), un vérificateur ne peut pas être l'auteur, un projet archivé est en lecture seule.
-- [ ] Matrice de permissions complète pour tous les endpoints Projets / Études / Calculs / Bibliothèque.
-- [ ] Résolution des paramètres testée (priorité projet > organisation > référentiel, snapshot et hash).
-- [ ] E2E : créer un projet → inviter un membre → créer une étude → (moteur de test) calculer → valider → vérifier par un autre utilisateur.
+- [x] Tests d'intégration sur PostgreSQL : révisions immuables (le rôle applicatif n'a ni UPDATE ni
+  DELETE ; un trigger bloque même le propriétaire), un vérificateur ne peut pas être l'auteur (trigger
+  `apply_calculation_review`, y compris en écrivant directement en base), un projet archivé est en
+  lecture seule (triggers sur toutes ses tables).
+- [x] Matrice de permissions générée pour les 64 endpoints : rôle d'organisation × permission ; pour
+  les routes de projet, membre du projet ou non, rôle effectif borné par le rôle de projet ; routes de
+  la plateforme (administrateur seulement).
+- [x] Résolution des paramètres testée (projet > organisation > référentiel), snapshot figé dans la
+  révision et empreinte SHA-256 du JSON canonique, recalculée et comparée dans les tests.
+- [x] E2E : créer un projet → inviter un membre → créer une étude → calculer (moteur de démonstration)
+  → valider → vérifier par un autre utilisateur, notifié dans l'application.
+
+**Bilan chiffré** : 340 tests unitaires et de calcul, 668 tests d'intégration (dont 627 côté API),
+68 tests E2E (accessibilité axe de chaque page en clair et en sombre, de 360 à 1920 px).
+
+**Écarts et décisions**
+- Profils de référentiels : la sélection, par métier, des versions retenues par chaque projet (les
+  dernières versions publiées du métier par défaut), visible et modifiable dans l'onglet Référentiels.
+- Référentiels propres à une organisation (`CUSTOM`) : non livrés (consultation et surcharges
+  seulement, comme prévu) ; le modèle et la RLS les permettent déjà.
+- Les surcharges de tables passent par l'API ; l'interface propose les scalaires et les énumérés.
+- Une exécution aux entrées refusées (`INVALID`) n'est pas enregistrée : l'erreur est renvoyée champ
+  par champ et l'utilisateur corrige sa saisie. Les autres statuts (dont `ERROR`) créent une révision.
+- La présentation du moteur (libellés, précisions) est figée dans chaque révision : son affichage ne
+  dépend plus du moteur, même retiré du serveur.
+- Recherche globale : sous-chaîne insensible aux accents (`unaccent`) sur les intitulés de projets,
+  études et calculs ; les jeux de données ne sont pas indexés.
+- Moteurs de démonstration : refusés au démarrage quand l'environnement est la production
+  (`APP_ENV`, sinon `NODE_ENV`) ; le build de production des tests E2E déclare `APP_ENV=test`.
+- Le statut HTTP d'une page de projet inexistante est 200 (page diffusée en flux) ; le contenu
+  « Page introuvable » et la balise `noindex` le signalent, sans distinguer inexistant et inaccessible.
 
 ---
 

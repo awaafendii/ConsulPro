@@ -1,5 +1,8 @@
-import type { Result } from '@consulpro/calc-core';
+import type { EngineRegistry, Result } from '@consulpro/calc-core';
 import type { AuditAction, OrgRole } from '@consulpro/domain';
+
+import type { CalculationRepositories } from './ports-calculations';
+import type { ProjectRepositories } from './ports-projects';
 
 /*
  * Ports : interfaces implémentées par l'infrastructure (ADR-0002).
@@ -75,7 +78,7 @@ export interface AuditRecord {
   readonly createdAt: Date;
 }
 
-export interface Repositories {
+export interface Repositories extends ProjectRepositories, CalculationRepositories {
   readonly organizations: {
     create(input: {
       id: string;
@@ -169,12 +172,22 @@ export interface IdGenerator {
   next(): string;
 }
 
+export interface Hasher {
+  /** Empreinte SHA-256 (hexadécimal) d'un texte UTF-8. */
+  sha256(text: string): string;
+}
+
 export interface ApplicationDeps {
   readonly uow: UnitOfWork;
   readonly mailer: Mailer;
   readonly tokens: TokenService;
   readonly clock: Clock;
   readonly ids: IdGenerator;
+  readonly hasher: Hasher;
+  /** Moteurs de calcul disponibles sur ce serveur. */
+  readonly engines: EngineRegistry;
+  /** Fuseau horaire par défaut de l'application (IANA). */
+  readonly defaultTimeZone: string;
   /** URL publique de l'application (liens dans les e-mails). */
   readonly appUrl: string;
 }

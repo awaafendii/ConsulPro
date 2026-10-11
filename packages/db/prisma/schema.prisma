@@ -1,4 +1,4 @@
-// Schéma ConsulPro — Phase 1 (identité, organisations, audit).
+// Schéma ConsulPro — Phases 1 à 3 (identité, organisations, audit, référentiels, projets).
 // Conventions : docs/architecture/02-modele-de-donnees.md et 05-conventions.md §6.
 // L'isolation (RLS), les droits du rôle applicatif et l'immuabilité de l'audit
 // sont définis en SQL dans les migrations.
@@ -27,23 +27,95 @@ enum InvitationStatus {
   REVOKED
 }
 
+enum PlatformRole {
+  NONE
+  PLATFORM_ADMIN
+}
+
+enum Discipline {
+  BTP
+  ELEC
+  PLUMBING
+  TOPO
+}
+
+enum StandardNature {
+  NORM
+  GUIDE
+  PRACTICE
+  CUSTOM
+}
+
+enum StandardVersionStatus {
+  DRAFT
+  PUBLISHED
+  DEPRECATED
+}
+
+enum VerificationStatus {
+  VERIFIED
+  TO_VERIFY
+}
+
+enum ParameterKind {
+  SCALAR
+  ENUM
+  TABLE
+}
+
+enum RuleSeverity {
+  BLOCKING
+  WARNING
+  INFO
+}
+
+enum ProjectStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+enum ProjectRole {
+  ENGINEER
+  TECHNICIAN
+  COLLABORATOR
+  VIEWER
+}
+
 // ---------------------------------------------------------------------------
 // Authentification (tables gérées par Better Auth — ADR-0009)
 // ---------------------------------------------------------------------------
 
 model User {
-  id            String   @id @default(uuid(7)) @db.Uuid
-  name          String
-  email         String   @unique
-  emailVerified Boolean  @default(false) @map("email_verified")
-  image         String?
-  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
-  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+  id               String       @id @default(uuid(7)) @db.Uuid
+  name             String
+  email            String       @unique
+  emailVerified    Boolean      @default(false) @map("email_verified")
+  image            String?
+  /// Rôle de plateforme (publication des référentiels système), hors organisation.
+  platformRole     PlatformRole @default(NONE) @map("platform_role")
+  /// Fuseau d'affichage choisi (IANA), sinon celui de l'application.
+  timeZone         String?      @map("time_zone")
+  /// Double authentification TOTP activée (facultative, plugin Better Auth).
+  twoFactorEnabled Boolean      @default(false) @map("two_factor_enabled")
+  createdAt        DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt        DateTime     @updatedAt @map("updated_at") @db.Timestamptz(3)
 
-  sessions    Session[]
-  accounts    Account[]
-  memberships Membership[]
-  invitations Invitation[]
+  sessions                  Session[]
+  accounts                  Account[]
+  memberships               Membership[]
+  invitations               Invitation[]
+  projectsCreated           Project[]             @relation("ProjectCreator")
+  projectMemberships        ProjectMember[]
+  overridesCreated          ParameterOverride[]
+  standardVersionsPublished StandardVersion[]     @relation("StandardPublisher")
+  studiesCreated            Study[]               @relation("StudyCreator")
+  calculationsCreated       Calculation[]         @relation("CalculationCreator")
+  revisionsAuthored         CalculationRevision[] @relation("RevisionAuthor")
+  reviews                   CalculationReview[]   @relation("Reviewer")
+  datasetsCreated           Dataset[]             @relation("DatasetCreator")
+  datasetRevisionsAuthored  DatasetRevision[]     @relation("DatasetRevisionAuthor")
+  notifications             Notification[]
+  twoFactors                TwoFactor[]
 
   @@map("users")
 }
@@ -120,8 +192,12 @@ model Organization {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
 
-  memberships Membership[]
-  invitations Invitation[]
+  memberships   Membership[]
+  invitations   Invitation[]
+  standards     Standard[]
+  projects      Project[]
+  overrides     ParameterOverride[]
+  notifications Notification[]
 
   @@map("organizations")
 }
@@ -185,4 +261,471 @@ model AuditLog {
 
   @@index([organizationId, id(sort: Desc)])
   @@map("audit_logs")
+}
+
+// ---------------------------------------------------------------------------
+// Référentiels (docs/architecture/11-referentiels.md) — organisation NULL = système.
+// Une version publiée est immuable (triggers) ; la publication système passe par
+// une fonction SQL qui vérifie le rôle PLATFORM_ADMIN.
+// ---------------------------------------------------------------------------
+
+model Standard {
+  id             String         @id @default(uuid(7)) @db.Uuid
+  organizationId String?        @map("organization_id") @db.Uuid
+  code           String
+  title          String
+  publisher      String?
+  discipline     Discipline?
+  nature         StandardNature
+  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime       @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  organization Organization?     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  versions     StandardVersion[]
+
+  @@unique([organizationId, code])
+  @@map("standards")
+}
+
+model StandardVersion {
+  id             String                @id @default(uuid(7)) @db.Uuid
+  standardId     String                @map("standard_id") @db.Uuid
+  organizationId String?               @map("organization_id") @db.Uuid
+  label          String
+  status         StandardVersionStatus @default(DRAFT)
+  sourceNotes    String?               @map("source_notes")
+  publishedAt    DateTime?             @map("published_at") @db.Timestamptz(3)
+  publishedById  String?               @map("published_by_id") @db.Uuid
+  deprecatedAt   DateTime?             @map("deprecated_at") @db.Timestamptz(3)
+  createdAt      DateTime              @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime              @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  standard          Standard                 @relation(fields: [standardId], references: [id], onDelete: Cascade)
+  publishedBy       User?                    @relation("StandardPublisher", fields: [publishedById], references: [id])
+  parameters        Parameter[]
+  rules             Rule[]
+  overrides         ParameterOverride[]
+  projectSelections ProjectStandardVersion[]
+
+  @@unique([standardId, label])
+  @@index([organizationId, status])
+  @@map("standard_versions")
+}
+
+model Parameter {
+  id                String             @id @default(uuid(7)) @db.Uuid
+  standardVersionId String             @map("standard_version_id") @db.Uuid
+  organizationId    String?            @map("organization_id") @db.Uuid
+  key               String
+  label             String
+  kind              ParameterKind
+  /// Valeur typée (ParameterValue de calc-core), validée par packages/standards.
+  value             Json
+  unit              String?
+  /// { document, clause?, table?, note? } — source obligatoire (principe P10).
+  source            Json
+  verification      VerificationStatus
+  createdAt         DateTime           @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  standardVersion StandardVersion @relation(fields: [standardVersionId], references: [id], onDelete: Cascade)
+
+  @@unique([standardVersionId, key])
+  @@map("parameters")
+}
+
+model Rule {
+  id                String       @id @default(uuid(7)) @db.Uuid
+  standardVersionId String       @map("standard_version_id") @db.Uuid
+  organizationId    String?      @map("organization_id") @db.Uuid
+  code              String
+  description       String
+  severity          RuleSeverity
+  clause            String?
+  parameterKeys     String[]     @map("parameter_keys")
+  implementation    String
+  createdAt         DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  standardVersion StandardVersion @relation(fields: [standardVersionId], references: [id], onDelete: Cascade)
+
+  @@unique([standardVersionId, code])
+  @@map("rules")
+}
+
+/// Paramètre personnalisé : organisation (project_id NULL) ou projet. Justification obligatoire.
+model ParameterOverride {
+  id                String   @id @db.Uuid
+  organizationId    String   @map("organization_id") @db.Uuid
+  projectId         String?  @map("project_id") @db.Uuid
+  standardVersionId String   @map("standard_version_id") @db.Uuid
+  key               String
+  value             Json
+  justification     String
+  createdById       String   @map("created_by_id") @db.Uuid
+  version           Int      @default(1)
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  organization    Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project         Project?        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  standardVersion StandardVersion @relation(fields: [standardVersionId], references: [id])
+  createdBy       User            @relation(fields: [createdById], references: [id])
+
+  /// Index créé avec NULLS NOT DISTINCT (migration 20261009021423_standards_and_projects).
+  @@unique([organizationId, projectId, standardVersionId, key], map: "parameter_overrides_scope_key")
+  @@index([organizationId, projectId])
+  @@map("parameter_overrides")
+}
+
+// ---------------------------------------------------------------------------
+// Projets — l'accès à un projet et à ses données est restreint en base (RLS) aux
+// propriétaires et administrateurs de l'organisation et aux membres du projet.
+// Les tables filles référencent (project_id, organization_id) : cohérence garantie.
+// ---------------------------------------------------------------------------
+
+model Project {
+  id             String        @id @db.Uuid
+  organizationId String        @map("organization_id") @db.Uuid
+  code           String
+  name           String
+  description    String?
+  client         String?
+  location       String?
+  status         ProjectStatus @default(ACTIVE)
+  startDate      DateTime?     @map("start_date") @db.Date
+  endDate        DateTime?     @map("end_date") @db.Date
+  version        Int           @default(1)
+  createdById    String        @map("created_by_id") @db.Uuid
+  archivedAt     DateTime?     @map("archived_at") @db.Timestamptz(3)
+  createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime      @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  organization     Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdBy        User                     @relation("ProjectCreator", fields: [createdById], references: [id])
+  members          ProjectMember[]
+  disciplines      ProjectDiscipline[]
+  standardVersions ProjectStandardVersion[]
+  activity         ActivityEvent[]
+  overrides        ParameterOverride[]
+  studies          Study[]
+  calculations     Calculation[]
+  revisions        CalculationRevision[]
+  reviews          CalculationReview[]
+  dependencies     CalculationDependency[]
+  datasets         Dataset[]
+  datasetRevisions DatasetRevision[]
+
+  @@unique([organizationId, code])
+  @@unique([id, organizationId])
+  @@index([organizationId, status])
+  @@map("projects")
+}
+
+model ProjectMember {
+  id             String      @id @db.Uuid
+  organizationId String      @map("organization_id") @db.Uuid
+  projectId      String      @map("project_id") @db.Uuid
+  userId         String      @map("user_id") @db.Uuid
+  role           ProjectRole
+  version        Int         @default(1)
+  createdAt      DateTime    @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime    @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  project Project @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, userId])
+  @@index([userId])
+  @@map("project_members")
+}
+
+model ProjectDiscipline {
+  id             String     @id @db.Uuid
+  organizationId String     @map("organization_id") @db.Uuid
+  projectId      String     @map("project_id") @db.Uuid
+  discipline     Discipline
+  createdAt      DateTime   @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  project Project @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
+
+  @@unique([projectId, discipline])
+  @@map("project_disciplines")
+}
+
+/// Versions de référentiels retenues par un projet, par discipline.
+model ProjectStandardVersion {
+  organizationId    String     @map("organization_id") @db.Uuid
+  projectId         String     @map("project_id") @db.Uuid
+  discipline        Discipline
+  standardVersionId String     @map("standard_version_id") @db.Uuid
+  createdAt         DateTime   @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  project         Project         @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
+  standardVersion StandardVersion @relation(fields: [standardVersionId], references: [id])
+
+  @@id([projectId, discipline, standardVersionId])
+  @@map("project_standard_versions")
+}
+
+/// Fil d'activité visible des membres (distinct du journal d'audit, sécuritaire).
+model ActivityEvent {
+  id             String   @id @default(uuid(7)) @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  projectId      String   @map("project_id") @db.Uuid
+  actorUserId    String?  @map("actor_user_id") @db.Uuid
+  type           String
+  targetType     String?  @map("target_type")
+  targetId       String?  @map("target_id")
+  summary        Json     @default("{}")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  project Project @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
+
+  @@index([projectId, id(sort: Desc)])
+  @@map("activity_events")
+}
+
+// ---------------------------------------------------------------------------
+// Études, calculs et révisions immuables (Phase 3, lot C). Accès restreint au projet
+// (mêmes règles que les projets). Une révision n'est jamais modifiée : seul son statut de
+// contrôle est dérivé des avis (calculation_reviews), par un trigger.
+// ---------------------------------------------------------------------------
+
+enum ResultStatus {
+  OK
+  OK_WITH_WARNINGS
+  NON_COMPLIANT
+  INVALID
+  ERROR
+}
+
+enum WorkflowStatus {
+  COMPUTED
+  VALIDATED
+  VERIFIED
+  REJECTED
+}
+
+enum ReviewType {
+  VALIDATION
+  VERIFICATION
+}
+
+enum ReviewDecision {
+  APPROVED
+  REJECTED
+}
+
+model Study {
+  id             String     @id @db.Uuid
+  organizationId String     @map("organization_id") @db.Uuid
+  projectId      String     @map("project_id") @db.Uuid
+  discipline     Discipline
+  title          String
+  description    String?
+  version        Int        @default(1)
+  createdById    String     @map("created_by_id") @db.Uuid
+  createdAt      DateTime   @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime   @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  project      Project       @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
+  createdBy    User          @relation("StudyCreator", fields: [createdById], references: [id])
+  calculations Calculation[]
+
+  @@index([projectId])
+  @@map("studies")
+}
+
+model Calculation {
+  id                String   @id @db.Uuid
+  organizationId    String   @map("organization_id") @db.Uuid
+  projectId         String   @map("project_id") @db.Uuid
+  studyId           String   @map("study_id") @db.Uuid
+  engineId          String   @map("engine_id")
+  title             String
+  currentRevisionId String?  @unique @map("current_revision_id") @db.Uuid
+  version           Int      @default(1)
+  createdById       String   @map("created_by_id") @db.Uuid
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  project         Project                 @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
+  study           Study                   @relation(fields: [studyId], references: [id], onDelete: Cascade)
+  createdBy       User                    @relation("CalculationCreator", fields: [createdById], references: [id])
+  currentRevision CalculationRevision?    @relation("CurrentRevision", fields: [currentRevisionId], references: [id])
+  revisions       CalculationRevision[]   @relation("Revisions")
+  dependents      CalculationDependency[] @relation("DependencySource")
+
+  @@index([studyId])
+  @@index([projectId])
+  @@map("calculations")
+}
+
+/// Instantané immuable d'une exécution (aucun UPDATE ni DELETE par l'application).
+model CalculationRevision {
+  id                    String         @id @db.Uuid
+  organizationId        String         @map("organization_id") @db.Uuid
+  projectId             String         @map("project_id") @db.Uuid
+  calculationId         String         @map("calculation_id") @db.Uuid
+  number                Int
+  engineId              String         @map("engine_id")
+  engineVersion         String         @map("engine_version")
+  /// Références des versions de référentiels utilisées (StandardRef[]).
+  standards             Json
+  parameterSnapshot     Json           @map("parameter_snapshot")
+  /// SHA-256 du JSON canonique du snapshot des paramètres.
+  parameterSnapshotHash String         @map("parameter_snapshot_hash")
+  rawInputs             Json           @map("raw_inputs")
+  inputs                Json?
+  outputs               Json?
+  checks                Json
+  warnings              Json
+  hypotheses            Json
+  trace                 Json
+  errors                Json
+  failure               Json?
+  /// Présentation du moteur au moment du calcul (libellés, précisions).
+  presentation          Json
+  resultStatus          ResultStatus   @map("result_status")
+  workflowStatus        WorkflowStatus @default(COMPUTED) @map("workflow_status")
+  authorId              String         @map("author_id") @db.Uuid
+  createdAt             DateTime       @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  project      Project                 @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
+  calculation  Calculation             @relation("Revisions", fields: [calculationId], references: [id], onDelete: Cascade)
+  currentOf    Calculation?            @relation("CurrentRevision")
+  author       User                    @relation("RevisionAuthor", fields: [authorId], references: [id])
+  reviews      CalculationReview[]
+  dependencies CalculationDependency[] @relation("DependencyTarget")
+  usedBy       CalculationDependency[] @relation("DependencySourceRevision")
+
+  @@unique([calculationId, number])
+  @@map("calculation_revisions")
+}
+
+/// Avis de contrôle (append-only) : validation par l'auteur, vérification par un tiers.
+model CalculationReview {
+  id             String         @id @default(uuid(7)) @db.Uuid
+  organizationId String         @map("organization_id") @db.Uuid
+  projectId      String         @map("project_id") @db.Uuid
+  revisionId     String         @map("revision_id") @db.Uuid
+  type           ReviewType
+  decision       ReviewDecision
+  comment        String?
+  reviewerId     String         @map("reviewer_id") @db.Uuid
+  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  project  Project             @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
+  revision CalculationRevision @relation(fields: [revisionId], references: [id], onDelete: Cascade)
+  reviewer User                @relation("Reviewer", fields: [reviewerId], references: [id])
+
+  @@index([revisionId])
+  @@map("calculation_reviews")
+}
+
+/// Entrée d'une révision reprise de la sortie d'une révision d'un autre calcul.
+model CalculationDependency {
+  id                  String @id @default(uuid(7)) @db.Uuid
+  organizationId      String @map("organization_id") @db.Uuid
+  projectId           String @map("project_id") @db.Uuid
+  revisionId          String @map("revision_id") @db.Uuid
+  input               String
+  sourceCalculationId String @map("source_calculation_id") @db.Uuid
+  sourceRevisionId    String @map("source_revision_id") @db.Uuid
+  output              String
+
+  project           Project             @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
+  revision          CalculationRevision @relation("DependencyTarget", fields: [revisionId], references: [id], onDelete: Cascade)
+  sourceCalculation Calculation         @relation("DependencySource", fields: [sourceCalculationId], references: [id], onDelete: Cascade)
+  sourceRevision    CalculationRevision @relation("DependencySourceRevision", fields: [sourceRevisionId], references: [id], onDelete: Cascade)
+
+  @@unique([revisionId, input])
+  @@index([sourceCalculationId])
+  @@map("calculation_dependencies")
+}
+
+// ---------------------------------------------------------------------------
+// Données de projet : jeux de données typés, révisions immuables.
+// ---------------------------------------------------------------------------
+
+model Dataset {
+  id                String     @id @db.Uuid
+  organizationId    String     @map("organization_id") @db.Uuid
+  projectId         String     @map("project_id") @db.Uuid
+  kind              String
+  discipline        Discipline
+  title             String
+  currentRevisionId String?    @unique @map("current_revision_id") @db.Uuid
+  version           Int        @default(1)
+  createdById       String     @map("created_by_id") @db.Uuid
+  createdAt         DateTime   @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime   @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  project         Project           @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
+  createdBy       User              @relation("DatasetCreator", fields: [createdById], references: [id])
+  currentRevision DatasetRevision?  @relation("CurrentDatasetRevision", fields: [currentRevisionId], references: [id])
+  revisions       DatasetRevision[] @relation("DatasetRevisions")
+
+  @@index([projectId])
+  @@map("datasets")
+}
+
+model DatasetRevision {
+  id             String   @id @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  projectId      String   @map("project_id") @db.Uuid
+  datasetId      String   @map("dataset_id") @db.Uuid
+  number         Int
+  /// Lignes validées par le type du jeu (packages/domain).
+  rows           Json
+  rowCount       Int      @map("row_count")
+  note           String?
+  authorId       String   @map("author_id") @db.Uuid
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  project   Project  @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
+  dataset   Dataset  @relation("DatasetRevisions", fields: [datasetId], references: [id], onDelete: Cascade)
+  currentOf Dataset? @relation("CurrentDatasetRevision")
+  author    User     @relation("DatasetRevisionAuthor", fields: [authorId], references: [id])
+
+  @@unique([datasetId, number])
+  @@map("dataset_revisions")
+}
+
+// ---------------------------------------------------------------------------
+// Notifications in-app (lot D) : visibles de leur seul destinataire.
+// ---------------------------------------------------------------------------
+
+model Notification {
+  id             String    @id @default(uuid(7)) @db.Uuid
+  userId         String    @map("user_id") @db.Uuid
+  organizationId String?   @map("organization_id") @db.Uuid
+  type           String
+  title          String
+  body           String?
+  link           String?
+  readAt         DateTime? @map("read_at") @db.Timestamptz(3)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([userId, id(sort: Desc)])
+  @@map("notifications")
+}
+
+/// Double authentification TOTP facultative (plugin twoFactor de Better Auth).
+model TwoFactor {
+  id                      String    @id @default(uuid(7)) @db.Uuid
+  userId                  String    @map("user_id") @db.Uuid
+  secret                  String
+  backupCodes             String    @map("backup_codes")
+  verified                Boolean   @default(true)
+  failedVerificationCount Int       @default(0) @map("failed_verification_count")
+  lockedUntil             DateTime? @map("locked_until") @db.Timestamptz(3)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([secret])
+  @@map("two_factors")
 }

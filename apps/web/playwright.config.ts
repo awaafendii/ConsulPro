@@ -28,7 +28,12 @@ const config = defineConfig({
     url: `${BASE_URL}/connexion`,
     reuseExistingServer: false,
     timeout: 120_000,
-    env: { APP_URL: BASE_URL, NEXT_TELEMETRY_DISABLED: '1' },
+    env: {
+      APP_URL: BASE_URL,
+      NEXT_TELEMETRY_DISABLED: '1',
+      CONSULPRO_DEMO_ENGINES: 'true',
+      APP_ENV: 'test',
+    },
   },
 });
 
