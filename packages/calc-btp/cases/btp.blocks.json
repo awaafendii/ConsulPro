@@ -1,0 +1,304 @@
+{
+  "engine": "btp.blocks",
+  "parameterSet": {
+    "standard": "BTP-USAGES-METRE",
+    "version": "1"
+  },
+  "cases": [
+    {
+      "id": "btp.blocks/50m2-t15",
+      "engine": "btp.blocks",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "n = 1 / (0,0861) = 11,614402 blocs/m² ; N = 50 / ((0,4 + 0,01) × (0,2 + 0,01)) × 1,05 = 609,756098",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "area": {
+          "value": 50,
+          "unit": "m2"
+        },
+        "thickness": "T15"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "perM2": {
+            "value": 11.6144018583,
+            "tolerance": 0.001
+          },
+          "blocks10": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "blocks15": {
+            "value": 609.756097561,
+            "tolerance": 0.001
+          },
+          "blocks20": {
+            "value": 0,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.blocks/28.62m2-t20",
+      "engine": "btp.blocks",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "n = 1 / (0,0861) = 11,614402 blocs/m² ; N = 28,62 / ((0,4 + 0,01) × (0,2 + 0,01)) × 1,05 = 349,02439",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "area": {
+          "value": 28.62,
+          "unit": "m2"
+        },
+        "thickness": "T20"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "perM2": {
+            "value": 11.6144018583,
+            "tolerance": 0.001
+          },
+          "blocks10": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "blocks15": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "blocks20": {
+            "value": 349.024390244,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.blocks/100m2-t10",
+      "engine": "btp.blocks",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "n = 1 / (0,0861) = 11,614402 blocs/m² ; N = 100 / ((0,4 + 0,01) × (0,2 + 0,01)) × 1,05 = 1219,512195",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "area": {
+          "value": 100,
+          "unit": "m2"
+        },
+        "thickness": "T10"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "perM2": {
+            "value": 11.6144018583,
+            "tolerance": 0.001
+          },
+          "blocks10": {
+            "value": 1219.51219512,
+            "tolerance": 0.001
+          },
+          "blocks15": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "blocks20": {
+            "value": 0,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.blocks/max-area",
+      "engine": "btp.blocks",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "n = 1 / (0,0861) = 11,614402 blocs/m² ; N = 1000000 / ((0,4 + 0,01) × (0,2 + 0,01)) × 1,05 = 12195121,95 — limite : surface maximale du domaine.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "area": {
+          "value": 1000000,
+          "unit": "m2"
+        },
+        "thickness": "T20"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "perM2": {
+            "value": 11.6144018583,
+            "tolerance": 0.001
+          },
+          "blocks10": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "blocks15": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "blocks20": {
+            "value": 12195121.9512,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.blocks/one-module",
+      "engine": "btp.blocks",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "n = 1 / (0,0861) = 11,614402 blocs/m² ; N = 0,0861 / ((0,4 + 0,01) × (0,2 + 0,01)) × 1,05 = 1,05 — limite : un seul module de calepinage (un bloc, pertes comprises).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "area": {
+          "value": 0.0861,
+          "unit": "m2"
+        },
+        "thickness": "T15"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "perM2": {
+            "value": 11.6144018583,
+            "tolerance": 0.001
+          },
+          "blocks10": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "blocks15": {
+            "value": 1.05,
+            "tolerance": 0.001
+          },
+          "blocks20": {
+            "value": 0,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.blocks/zero-area",
+      "engine": "btp.blocks",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Surface nulle (strictement positive exigée) : refus.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "area": {
+          "value": 0,
+          "unit": "m2"
+        },
+        "thickness": "T15"
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "area.value",
+            "code": "OUT_OF_RANGE"
+          }
+        ]
+      }
+    },
+    {
+      "id": "btp.blocks/missing-block-length",
+      "engine": "btp.blocks",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Paramètre btp.block.length absent du jeu résolu : le calcul est refusé avant exécution (PARAMETER_MISSING).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "omitParameters": ["btp.block.length"],
+      "inputs": {
+        "area": {
+          "value": 50,
+          "unit": "m2"
+        },
+        "thickness": "T15"
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.btp.block.length",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

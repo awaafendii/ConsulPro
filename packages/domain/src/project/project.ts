@@ -140,5 +140,18 @@ export const ACTIVITY_TYPES = [
   'calculation.rejected',
   'dataset.created',
   'dataset.revised',
+  'takeoff.node_created',
+  'takeoff.node_updated',
+  'takeoff.node_deleted',
+  'takeoff.calculation_assigned',
+  'takeoff.calculation_unassigned',
+  'boq.created',
+  'boq.updated',
+  'boq.deleted',
+  'boq.synced',
+  'boq.prices_applied',
+  'boq.item_added',
+  'boq.item_updated',
+  'boq.item_deleted',
 ] as const;
 export type ActivityType = (typeof ACTIVITY_TYPES)[number];

@@ -1,0 +1,500 @@
+{
+  "engine": "btp.slabs",
+  "parameterSet": {
+    "standard": "BTP-USAGES-METRE",
+    "version": "1"
+  },
+  "cases": [
+    {
+      "id": "btp.slabs/solid-48m2-15cm",
+      "engine": "btp.slabs",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V = 48 × 0,15 = 7,2 m³ ; S_c = 48 + 28 × 0,15 = 52,2 m² ; aciers = 90 kg/m³ × 7,2 m³ = 648 kg ; commandés × 1,05 = 680,4 kg ; béton ARME : V_c = 7,2 × 1,05 = 7,56 m³ ; ciment 350 × 7,56 = 2646 kg ; sable 0,4 × 7,56 = 3,024 m³ ; gravier 0,8 × 7,56 = 6,048 m³ ; eau 0,175 × 7,56 × 1000 = 1323 L ; sacs = 2646 / 50 = 52,92",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "type": "SOLID",
+        "area": {
+          "value": 48,
+          "unit": "m2"
+        },
+        "thickness": {
+          "value": 15,
+          "unit": "cm"
+        },
+        "edgeLength": {
+          "value": 28,
+          "unit": "m"
+        },
+        "steelMode": "RATIO"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "concrete": {
+            "value": 7.2,
+            "tolerance": 0.001
+          },
+          "formwork": {
+            "value": 52.2,
+            "tolerance": 0.001
+          },
+          "steel": {
+            "value": 648,
+            "tolerance": 0.001
+          },
+          "steelOrdered": {
+            "value": 680.4,
+            "tolerance": 0.001
+          },
+          "hollowBlocks": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "joists": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "mesh": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 2646,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 52.92,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 3.024,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 6.048,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 1323,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.slabs/hollow-16-4-60m2",
+      "engine": "btp.slabs",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V = 60 × 0,065 = 3,9 m³ ; S_c = 32 × 0,2 = 6,4 m² ; N = 60 / (0,6 × 0,2) × 1,05 = 525 ; L_p = 60 / 0,6 = 100 m ; treillis = 60 × 1,1 = 66 m² ; aciers non comptés (poutrelles armées) ; béton ARME : V_c = 3,9 × 1,05 = 4,095 m³ ; ciment 350 × 4,095 = 1433,25 kg ; sable 0,4 × 4,095 = 1,638 m³ ; gravier 0,8 × 4,095 = 3,276 m³ ; eau 0,175 × 4,095 × 1000 = 716,625 L ; sacs = 1433,25 / 50 = 28,665",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "type": "H16_4",
+        "area": {
+          "value": 60,
+          "unit": "m2"
+        },
+        "edgeLength": {
+          "value": 32,
+          "unit": "m"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "concrete": {
+            "value": 3.9,
+            "tolerance": 0.001
+          },
+          "formwork": {
+            "value": 6.4,
+            "tolerance": 0.001
+          },
+          "steel": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "steelOrdered": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "hollowBlocks": {
+            "value": 525,
+            "tolerance": 0.001
+          },
+          "joists": {
+            "value": 100,
+            "tolerance": 0.001
+          },
+          "mesh": {
+            "value": 66,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 1433.25,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 28.665,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 1.638,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 3.276,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 716.625,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.HOLLOW_STEEL", "BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.slabs/hollow-20-4-schedule",
+      "engine": "btp.slabs",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V = 80 × 0,075 = 6 m³ ; S_c = 0 × 0,24 = 0 m² ; N = 80 / (0,6 × 0,2) × 1,05 = 700 ; L_p = 80 / 0,6 = 133,333333 m ; treillis = 80 × 1,1 = 88 m² ; HA10 : π × 0,01² / 4 × 7850 = 0,616538 kg/m × 4 m × 50 = 123,307512 kg ; total 123,307512 kg ; commandés × 1,05 = 129,472887 kg ; béton ARME : V_c = 6 × 1,05 = 6,3 m³ ; ciment 350 × 6,3 = 2205 kg ; sable 0,4 × 6,3 = 2,52 m³ ; gravier 0,8 × 6,3 = 5,04 m³ ; eau 0,175 × 6,3 × 1000 = 1102,5 L ; sacs = 2205 / 50 = 44,1 (rives non saisies : 0)",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "type": "H20_4",
+        "area": {
+          "value": 80,
+          "unit": "m2"
+        },
+        "steelMode": "SCHEDULE",
+        "schedule": [
+          {
+            "diameter": {
+              "value": 10,
+              "unit": "mm"
+            },
+            "length": {
+              "value": 4,
+              "unit": "m"
+            },
+            "count": 50
+          }
+        ]
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "concrete": {
+            "value": 6,
+            "tolerance": 0.001
+          },
+          "formwork": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "steel": {
+            "value": 123.307511653,
+            "tolerance": 0.001
+          },
+          "steelOrdered": {
+            "value": 129.472887236,
+            "tolerance": 0.001
+          },
+          "hollowBlocks": {
+            "value": 700,
+            "tolerance": 0.001
+          },
+          "joists": {
+            "value": 133.333333333,
+            "tolerance": 0.001
+          },
+          "mesh": {
+            "value": 88,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 2205,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 44.1,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 2.52,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 5.04,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 1102.5,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY", "DEFAULT.edgeLength"]
+      }
+    },
+    {
+      "id": "btp.slabs/solid-max-thickness-1m",
+      "engine": "btp.slabs",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V = 10 × 1 = 10 m³ ; S_c = 10 + 0 × 1 = 10 m² ; aciers = 90 kg/m³ × 10 m³ = 900 kg ; commandés × 1,05 = 945 kg ; béton ARME : V_c = 10 × 1,05 = 10,5 m³ ; ciment 350 × 10,5 = 3675 kg ; sable 0,4 × 10,5 = 4,2 m³ ; gravier 0,8 × 10,5 = 8,4 m³ ; eau 0,175 × 10,5 × 1000 = 1837,5 L ; sacs = 3675 / 50 = 73,5 — limite : épaisseur maximale du domaine (1 m) ; rives non saisies.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "type": "SOLID",
+        "area": {
+          "value": 10,
+          "unit": "m2"
+        },
+        "thickness": {
+          "value": 1,
+          "unit": "m"
+        },
+        "steelMode": "RATIO"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "concrete": {
+            "value": 10,
+            "tolerance": 0.001
+          },
+          "formwork": {
+            "value": 10,
+            "tolerance": 0.001
+          },
+          "steel": {
+            "value": 900,
+            "tolerance": 0.001
+          },
+          "steelOrdered": {
+            "value": 945,
+            "tolerance": 0.001
+          },
+          "hollowBlocks": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "joists": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "mesh": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 3675,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 73.5,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 4.2,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 8.4,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 1837.5,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY", "DEFAULT.edgeLength"]
+      }
+    },
+    {
+      "id": "btp.slabs/hollow-max-area",
+      "engine": "btp.slabs",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V = 1000000 × 0,065 = 65000 m³ ; S_c = 0,01 × 0,2 = 0,002 m² ; N = 1000000 / (0,6 × 0,2) × 1,05 = 8750000 ; L_p = 1000000 / 0,6 = 1666666,667 m ; treillis = 1000000 × 1,1 = 1100000 m² ; aciers non comptés (poutrelles armées) ; béton ARME : V_c = 65000 × 1,05 = 68250 m³ ; ciment 350 × 68250 = 23887500 kg ; sable 0,4 × 68250 = 27300 m³ ; gravier 0,8 × 68250 = 54600 m³ ; eau 0,175 × 68250 × 1000 = 11943750 L ; sacs = 23887500 / 50 = 477750 — limite : surface maximale du domaine (1 000 000 m²).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "type": "H16_4",
+        "area": {
+          "value": 1000000,
+          "unit": "m2"
+        },
+        "edgeLength": {
+          "value": 0.01,
+          "unit": "m"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "concrete": {
+            "value": 65000,
+            "tolerance": 0.001
+          },
+          "formwork": {
+            "value": 0.002,
+            "tolerance": 0.001
+          },
+          "steel": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "steelOrdered": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "hollowBlocks": {
+            "value": 8750000,
+            "tolerance": 0.001
+          },
+          "joists": {
+            "value": 1666666.66667,
+            "tolerance": 0.001
+          },
+          "mesh": {
+            "value": 1100000,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 23887500,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 477750,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 27300,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 54600,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 11943750,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.HOLLOW_STEEL", "BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.slabs/solid-without-thickness",
+      "engine": "btp.slabs",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Dalle pleine sans épaisseur : refus (THICKNESS_REQUIRED).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "type": "SOLID",
+        "area": {
+          "value": 48,
+          "unit": "m2"
+        }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "thickness",
+            "code": "THICKNESS_REQUIRED"
+          }
+        ]
+      }
+    },
+    {
+      "id": "btp.slabs/missing-slab-joist_spacing",
+      "engine": "btp.slabs",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Paramètre btp.slab.joist_spacing absent du jeu résolu : le calcul est refusé avant exécution (PARAMETER_MISSING).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "omitParameters": ["btp.slab.joist_spacing"],
+      "inputs": {
+        "type": "H16_4",
+        "area": {
+          "value": 60,
+          "unit": "m2"
+        }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.btp.slab.joist_spacing",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

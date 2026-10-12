@@ -6,7 +6,7 @@
  * À chaque phase terminée, relever LATEST_DELIVERED_PHASE ; un test E2E vérifie que
  * chaque module disponible mène à une page qui existe.
  */
-export const LATEST_DELIVERED_PHASE = 3;
+export const LATEST_DELIVERED_PHASE = 4;
 
 export type ModuleSection = 'workspace' | 'trades' | 'organization';
 

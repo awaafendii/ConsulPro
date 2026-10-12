@@ -22,8 +22,13 @@ import { DEMO_ENGINES } from '@consulpro/calc-demo';
 
 import { calculationRepositories, type CalculationState } from './in-memory-calculations';
 import { projectRepositories, type ProjectState } from './in-memory-projects';
+import {
+  emptyQuantityState,
+  quantityRepositories,
+  type QuantityState,
+} from './in-memory-quantities';
 
-interface State extends ProjectState, CalculationState {
+interface State extends ProjectState, CalculationState, QuantityState {
   users: CalculationState['users'];
   organizations: OrganizationRecord[];
   memberships: MembershipRecord[];
@@ -52,6 +57,7 @@ const emptyState = (): State => ({
   datasets: [],
   datasetRevisions: [],
   notifications: [],
+  ...emptyQuantityState(),
 });
 
 export class InMemoryStore {
@@ -90,6 +96,7 @@ export class InMemoryStore {
     const userOf = (id: string) => s.users.find((u) => u.id === id);
     return {
       ...calculationRepositories(s, now, () => this.nextId()),
+      ...quantityRepositories(s, now),
       ...projectRepositories(
         s,
         now,

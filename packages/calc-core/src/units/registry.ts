@@ -27,7 +27,13 @@ export type UnitKind =
   | 'resistivity'
   | 'linearReactance'
   | 'density'
-  | 'force';
+  | 'force'
+  /** Rendement surfacique (peinture : m² couverts par litre). */
+  | 'spreadRate'
+  /** Masse surfacique (consommation de colle : kg/m²). */
+  | 'surfaceDensity'
+  /** Masse linéique (aciers : kg/m). */
+  | 'linearDensity';
 
 export interface UnitDefinition {
   /** Identifiant ASCII stable, utilisé dans les données (ex. `mm2`). */
@@ -133,6 +139,14 @@ export const UNITS = {
 
   N: unit('N', 'N', 'force', 1),
   kN: unit('kN', 'kN', 'force', 1e3),
+
+  // SI : m²/m³ (= 1/m) pour le rendement ; m²/L = 1000 m²/m³.
+  'm2/m3': unit('m2/m3', 'm²/m³', 'spreadRate', 1),
+  'm2/L': unit('m2/L', 'm²/L', 'spreadRate', 1e3),
+
+  'kg/m2': unit('kg/m2', 'kg/m²', 'surfaceDensity', 1),
+
+  'kg/m': unit('kg/m', 'kg/m', 'linearDensity', 1),
 } as const satisfies Record<string, UnitDefinition>;
 
 export type UnitSymbol = keyof typeof UNITS;

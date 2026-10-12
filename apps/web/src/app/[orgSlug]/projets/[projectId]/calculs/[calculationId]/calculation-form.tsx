@@ -1,6 +1,6 @@
 'use client';
 
-import type { EngineDto, RevisionDto } from '@consulpro/contracts';
+import type { EngineDto, ListFieldDto, RevisionDto } from '@consulpro/contracts';
 import {
   Button,
   Callout,
@@ -16,7 +16,7 @@ import {
   withUnit,
 } from '@consulpro/ui';
 import { useMutation } from '@tanstack/react-query';
-import { Play } from 'lucide-react';
+import { Play, Plus, Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -34,9 +34,19 @@ export interface LinkableOutputView {
   readonly unitKind: string;
 }
 
+type Input = EngineDto['inputs'][number];
+interface Cell {
+  readonly text: string;
+  readonly unit: string;
+}
+interface Row {
+  readonly id: number;
+  readonly cells: Readonly<Record<string, Cell>>;
+}
 type Field =
   | { readonly mode: 'manual'; readonly value: string; readonly unit: string }
-  | { readonly mode: 'link'; readonly link: string };
+  | { readonly mode: 'link'; readonly link: string }
+  | { readonly mode: 'list'; readonly rows: readonly Row[] };
 
 interface Props {
   readonly orgSlug: string;
@@ -47,9 +57,34 @@ interface Props {
   readonly linkable: readonly LinkableOutputView[];
 }
 
+let nextRowId = 0;
 const linkKey = (o: { calculationId: string; output: string }) => `${o.calculationId}:${o.output}`;
+/** Saisie à la française (virgule décimale, espaces de milliers) ; aucune conversion d'unité. */
+const parseNumber = (text: string) => Number(text.replace(/\s/g, '').replace(',', '.'));
+const shown = (value: unknown) =>
+  typeof value === 'number' ? String(value).replace('.', ',') : '';
 
-function initialField(input: EngineDto['inputs'][number], raw: unknown): Field {
+const unitOf = (raw: unknown, units: readonly { symbol: string }[]) => {
+  const unit = (raw as { unit?: unknown } | undefined)?.unit;
+  return typeof unit === 'string' && units.some((u) => u.symbol === unit)
+    ? unit
+    : (units[0]?.symbol ?? '');
+};
+
+function cellOf(field: ListFieldDto, raw: unknown): Cell {
+  if (field.kind === 'integer') return { text: shown(raw), unit: '' };
+  return {
+    text: shown((raw as { value?: unknown } | undefined)?.value),
+    unit: unitOf(raw, field.units),
+  };
+}
+
+const emptyRow = (fields: readonly ListFieldDto[]): Row => ({
+  id: (nextRowId += 1),
+  cells: Object.fromEntries(fields.map((f) => [f.key, cellOf(f, undefined)])),
+});
+
+function initialField(input: Input, raw: unknown): Field {
   if (typeof raw === 'object' && raw !== null && 'fromCalculation' in raw && 'output' in raw) {
     const link = raw as { fromCalculation: string; output: string };
     return {
@@ -57,18 +92,54 @@ function initialField(input: EngineDto['inputs'][number], raw: unknown): Field {
       link: linkKey({ calculationId: link.fromCalculation, output: link.output }),
     };
   }
-  if (input.kind === 'enum') {
-    return { mode: 'manual', value: typeof raw === 'string' ? raw : '', unit: '' };
+  switch (input.kind) {
+    case 'enum':
+      return { mode: 'manual', value: typeof raw === 'string' ? raw : '', unit: '' };
+    case 'integer':
+      return { mode: 'manual', value: shown(raw), unit: '' };
+    case 'list':
+      return {
+        mode: 'list',
+        rows: Array.isArray(raw)
+          ? raw.map((r: Record<string, unknown>) => ({
+              id: (nextRowId += 1),
+              cells: Object.fromEntries(input.fields.map((f) => [f.key, cellOf(f, r[f.key])])),
+            }))
+          : [],
+      };
+    case 'quantity':
+      return {
+        mode: 'manual',
+        value: shown((raw as { value?: unknown } | undefined)?.value),
+        unit: unitOf(raw, input.units),
+      };
   }
-  const measured = raw as { value?: unknown; unit?: unknown } | undefined;
-  return {
-    mode: 'manual',
-    value: typeof measured?.value === 'number' ? String(measured.value).replace('.', ',') : '',
-    unit:
-      typeof measured?.unit === 'string' && input.units.some((u) => u.symbol === measured.unit)
-        ? measured.unit
-        : (input.units[0]?.symbol ?? ''),
-  };
+}
+
+/** Valeur envoyée au serveur pour une entrée (undefined : entrée non renseignée). */
+function payload(input: Input, field: Field): unknown {
+  if (field.mode === 'link') {
+    const [fromCalculation, output] = field.link.split(':');
+    return fromCalculation && output ? { fromCalculation, output } : undefined;
+  }
+  if (field.mode === 'list') {
+    if (input.kind !== 'list') return undefined;
+    const rows = field.rows.filter((r) => Object.values(r.cells).some((c) => c.text.trim() !== ''));
+    return rows.map((r) =>
+      Object.fromEntries(
+        input.fields.map((f) => {
+          const cell = r.cells[f.key] ?? { text: '', unit: '' };
+          const value = parseNumber(cell.text);
+          return [f.key, f.kind === 'integer' ? value : { value, unit: cell.unit }];
+        }),
+      ),
+    );
+  }
+  const text = field.value.trim();
+  if (text === '') return undefined;
+  if (input.kind === 'enum') return text;
+  if (input.kind === 'integer') return parseNumber(text);
+  return { value: parseNumber(text), unit: field.unit };
 }
 
 /**
@@ -99,18 +170,8 @@ export function CalculationForm({
       const inputs: Record<string, unknown> = {};
       for (const input of engine.inputs) {
         const field = fields[input.key];
-        if (!field) continue;
-        if (field.mode === 'link') {
-          const [fromCalculation, output] = field.link.split(':');
-          if (fromCalculation && output) inputs[input.key] = { fromCalculation, output };
-          continue;
-        }
-        const text = field.value.trim();
-        if (text === '') continue;
-        inputs[input.key] =
-          input.kind === 'enum'
-            ? text
-            : { value: Number(text.replace(/\s/g, '').replace(',', '.')), unit: field.unit };
+        const value = field ? payload(input, field) : undefined;
+        if (value !== undefined) inputs[input.key] = value;
       }
       return api<RevisionDto>(
         `/organizations/${orgSlug}/projects/${projectId}/calculations/${calculationId}/runs`,
@@ -124,8 +185,7 @@ export function CalculationForm({
       router.refresh();
     },
     onError: (error) => {
-      const issues = error instanceof ApiError ? (error.problem.errors ?? []) : [];
-      setErrors(issues);
+      setErrors(error instanceof ApiError ? (error.problem.errors ?? []) : []);
       toast.error(error.message);
     },
   });
@@ -156,7 +216,7 @@ export function CalculationForm({
       )}
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         {engine.inputs.map((input) => {
-          const field = fields[input.key] ?? { mode: 'manual', value: '', unit: '' };
+          const field = fields[input.key] ?? initialField(input, undefined);
           const id = `input-${input.key}`;
           const fieldErrors = errorFor(input.key);
           const described =
@@ -164,7 +224,10 @@ export function CalculationForm({
           const compatible =
             input.kind === 'quantity' ? linkable.filter((o) => o.unitKind === input.unitKind) : [];
           return (
-            <fieldset key={input.key} className="min-w-0 space-y-2 rounded-lg border p-3">
+            <fieldset
+              key={input.key}
+              className={`min-w-0 space-y-2 rounded-lg border p-3 ${input.kind === 'list' ? 'lg:col-span-2' : ''}`}
+            >
               <legend className="px-1 text-sm font-medium">{input.label}</legend>
               {compatible.length > 0 && (
                 <div className="flex flex-wrap gap-2" role="radiogroup" aria-label={t('source')}>
@@ -194,7 +257,7 @@ export function CalculationForm({
                 <Select
                   value={field.link}
                   onValueChange={(link) => {
-                    set(input.key, { mode: 'link', link });
+                    if (link) set(input.key, { mode: 'link', link });
                   }}
                 >
                   <SelectTrigger
@@ -211,11 +274,23 @@ export function CalculationForm({
                     ))}
                   </SelectContent>
                 </Select>
-              ) : input.kind === 'enum' ? (
+              ) : field.mode === 'list' && input.kind === 'list' ? (
+                <ListEditor
+                  inputKey={input.key}
+                  label={input.label}
+                  fields={input.fields}
+                  maxItems={input.maxItems}
+                  rows={field.rows}
+                  invalid={(path) => errors.some((e) => e.path.startsWith(`${input.key}.${path}`))}
+                  onChange={(rows) => {
+                    set(input.key, { mode: 'list', rows });
+                  }}
+                />
+              ) : field.mode === 'manual' && input.kind === 'enum' ? (
                 <Select
                   value={field.value}
                   onValueChange={(value) => {
-                    set(input.key, { mode: 'manual', value, unit: '' });
+                    if (value) set(input.key, { mode: 'manual', value, unit: '' });
                   }}
                 >
                   <SelectTrigger id={id} className="w-full" aria-label={input.label}>
@@ -229,7 +304,7 @@ export function CalculationForm({
                     ))}
                   </SelectContent>
                 </Select>
-              ) : (
+              ) : field.mode === 'manual' ? (
                 <div className="flex gap-2">
                   <div className="min-w-0 flex-1">
                     <Label htmlFor={id} className="sr-only">
@@ -237,7 +312,7 @@ export function CalculationForm({
                     </Label>
                     <Input
                       id={id}
-                      inputMode="decimal"
+                      inputMode={input.kind === 'integer' ? 'numeric' : 'decimal'}
                       autoComplete="off"
                       value={field.value}
                       aria-invalid={fieldErrors.length > 0 || undefined}
@@ -247,28 +322,30 @@ export function CalculationForm({
                       }}
                     />
                   </div>
-                  <Select
-                    value={field.unit}
-                    onValueChange={(unit) => {
-                      set(input.key, { ...field, unit });
-                    }}
-                  >
-                    <SelectTrigger
-                      className="w-28"
-                      aria-label={t('unitOf', { label: input.label })}
+                  {input.kind === 'quantity' && (
+                    <Select
+                      value={field.unit}
+                      onValueChange={(unit) => {
+                        if (unit) set(input.key, { ...field, unit });
+                      }}
                     >
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {input.units.map((u) => (
-                        <SelectItem key={u.symbol} value={u.symbol}>
-                          {u.display}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                      <SelectTrigger
+                        className="w-28"
+                        aria-label={t('unitOf', { label: input.label })}
+                      >
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {input.units.map((u) => (
+                          <SelectItem key={u.symbol} value={u.symbol}>
+                            {u.display}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
                 </div>
-              )}
+              ) : null}
               {input.help && fieldErrors.length === 0 && (
                 <p id={`${id}-help`} className="text-sm text-muted-foreground">
                   {input.help}
@@ -288,5 +365,114 @@ export function CalculationForm({
         {run.isPending ? t('running') : t('run')}
       </Button>
     </form>
+  );
+}
+
+/** Saisie d'une liste (ouvertures, barres d'acier…) : une ligne par élément. */
+function ListEditor({
+  inputKey,
+  label,
+  fields,
+  maxItems,
+  rows,
+  invalid,
+  onChange,
+}: {
+  inputKey: string;
+  label: string;
+  fields: readonly ListFieldDto[];
+  maxItems: number;
+  rows: readonly Row[];
+  invalid: (path: string) => boolean;
+  onChange: (rows: readonly Row[]) => void;
+}) {
+  const t = useTranslations('calculations');
+  const update = (rowId: number, key: string, cell: Cell) => {
+    onChange(rows.map((r) => (r.id === rowId ? { ...r, cells: { ...r.cells, [key]: cell } } : r)));
+  };
+
+  return (
+    <div className="space-y-2">
+      {rows.length === 0 && <p className="text-sm text-muted-foreground">{t('listEmpty')}</p>}
+      <ul className="space-y-2">
+        {rows.map((row, index) => (
+          <li key={row.id} className="flex flex-wrap items-end gap-2 rounded-md bg-muted/40 p-2">
+            {fields.map((f) => {
+              const cell = row.cells[f.key] ?? { text: '', unit: '' };
+              const id = `${inputKey}-${String(row.id)}-${f.key}`;
+              const name = t('listCell', { field: f.label, row: index + 1 });
+              return (
+                <div key={f.key} className="min-w-28 flex-1 space-y-1">
+                  <Label htmlFor={id} className="text-xs">
+                    {f.label}
+                  </Label>
+                  <div className="flex gap-1">
+                    <Input
+                      id={id}
+                      aria-label={name}
+                      inputMode={f.kind === 'integer' ? 'numeric' : 'decimal'}
+                      autoComplete="off"
+                      value={cell.text}
+                      aria-invalid={invalid(`${String(index)}.${f.key}`) || undefined}
+                      onChange={(e) => {
+                        update(row.id, f.key, { ...cell, text: e.target.value });
+                      }}
+                    />
+                    {f.kind === 'quantity' &&
+                      (f.units.length > 1 ? (
+                        <Select
+                          value={cell.unit}
+                          onValueChange={(unit) => {
+                            if (unit) update(row.id, f.key, { ...cell, unit });
+                          }}
+                        >
+                          <SelectTrigger className="w-20" aria-label={`${name} — ${t('unit')}`}>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {f.units.map((u) => (
+                              <SelectItem key={u.symbol} value={u.symbol}>
+                                {u.display}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      ) : (
+                        <span className="self-center text-sm text-muted-foreground">
+                          {f.units[0]?.display}
+                        </span>
+                      ))}
+                  </div>
+                </div>
+              );
+            })}
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              aria-label={t('listRemove', { label, row: index + 1 })}
+              onClick={() => {
+                onChange(rows.filter((r) => r.id !== row.id));
+              }}
+            >
+              <Trash2 aria-hidden />
+            </Button>
+          </li>
+        ))}
+      </ul>
+      {rows.length < maxItems && (
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            onChange([...rows, emptyRow(fields)]);
+          }}
+        >
+          <Plus aria-hidden />
+          {t('listAdd', { label })}
+        </Button>
+      )}
+    </div>
   );
 }

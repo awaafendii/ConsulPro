@@ -1,0 +1,593 @@
+{
+  "engine": "btp.stairs",
+  "parameterSet": {
+    "standard": "BTP-USAGES-METRE",
+    "version": "1"
+  },
+  "cases": [
+    {
+      "id": "btp.stairs/flight-18-landing",
+      "engine": "btp.stairs",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "L_i = 18 × √(0,17² + 0,28²) = 5,896202 m ; paillasse 1,2 × 5,896202 × 0,15 = 1,061316 m³ ; marches 18 × 0,17 × 0,28 / 2 × 1,2 = 0,51408 m³ ; palier 1,2 × 1,2 × 0,15 = 0,216 m³ ; V = 1,791396 m³ ; S_c = 1,2 × 5,896202 + 18 × 0,17 × 1,2 + 2 × (5,896202 × 0,15 + 18 × 0,17 × 0,28 / 2) + 1,2 × 1,2 = 14,813103 m² ; aciers = 80 kg/m³ × 1,791396 m³ = 143,311711 kg ; commandés × 1,05 = 150,477297 kg ; béton ARME : V_c = 1,791396 × 1,05 = 1,880966 m³ ; ciment 350 × 1,880966 = 658,338173 kg ; sable 0,4 × 1,880966 = 0,752386 m³ ; gravier 0,8 × 1,880966 = 1,504773 m³ ; eau 0,175 × 1,880966 × 1000 = 329,169087 L ; sacs = 658,338173 / 50 = 13,166763 ; Blondel 2 × 0,17 + 0,28 = 0,62 m (bornes 0,6 – 0,64 m)",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "width": {
+          "value": 1.2,
+          "unit": "m"
+        },
+        "steps": 18,
+        "riser": {
+          "value": 17,
+          "unit": "cm"
+        },
+        "going": {
+          "value": 28,
+          "unit": "cm"
+        },
+        "waistThickness": {
+          "value": 15,
+          "unit": "cm"
+        },
+        "landingLength": {
+          "value": 1.2,
+          "unit": "m"
+        },
+        "landingThickness": {
+          "value": 15,
+          "unit": "cm"
+        },
+        "steelMode": "RATIO"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "concrete": {
+            "value": 1.79139639015,
+            "tolerance": 0.001
+          },
+          "formwork": {
+            "value": 14.8131032512,
+            "tolerance": 0.001
+          },
+          "steel": {
+            "value": 143.311711212,
+            "tolerance": 0.001
+          },
+          "steelOrdered": {
+            "value": 150.477296773,
+            "tolerance": 0.001
+          },
+          "blondel": {
+            "value": 0.62,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 658.33817338,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 13.1667634676,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0.752386483863,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 1.50477296773,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 329.16908669,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [
+          {
+            "rule": "btp.stairs.blondel",
+            "status": "PASS"
+          },
+          {
+            "rule": "btp.stairs.blondel",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.stairs/flight-16-no-landing",
+      "engine": "btp.stairs",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "L_i = 16 × √(0,18² + 0,25²) = 4,928935 m ; paillasse 1 × 4,928935 × 0,12 = 0,591472 m³ ; marches 16 × 0,18 × 0,25 / 2 × 1 = 0,36 m³ ; palier 1 × 0 × 0,12 = 0 m³ ; V = 0,951472 m³ ; S_c = 1 × 4,928935 + 16 × 0,18 × 1 + 2 × (4,928935 × 0,12 + 16 × 0,18 × 0,25 / 2) + 1 × 0 = 9,711879 m² ; aciers = 80 kg/m³ × 0,951472 m³ = 76,117776 kg ; commandés × 1,05 = 79,923665 kg ; béton ARME : V_c = 0,951472 × 1,05 = 0,999046 m³ ; ciment 350 × 0,999046 = 349,666032 kg ; sable 0,4 × 0,999046 = 0,399618 m³ ; gravier 0,8 × 0,999046 = 0,799237 m³ ; eau 0,175 × 0,999046 × 1000 = 174,833016 L ; sacs = 349,666032 / 50 = 6,993321 ; Blondel 2 × 0,18 + 0,25 = 0,61 m (bornes 0,6 – 0,64 m) (pas de palier, aciers par ratio par défaut)",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "width": {
+          "value": 1,
+          "unit": "m"
+        },
+        "steps": 16,
+        "riser": {
+          "value": 18,
+          "unit": "cm"
+        },
+        "going": {
+          "value": 25,
+          "unit": "cm"
+        },
+        "waistThickness": {
+          "value": 12,
+          "unit": "cm"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "concrete": {
+            "value": 0.951472197149,
+            "tolerance": 0.001
+          },
+          "formwork": {
+            "value": 9.71187937054,
+            "tolerance": 0.001
+          },
+          "steel": {
+            "value": 76.1177757719,
+            "tolerance": 0.001
+          },
+          "steelOrdered": {
+            "value": 79.9236645605,
+            "tolerance": 0.001
+          },
+          "blondel": {
+            "value": 0.61,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 349.666032452,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 6.99332064904,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0.399618322802,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0.799236645605,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 174.833016226,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [
+          {
+            "rule": "btp.stairs.blondel",
+            "status": "PASS"
+          },
+          {
+            "rule": "btp.stairs.blondel",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["BTP.QUANTITIES_ONLY", "DEFAULT.landingLength", "DEFAULT.steelMode"]
+      }
+    },
+    {
+      "id": "btp.stairs/steep-flight-blondel-fail",
+      "engine": "btp.stairs",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "L_i = 10 × √(0,2² + 0,3²) = 3,605551 m ; paillasse 0,9 × 3,605551 × 0,15 = 0,486749 m³ ; marches 10 × 0,2 × 0,3 / 2 × 0,9 = 0,27 m³ ; palier 0,9 × 1 × 0,15 = 0,135 m³ ; V = 0,891749 m³ ; S_c = 0,9 × 3,605551 + 10 × 0,2 × 0,9 + 2 × (3,605551 × 0,15 + 10 × 0,2 × 0,3 / 2) + 0,9 × 1 = 7,626662 m² ; HA10 : π × 0,01² / 4 × 7850 = 0,616538 kg/m × 4,5 m × 8 = 22,195352 kg ; HA8 : π × 0,008² / 4 × 7850 = 0,394584 kg/m × 1 m × 30 = 11,837521 kg ; total 34,032873 kg ; commandés × 1,05 = 35,734517 kg ; béton ARME : V_c = 0,891749 × 1,05 = 0,936337 m³ ; ciment 350 × 0,936337 = 327,717913 kg ; sable 0,4 × 0,936337 = 0,374535 m³ ; gravier 0,8 × 0,936337 = 0,74907 m³ ; eau 0,175 × 0,936337 × 1000 = 163,858956 L ; sacs = 327,717913 / 50 = 6,554358 ; Blondel 2 × 0,2 + 0,3 = 0,7 m (bornes 0,6 – 0,64 m) — 0,70 > 0,64 : avertissement de confort (non bloquant).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "width": {
+          "value": 0.9,
+          "unit": "m"
+        },
+        "steps": 10,
+        "riser": {
+          "value": 20,
+          "unit": "cm"
+        },
+        "going": {
+          "value": 30,
+          "unit": "cm"
+        },
+        "waistThickness": {
+          "value": 15,
+          "unit": "cm"
+        },
+        "landingLength": {
+          "value": 1,
+          "unit": "m"
+        },
+        "steelMode": "SCHEDULE",
+        "schedule": [
+          {
+            "diameter": {
+              "value": 10,
+              "unit": "mm"
+            },
+            "length": {
+              "value": 4.5,
+              "unit": "m"
+            },
+            "count": 8
+          },
+          {
+            "diameter": {
+              "value": 8,
+              "unit": "mm"
+            },
+            "length": {
+              "value": 1,
+              "unit": "m"
+            },
+            "count": 30
+          }
+        ]
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "concrete": {
+            "value": 0.891749422188,
+            "tolerance": 0.001
+          },
+          "formwork": {
+            "value": 7.62666153056,
+            "tolerance": 0.001
+          },
+          "steel": {
+            "value": 34.0328732163,
+            "tolerance": 0.001
+          },
+          "steelOrdered": {
+            "value": 35.7345168772,
+            "tolerance": 0.001
+          },
+          "blondel": {
+            "value": 0.7,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 327.717912654,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 6.55435825308,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0.374534757319,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0.749069514638,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 163.858956327,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [
+          {
+            "rule": "btp.stairs.blondel",
+            "status": "PASS"
+          },
+          {
+            "rule": "btp.stairs.blondel",
+            "status": "FAIL"
+          }
+        ],
+        "hypotheses": ["BTP.QUANTITIES_ONLY", "DEFAULT.landingThickness"]
+      }
+    },
+    {
+      "id": "btp.stairs/blondel-at-lower-bound",
+      "engine": "btp.stairs",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "L_i = 1 × √(0,17² + 0,26²) = 0,310644 m ; paillasse 1 × 0,310644 × 0,1 = 0,031064 m³ ; marches 1 × 0,17 × 0,26 / 2 × 1 = 0,0221 m³ ; palier 1 × 0 × 0,1 = 0 m³ ; V = 0,053164 m³ ; S_c = 1 × 0,310644 + 1 × 0,17 × 1 + 2 × (0,310644 × 0,1 + 1 × 0,17 × 0,26 / 2) + 1 × 0 = 0,586973 m² ; aciers = 80 kg/m³ × 0,053164 m³ = 4,253156 kg ; commandés × 1,05 = 4,465814 kg ; béton ARME : V_c = 0,053164 × 1,05 = 0,055823 m³ ; ciment 350 × 0,055823 = 19,537935 kg ; sable 0,4 × 0,055823 = 0,022329 m³ ; gravier 0,8 × 0,055823 = 0,044658 m³ ; eau 0,175 × 0,055823 × 1000 = 9,768968 L ; sacs = 19,537935 / 50 = 0,390759 ; Blondel 2 × 0,17 + 0,26 = 0,6 m (bornes 0,6 – 0,64 m) — limite : 2h + g = borne basse (conforme).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "width": {
+          "value": 1,
+          "unit": "m"
+        },
+        "steps": 1,
+        "riser": {
+          "value": 0.17,
+          "unit": "m"
+        },
+        "going": {
+          "value": 0.26,
+          "unit": "m"
+        },
+        "waistThickness": {
+          "value": 0.1,
+          "unit": "m"
+        },
+        "steelMode": "RATIO"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "concrete": {
+            "value": 0.053164449134,
+            "tolerance": 0.001
+          },
+          "formwork": {
+            "value": 0.586973389608,
+            "tolerance": 0.001
+          },
+          "steel": {
+            "value": 4.25315593072,
+            "tolerance": 0.001
+          },
+          "steelOrdered": {
+            "value": 4.46581372726,
+            "tolerance": 0.001
+          },
+          "blondel": {
+            "value": 0.6,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 19.5379350568,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 0.390758701135,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0.0223290686363,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0.0446581372726,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 9.76896752838,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [
+          {
+            "rule": "btp.stairs.blondel",
+            "status": "PASS"
+          },
+          {
+            "rule": "btp.stairs.blondel",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["BTP.QUANTITIES_ONLY", "DEFAULT.landingLength"]
+      }
+    },
+    {
+      "id": "btp.stairs/blondel-at-upper-bound",
+      "engine": "btp.stairs",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "L_i = 1 × √(0,18² + 0,28²) = 0,332866 m ; paillasse 1 × 0,332866 × 0,1 = 0,033287 m³ ; marches 1 × 0,18 × 0,28 / 2 × 1 = 0,0252 m³ ; palier 1 × 0 × 0,1 = 0 m³ ; V = 0,058487 m³ ; S_c = 1 × 0,332866 + 1 × 0,18 × 1 + 2 × (0,332866 × 0,1 + 1 × 0,18 × 0,28 / 2) + 1 × 0 = 0,62984 m² ; aciers = 80 kg/m³ × 0,058487 m³ = 4,678931 kg ; commandés × 1,05 = 4,912877 kg ; béton ARME : V_c = 0,058487 × 1,05 = 0,061411 m³ ; ciment 350 × 0,061411 = 21,493838 kg ; sable 0,4 × 0,061411 = 0,024564 m³ ; gravier 0,8 × 0,061411 = 0,049129 m³ ; eau 0,175 × 0,061411 × 1000 = 10,746919 L ; sacs = 21,493838 / 50 = 0,429877 ; Blondel 2 × 0,18 + 0,28 = 0,64 m (bornes 0,6 – 0,64 m) — limite : 2h + g = borne haute (conforme).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "width": {
+          "value": 1,
+          "unit": "m"
+        },
+        "steps": 1,
+        "riser": {
+          "value": 0.18,
+          "unit": "m"
+        },
+        "going": {
+          "value": 0.28,
+          "unit": "m"
+        },
+        "waistThickness": {
+          "value": 0.1,
+          "unit": "m"
+        },
+        "steelMode": "RATIO"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "concrete": {
+            "value": 0.0584866339542,
+            "tolerance": 0.001
+          },
+          "formwork": {
+            "value": 0.62983960745,
+            "tolerance": 0.001
+          },
+          "steel": {
+            "value": 4.67893071633,
+            "tolerance": 0.001
+          },
+          "steelOrdered": {
+            "value": 4.91287725215,
+            "tolerance": 0.001
+          },
+          "blondel": {
+            "value": 0.64,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 21.4938379782,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 0.429876759563,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0.0245643862608,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0.0491287725215,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 10.7469189891,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [
+          {
+            "rule": "btp.stairs.blondel",
+            "status": "PASS"
+          },
+          {
+            "rule": "btp.stairs.blondel",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["BTP.QUANTITIES_ONLY", "DEFAULT.landingLength"]
+      }
+    },
+    {
+      "id": "btp.stairs/zero-steps",
+      "engine": "btp.stairs",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Nombre de marches 0 < 1 : refus.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "width": {
+          "value": 1,
+          "unit": "m"
+        },
+        "steps": 0,
+        "riser": {
+          "value": 0.17,
+          "unit": "m"
+        },
+        "going": {
+          "value": 0.28,
+          "unit": "m"
+        },
+        "waistThickness": {
+          "value": 0.15,
+          "unit": "m"
+        }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "steps",
+            "code": "too_small"
+          }
+        ]
+      }
+    },
+    {
+      "id": "btp.stairs/missing-stairs-blondel_min",
+      "engine": "btp.stairs",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Paramètre btp.stairs.blondel_min absent du jeu résolu : le calcul est refusé avant exécution (PARAMETER_MISSING).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "omitParameters": ["btp.stairs.blondel_min"],
+      "inputs": {
+        "width": {
+          "value": 1.2,
+          "unit": "m"
+        },
+        "steps": 18,
+        "riser": {
+          "value": 0.17,
+          "unit": "m"
+        },
+        "going": {
+          "value": 0.28,
+          "unit": "m"
+        },
+        "waistThickness": {
+          "value": 0.15,
+          "unit": "m"
+        }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.btp.stairs.blondel_min",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

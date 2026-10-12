@@ -1,0 +1,591 @@
+{
+  "standard": {
+    "code": "BTP-USAGES-METRE",
+    "title": "Usages courants — métré",
+    "publisher": "ConsulPro",
+    "discipline": "BTP",
+    "nature": "PRACTICE"
+  },
+  "version": {
+    "label": "1",
+    "sourceNotes": "Valeurs indicatives couramment employées pour le métré en Afrique francophone. Aucune n'est vérifiée : chaque bureau d'études les confirme ou les surcharge (avec justification) avant usage."
+  },
+  "parameters": [
+    {
+      "key": "btp.concrete.cement",
+      "label": "Dosage en ciment des bétons",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "mix",
+            "kind": "CATEGORY",
+            "values": ["PROPRETE", "FORME", "ARME"]
+          }
+        ],
+        "unit": "kg/m3",
+        "cells": [150, 250, 350]
+      },
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.concrete.sand",
+      "label": "Sable par m³ de béton",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "mix",
+            "kind": "CATEGORY",
+            "values": ["PROPRETE", "FORME", "ARME"]
+          }
+        ],
+        "unit": "1",
+        "cells": [0.4, 0.4, 0.4]
+      },
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible). Volume de sable (m³) par m³ de béton."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.concrete.gravel",
+      "label": "Gravier par m³ de béton",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "mix",
+            "kind": "CATEGORY",
+            "values": ["PROPRETE", "FORME", "ARME"]
+          }
+        ],
+        "unit": "1",
+        "cells": [0.8, 0.8, 0.8]
+      },
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible). Volume de gravier (m³) par m³ de béton."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.concrete.water",
+      "label": "Eau par m³ de béton",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "mix",
+            "kind": "CATEGORY",
+            "values": ["PROPRETE", "FORME", "ARME"]
+          }
+        ],
+        "unit": "1",
+        "cells": [0.15, 0.16, 0.175]
+      },
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible). Volume d'eau (m³) par m³ de béton."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.waste.concrete",
+      "label": "Taux de pertes sur béton",
+      "kind": "SCALAR",
+      "value": 5,
+      "unit": "%",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.cement.bag_mass",
+      "label": "Masse d'un sac de ciment",
+      "kind": "SCALAR",
+      "value": 50,
+      "unit": "kg",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.steel.ratio",
+      "label": "Ratio d'acier par m³ de béton armé",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "element",
+            "kind": "CATEGORY",
+            "values": ["FOOTING", "GROUND_BEAM", "COLUMN", "BEAM", "SLAB", "STAIRS"]
+          }
+        ],
+        "unit": "kg/m3",
+        "cells": [60, 90, 120, 110, 90, 80]
+      },
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible). Estimation globale ; remplacer par la nomenclature du bureau d'études structure dès qu'elle existe."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.steel.density",
+      "label": "Masse volumique de l'acier",
+      "kind": "SCALAR",
+      "value": 7850,
+      "unit": "kg/m3",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.waste.steel",
+      "label": "Taux de pertes sur aciers (chutes, recouvrements)",
+      "kind": "SCALAR",
+      "value": 5,
+      "unit": "%",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.mesh.overlap",
+      "label": "Recouvrement des treillis soudés",
+      "kind": "SCALAR",
+      "value": 10,
+      "unit": "%",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.lean_concrete.thickness",
+      "label": "Épaisseur du béton de propreté",
+      "kind": "SCALAR",
+      "value": 0.05,
+      "unit": "m",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.lean_concrete.overhang",
+      "label": "Débord du béton de propreté (par côté)",
+      "kind": "SCALAR",
+      "value": 0.05,
+      "unit": "m",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.earthworks.bulking",
+      "label": "Coefficient de foisonnement",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "soil",
+            "kind": "CATEGORY",
+            "values": ["TOPSOIL", "ORDINARY", "CLAY", "SAND", "GRAVEL", "ROCK"]
+          }
+        ],
+        "unit": "1",
+        "cells": [1.25, 1.2, 1.3, 1.1, 1.15, 1.5]
+      },
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible). Volume foisonné / volume en place, selon la nature du sol."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.slab.hollow_concrete",
+      "label": "Béton par m² de plancher à corps creux (épaisseur équivalente)",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "type",
+            "kind": "CATEGORY",
+            "values": ["H16_4", "H20_4"]
+          }
+        ],
+        "unit": "m",
+        "cells": [0.065, 0.075]
+      },
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible). Table de compression et nervures ; dépend du système de poutrelles (fiche du fabricant)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.slab.joist_spacing",
+      "label": "Entraxe des poutrelles",
+      "kind": "SCALAR",
+      "value": 0.6,
+      "unit": "m",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.slab.block_length",
+      "label": "Longueur d'un entrevous (sens des poutrelles)",
+      "kind": "SCALAR",
+      "value": 0.2,
+      "unit": "m",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.waste.hollow_blocks",
+      "label": "Taux de pertes sur entrevous",
+      "kind": "SCALAR",
+      "value": 5,
+      "unit": "%",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.stairs.blondel_min",
+      "label": "Formule de Blondel : borne basse de 2h + g",
+      "kind": "SCALAR",
+      "value": 0.6,
+      "unit": "m",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.stairs.blondel_max",
+      "label": "Formule de Blondel : borne haute de 2h + g",
+      "kind": "SCALAR",
+      "value": 0.64,
+      "unit": "m",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.block.length",
+      "label": "Longueur d'un bloc (agglo)",
+      "kind": "SCALAR",
+      "value": 0.4,
+      "unit": "m",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.block.height",
+      "label": "Hauteur d'un bloc (agglo)",
+      "kind": "SCALAR",
+      "value": 0.2,
+      "unit": "m",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.masonry.joint",
+      "label": "Épaisseur des joints de maçonnerie",
+      "kind": "SCALAR",
+      "value": 0.01,
+      "unit": "m",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.waste.blocks",
+      "label": "Taux de pertes sur blocs",
+      "kind": "SCALAR",
+      "value": 5,
+      "unit": "%",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.masonry.opening_min_area",
+      "label": "Surface d'ouverture au-dessous de laquelle le vide n'est pas déduit",
+      "kind": "SCALAR",
+      "value": 1,
+      "unit": "m2",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible). Convention de métré à fixer par le bureau ou le marché."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.mortar.cement",
+      "label": "Dosage en ciment des mortiers",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "mortar",
+            "kind": "CATEGORY",
+            "values": ["MASONRY", "RENDER", "BEDDING"]
+          }
+        ],
+        "unit": "kg/m3",
+        "cells": [300, 350, 300]
+      },
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.mortar.sand",
+      "label": "Sable par m³ de mortier",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "mortar",
+            "kind": "CATEGORY",
+            "values": ["MASONRY", "RENDER", "BEDDING"]
+          }
+        ],
+        "unit": "1",
+        "cells": [1.1, 1.1, 1.1]
+      },
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.mortar.water",
+      "label": "Eau par m³ de mortier",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "mortar",
+            "kind": "CATEGORY",
+            "values": ["MASONRY", "RENDER", "BEDDING"]
+          }
+        ],
+        "unit": "1",
+        "cells": [0.2, 0.22, 0.2]
+      },
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.waste.mortar",
+      "label": "Taux de pertes sur mortiers",
+      "kind": "SCALAR",
+      "value": 10,
+      "unit": "%",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.render.thickness",
+      "label": "Épaisseur d'enduit",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "side",
+            "kind": "CATEGORY",
+            "values": ["INTERIOR", "EXTERIOR"]
+          }
+        ],
+        "unit": "m",
+        "cells": [0.015, 0.02]
+      },
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.waste.tiling",
+      "label": "Taux de pertes de coupe sur carreaux",
+      "kind": "SCALAR",
+      "value": 8,
+      "unit": "%",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.tiling.adhesive",
+      "label": "Consommation de mortier-colle",
+      "kind": "SCALAR",
+      "value": 5,
+      "unit": "kg/m2",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.tiling.grout",
+      "label": "Consommation de produit de jointoiement",
+      "kind": "SCALAR",
+      "value": 0.5,
+      "unit": "kg/m2",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.tiling.bed_thickness",
+      "label": "Épaisseur du mortier de pose",
+      "kind": "SCALAR",
+      "value": 0.03,
+      "unit": "m",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.paint.spread_rate",
+      "label": "Rendement de la peinture (par couche)",
+      "kind": "SCALAR",
+      "value": 10,
+      "unit": "m2/L",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.paint.primer_rate",
+      "label": "Rendement de l'impression",
+      "kind": "SCALAR",
+      "value": 12,
+      "unit": "m2/L",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.waste.paint",
+      "label": "Taux de pertes sur peinture",
+      "kind": "SCALAR",
+      "value": 5,
+      "unit": "%",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.partition.board_area",
+      "label": "Surface d'une plaque de plâtre",
+      "kind": "SCALAR",
+      "value": 3,
+      "unit": "m2",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible). Plaque 1,20 × 2,50 m."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.partition.stud_spacing",
+      "label": "Entraxe des montants",
+      "kind": "SCALAR",
+      "value": 0.6,
+      "unit": "m",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "btp.waste.boards",
+      "label": "Taux de pertes sur plaques",
+      "kind": "SCALAR",
+      "value": 10,
+      "unit": "%",
+      "source": {
+        "document": "Usages courants du métré — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d'études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    }
+  ],
+  "rules": [
+    {
+      "code": "btp.stairs.blondel",
+      "description": "Confort des marches : 2h + g compris entre les bornes de la formule de Blondel.",
+      "severity": "WARNING",
+      "parameterKeys": ["btp.stairs.blondel_min", "btp.stairs.blondel_max"],
+      "implementation": "btp.stairs/blondel"
+    }
+  ]
+}

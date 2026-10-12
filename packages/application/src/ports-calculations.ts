@@ -68,6 +68,8 @@ export interface CalculationListItem extends CalculationRecord {
 /** Présentation enregistrée avec la révision (libellés des paramètres compris). */
 export interface StoredPresentation extends EnginePresentation {
   readonly title: string;
+  /** Cas de référence contre-vérifiés au moment du calcul (absent : révision antérieure). */
+  readonly referenceCases?: { readonly total: number; readonly checked: number };
   readonly parameters: readonly { readonly key: string; readonly label: string }[];
 }
 

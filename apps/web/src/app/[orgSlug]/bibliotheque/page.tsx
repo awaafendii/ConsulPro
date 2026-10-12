@@ -6,6 +6,7 @@ import { getServer } from '@/server/container';
 import { standardSummaryDto } from '@/server/http/presenters';
 import { requireOrganization } from '@/server/session';
 
+import { LibraryTabs } from './library-tabs';
 import { StandardsTable } from './standards-table';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -21,6 +22,7 @@ export default async function LibraryPage({ params }: { params: Promise<{ orgSlu
   return (
     <>
       <PageHeader title={t('title')} description={t('description')} />
+      <LibraryTabs orgSlug={ctx.organization.slug} />
       {standards.ok ? (
         <StandardsTable
           orgSlug={ctx.organization.slug}

@@ -1,4 +1,5 @@
 import { createApplication, type Application, type Mailer } from '@consulpro/application';
+import { BTP_ENGINES } from '@consulpro/calc-btp';
 import { EngineRegistry } from '@consulpro/calc-core';
 import { DEMO_ENGINES } from '@consulpro/calc-demo';
 import { createDatabase, type Database } from '@consulpro/db';
@@ -23,16 +24,17 @@ export interface InfrastructureConfig {
   readonly rateLimit?: boolean;
   /**
    * Moteurs de démonstration (sans valeur technique) : développement et test uniquement
-   * (CONSULPRO_DEMO_ENGINES=true). Les moteurs métier arrivent avec leur phase.
+   * (CONSULPRO_DEMO_ENGINES=true). Les moteurs métier sont toujours enregistrés.
    */
   readonly demoEngines?: boolean;
   /** Fuseau horaire par défaut (IANA). */
   readonly defaultTimeZone?: string;
 }
 
-/** Registre des moteurs disponibles sur ce serveur. */
+/** Registre des moteurs disponibles sur ce serveur : moteurs métier livrés, puis démonstration. */
 export function createEngineRegistry(options: { demoEngines: boolean }): EngineRegistry {
   const registry = new EngineRegistry();
+  for (const engine of BTP_ENGINES) registry.register(engine);
   if (options.demoEngines) for (const engine of DEMO_ENGINES) registry.register(engine);
   return registry;
 }

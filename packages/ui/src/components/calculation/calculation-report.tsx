@@ -112,6 +112,13 @@ export function CalculationReport({ view, traceOpen = false }: CalculationReport
         <CalculationStatusBadge status={view.status} />
       </header>
 
+      {view.engine.verified === false && (
+        <Callout tone="warning" title="Moteur non contre-vérifié">
+          Les cas de référence de ce moteur n’ont pas encore été contre-vérifiés par un ingénieur du
+          métier : contrôlez les résultats avant tout usage.
+        </Callout>
+      )}
+
       {view.preview && (
         <Callout tone="info" title="Aperçu non enregistré">
           Ce résultat est calculé dans le navigateur pour l’aperçu. Seul le calcul enregistré par le

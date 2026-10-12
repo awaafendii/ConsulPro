@@ -31,7 +31,7 @@ module.exports = {
       name: 'engines-depend-on-core-only',
       severity: 'error',
       comment: 'Un moteur métier ne dépend que de calc-core (et de ses propres fichiers).',
-      from: { path: '^packages/(calc-(?!core/)[^/]+)/src' },
+      from: { path: '^packages/(calc-(?!core/)[^/]+)/src', pathNot: '__tests__' },
       to: { path: '^(packages/(?!calc-core/)|apps/)', pathNot: '^packages/$1/' },
     },
     {

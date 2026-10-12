@@ -64,6 +64,14 @@ export function run<I, O>(
 ): CalculationResult<O>;
 ```
 
+Présentation (Phase 4) : chaque sortie déclare son unité et sa précision d'affichage. Une sortie
+d'ouvrage porte une **famille** (`EARTHWORKS`, `CONCRETE`, `FORMWORK`, `STEEL`, `MASONRY`…) qui la
+reprend comme ligne de quantitatif (ouvrage `<moteur>.<sortie>`, clé des prix) ; une sortie
+`MATERIAL` alimente la décomposition en matériaux, cumulée entre calculs seulement si elle est
+déclarée `additive` (matériau générique). `referenceCases` (cas rédigés / contre-vérifiés par un
+ingénieur) commande l'affichage « moteur non contre-vérifié ». Les entrées acceptent aussi des
+entiers et des listes de lignes (ouvertures, nomenclature d'aciers).
+
 ## 4. Étapes du pipeline
 
 | Étape            | Comportement                                                                                                                                                                                                                         | Échec ⇒                    |

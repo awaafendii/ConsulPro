@@ -49,7 +49,8 @@ export function toCalculationView(revision: RevisionRecord): CalculationView {
     const raw = normalized[input.key] ?? revision.rawInputs[input.key];
     const measured = isMeasured(raw);
     let value: Scalar = null;
-    if (measured) value = raw.value;
+    if (Array.isArray(raw)) value = `${String(raw.length)} ligne${raw.length > 1 ? 's' : ''}`;
+    else if (measured) value = raw.value;
     else if (['string', 'number', 'boolean'].includes(typeof raw)) value = raw as Scalar;
     else if (input.kind === 'enum' && typeof raw === 'string') value = raw;
     const label =
@@ -143,7 +144,15 @@ export function toCalculationView(revision: RevisionRecord): CalculationView {
   }));
 
   return {
-    engine: { id: revision.engineId, version: revision.engineVersion, title: p.title },
+    engine: {
+      id: revision.engineId,
+      version: revision.engineVersion,
+      title: p.title,
+      verified:
+        p.referenceCases !== undefined &&
+        p.referenceCases.total > 0 &&
+        p.referenceCases.checked === p.referenceCases.total,
+    },
     status: revision.resultStatus,
     preview: false,
     standards: revision.standards.map((s) => ({ code: s.code, version: s.version })),

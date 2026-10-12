@@ -100,8 +100,6 @@ la phase métier concernée. Rien n'est saisi sans source.
 | Discipline   | Référentiel                                            | Nature     | Usage dans ConsulPro                                                                                         | Phase |
 | ------------ | ------------------------------------------------------ | ---------- | ------------------------------------------------------------------------------------------------------------ | ----- |
 | BTP          | Usages courants — métré                                | `PRACTICE` | Dosages (béton de propreté, béton armé, mortiers), coefficients de foisonnement, taux de pertes, ratios d'acier, rendements de peinture, dimensions des blocs et des entrevous | 4 |
-| BTP          | BAEL 91 mod. 99                                        | `NORM`     | Seulement si le dimensionnement structurel est retenu (Q2) ; sinon, éventuellement les enrobages pour les longueurs d'acier | 4 |
-| BTP          | DTU 13.12 (fondations superficielles)                  | `NORM`     | À évaluer selon Q2                                                                                           | 4     |
 | Électricité  | NF C 15-100 (version à trancher : Q4)                  | `NORM`     | Courants admissibles, facteurs de correction, limites de chute de tension, règles de protection             | 5     |
 | Électricité  | UTE C 15-105                                           | `GUIDE`    | Méthodes de calcul (sections, chutes de tension)                                                            | 5     |
 | Électricité  | Normes nationales dérivées (selon pays cibles : Q3)    | `NORM`     | Versions distinctes de la NF C 15-100 lorsqu'un pays en publie une                                          | 5     |
@@ -109,6 +107,10 @@ la phase métier concernée. Rien n'est saisi sans source.
 | Plomberie    | DTU 64.1                                               | `NORM`     | Assainissement non collectif (fosses), à adapter aux pratiques locales                                      | 6     |
 | Plomberie    | Usages courants — plomberie                            | `PRACTICE` | Vitesses admissibles, pressions minimales aux appareils, consommations journalières, autonomie des réservoirs | 6   |
 | Topographie  | Tolérances de projet                                   | `PRACTICE` | Tolérances de fermeture angulaire et planimétrique, tolérance de nivellement ; fixées par projet ou par organisation | 7 |
+
+Q2 tranchée le 2026-10-11 : pas de dimensionnement structurel, donc ni BAEL 91 ni DTU 13.12
+dans le profil BTP ; les aciers se quantifient par ratio (référentiel d'usages) ou par
+nomenclature saisie par l'utilisateur.
 
 ## 7. Bibliothèque technique (correspondance avec le cahier des charges)
 

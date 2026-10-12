@@ -1,0 +1,364 @@
+{
+  "engine": "btp.renders",
+  "parameterSet": {
+    "standard": "BTP-USAGES-METRE",
+    "version": "1"
+  },
+  "cases": [
+    {
+      "id": "btp.renders/interior-120m2",
+      "engine": "btp.renders",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V = 120 × 0,015 = 1,8 m³ ; mortier RENDER : V_c = 1,8 × 1,1 = 1,98 m³ ; ciment 350 × 1,98 = 693 kg ; sable 1,1 × 1,98 = 2,178 m³ ; eau 0,22 × 1,98 × 1000 = 435,6 L ; sacs = 693 / 50 = 13,86",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "area": {
+          "value": 120,
+          "unit": "m2"
+        },
+        "side": "INTERIOR"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "area": {
+            "value": 120,
+            "tolerance": 0.001
+          },
+          "mortarVolume": {
+            "value": 1.8,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 693,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 13.86,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 2.178,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 435.6,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.renders/exterior-85.5m2",
+      "engine": "btp.renders",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V = 85,5 × 0,02 = 1,71 m³ ; mortier RENDER : V_c = 1,71 × 1,1 = 1,881 m³ ; ciment 350 × 1,881 = 658,35 kg ; sable 1,1 × 1,881 = 2,0691 m³ ; eau 0,22 × 1,881 × 1000 = 413,82 L ; sacs = 658,35 / 50 = 13,167",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "area": {
+          "value": 85.5,
+          "unit": "m2"
+        },
+        "side": "EXTERIOR"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "area": {
+            "value": 85.5,
+            "tolerance": 0.001
+          },
+          "mortarVolume": {
+            "value": 1.71,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 658.35,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 13.167,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 2.0691,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 413.82,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.renders/exterior-300m2",
+      "engine": "btp.renders",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V = 300 × 0,02 = 6 m³ ; mortier RENDER : V_c = 6 × 1,1 = 6,6 m³ ; ciment 350 × 6,6 = 2310 kg ; sable 1,1 × 6,6 = 7,26 m³ ; eau 0,22 × 6,6 × 1000 = 1452 L ; sacs = 2310 / 50 = 46,2",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "area": {
+          "value": 300,
+          "unit": "m2"
+        },
+        "side": "EXTERIOR"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "area": {
+            "value": 300,
+            "tolerance": 0.001
+          },
+          "mortarVolume": {
+            "value": 6,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 2310,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 46.2,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 7.26,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 1452,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.renders/max-area",
+      "engine": "btp.renders",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V = 1000000 × 0,015 = 15000 m³ ; mortier RENDER : V_c = 15000 × 1,1 = 16500 m³ ; ciment 350 × 16500 = 5775000 kg ; sable 1,1 × 16500 = 18150 m³ ; eau 0,22 × 16500 × 1000 = 3630000 L ; sacs = 5775000 / 50 = 115500 — limite : surface maximale du domaine.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "area": {
+          "value": 1000000,
+          "unit": "m2"
+        },
+        "side": "INTERIOR"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "area": {
+            "value": 1000000,
+            "tolerance": 0.001
+          },
+          "mortarVolume": {
+            "value": 15000,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 5775000,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 115500,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 18150,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 3630000,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.renders/tiny-area",
+      "engine": "btp.renders",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V = 0,01 × 0,015 = 0,00015 m³ ; mortier RENDER : V_c = 0,00015 × 1,1 = 0,000165 m³ ; ciment 350 × 0,000165 = 0,05775 kg ; sable 1,1 × 0,000165 = 0,000181 m³ ; eau 0,22 × 0,000165 × 1000 = 0,0363 L ; sacs = 0,05775 / 50 = 0,001155 — limite : très petite surface (1 dm²).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "area": {
+          "value": 0.01,
+          "unit": "m2"
+        },
+        "side": "INTERIOR"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "area": {
+            "value": 0.01,
+            "tolerance": 0.001
+          },
+          "mortarVolume": {
+            "value": 0.00015,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 0.05775,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 0.001155,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0.0001815,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 0.0363,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.renders/unknown-side",
+      "engine": "btp.renders",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Emplacement « BOTH » hors liste : refus.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "area": {
+          "value": 120,
+          "unit": "m2"
+        },
+        "side": "BOTH"
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "side",
+            "code": "invalid_value"
+          }
+        ]
+      }
+    },
+    {
+      "id": "btp.renders/missing-render-thickness",
+      "engine": "btp.renders",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Paramètre btp.render.thickness absent du jeu résolu : le calcul est refusé avant exécution (PARAMETER_MISSING).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "omitParameters": ["btp.render.thickness"],
+      "inputs": {
+        "area": {
+          "value": 120,
+          "unit": "m2"
+        },
+        "side": "INTERIOR"
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.btp.render.thickness",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

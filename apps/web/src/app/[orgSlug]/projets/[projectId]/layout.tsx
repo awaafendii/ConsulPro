@@ -45,7 +45,10 @@ export default async function ProjectLayout({
           {t('archivedNotice')}
         </Callout>
       )}
-      <ProjectTabs base={`/${ctx.organization.slug}/projets/${project.id}`} />
+      <ProjectTabs
+        base={`/${ctx.organization.slug}/projets/${project.id}`}
+        btp={project.disciplines.includes('BTP')}
+      />
       {children}
     </>
   );

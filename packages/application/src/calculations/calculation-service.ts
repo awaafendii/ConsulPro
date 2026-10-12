@@ -508,6 +508,7 @@ export function createCalculationService({
         const presentation: StoredPresentation = {
           ...engine.presentation,
           title: engine.title,
+          referenceCases: engine.referenceCases ?? { total: 0, checked: 0 },
           parameters: engine.parameters.map((p) => ({ key: p.key, label: p.description })),
         };
         const id = ids.next();

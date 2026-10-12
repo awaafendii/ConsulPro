@@ -19,7 +19,13 @@ export type ResultStatusDto = z.infer<typeof resultStatusSchema>;
 const scalar = z.union([z.number(), z.string(), z.boolean(), z.null()]);
 
 export const calculationViewSchema = z.object({
-  engine: z.object({ id: z.string(), version: z.string(), title: z.string() }),
+  engine: z.object({
+    id: z.string(),
+    version: z.string(),
+    title: z.string(),
+    /** Faux tant que les cas de référence du moteur ne sont pas contre-vérifiés. */
+    verified: z.boolean().optional(),
+  }),
   status: resultStatusSchema,
   /** Aperçu calculé dans le navigateur, sans valeur officielle (non enregistré). */
   preview: z.boolean(),

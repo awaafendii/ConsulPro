@@ -137,3 +137,11 @@ describe('schéma quantity()', () => {
     expect(quantity('temperature').parse({ value: -10, unit: 'degC' }).si).toBeCloseTo(263.15, 12);
   });
 });
+
+describe('unités du métré (Phase 4)', () => {
+  it('rendement, masse surfacique et masse linéique', () => {
+    expect(toSI(10, 'm2/L')).toBe(10_000);
+    expect(toSI(5, 'kg/m2')).toBe(5);
+    expect(toSI(0.617, 'kg/m')).toBe(0.617);
+  });
+});

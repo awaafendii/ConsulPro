@@ -69,7 +69,8 @@ If-Match obligatoire sur PATCH et DELETE).
 | 0 — Architecture | Validée (2026-10-08) |
 | 1 — Foundation   | Validée (2026-10-08) |
 | 2 — Design System | Validée (2026-10-09) |
-| 3 — Projets, calcul, référentiels | Terminée, en revue (2026-10-09) |
-| 4 à 10           | À faire |
+| 3 — Projets, calcul, référentiels | Validée (2026-10-11) |
+| 4 — BTP (quantités) | Terminée, en revue (2026-10-12) |
+| 5 à 10           | À faire |
 
 Critères de sortie de chaque phase : `docs/architecture/07-roadmap.md`.

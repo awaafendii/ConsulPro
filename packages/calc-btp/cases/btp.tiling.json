@@ -1,0 +1,528 @@
+{
+  "engine": "btp.tiling",
+  "parameterSet": {
+    "standard": "BTP-USAGES-METRE",
+    "version": "1"
+  },
+  "cases": [
+    {
+      "id": "btp.tiling/40m2-40x40-adhesive",
+      "engine": "btp.tiling",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "S_c = 40 × 1,08 = 43,2 m² ; N = 43,2 / (0,4 × 0,4) = 270 ; joints 40 × 0,5 = 20 kg ; mortier-colle 40 × 5 = 200 kg ; plinthes 26 m",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "area": {
+          "value": 40,
+          "unit": "m2"
+        },
+        "tileLength": {
+          "value": 40,
+          "unit": "cm"
+        },
+        "tileWidth": {
+          "value": 40,
+          "unit": "cm"
+        },
+        "laying": "ADHESIVE",
+        "skirtingLength": {
+          "value": 26,
+          "unit": "m"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "area": {
+            "value": 40,
+            "tolerance": 0.001
+          },
+          "skirting": {
+            "value": 26,
+            "tolerance": 0.001
+          },
+          "tilesArea": {
+            "value": 43.2,
+            "tolerance": 0.001
+          },
+          "tiles": {
+            "value": 270,
+            "tolerance": 0.001
+          },
+          "adhesive": {
+            "value": 200,
+            "tolerance": 0.001
+          },
+          "grout": {
+            "value": 20,
+            "tolerance": 0.001
+          },
+          "mortarVolume": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 0,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.tiling/25m2-30x30-mortar-bed",
+      "engine": "btp.tiling",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "S_c = 25 × 1,08 = 27 m² ; N = 27 / (0,3 × 0,3) = 300 ; joints 25 × 0,5 = 12,5 kg ; mortier de pose 25 × 0,03 = 0,75 m³ ; mortier BEDDING : V_c = 0,75 × 1,1 = 0,825 m³ ; ciment 300 × 0,825 = 247,5 kg ; sable 1,1 × 0,825 = 0,9075 m³ ; eau 0,2 × 0,825 × 1000 = 165 L ; sacs = 247,5 / 50 = 4,95 ; plinthes 0 m (plinthes non saisies : 0)",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "area": {
+          "value": 25,
+          "unit": "m2"
+        },
+        "tileLength": {
+          "value": 30,
+          "unit": "cm"
+        },
+        "tileWidth": {
+          "value": 30,
+          "unit": "cm"
+        },
+        "laying": "MORTAR_BED"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "area": {
+            "value": 25,
+            "tolerance": 0.001
+          },
+          "skirting": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "tilesArea": {
+            "value": 27,
+            "tolerance": 0.001
+          },
+          "tiles": {
+            "value": 300,
+            "tolerance": 0.001
+          },
+          "adhesive": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "grout": {
+            "value": 12.5,
+            "tolerance": 0.001
+          },
+          "mortarVolume": {
+            "value": 0.75,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 247.5,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 4.95,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0.9075,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 165,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY", "DEFAULT.skirtingLength"]
+      }
+    },
+    {
+      "id": "btp.tiling/18m2-60x60-adhesive",
+      "engine": "btp.tiling",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "S_c = 18 × 1,08 = 19,44 m² ; N = 19,44 / (0,6 × 0,6) = 54 ; joints 18 × 0,5 = 9 kg ; mortier-colle 18 × 5 = 90 kg ; plinthes 17 m",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "area": {
+          "value": 18,
+          "unit": "m2"
+        },
+        "tileLength": {
+          "value": 60,
+          "unit": "cm"
+        },
+        "tileWidth": {
+          "value": 60,
+          "unit": "cm"
+        },
+        "laying": "ADHESIVE",
+        "skirtingLength": {
+          "value": 1700,
+          "unit": "cm"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "area": {
+            "value": 18,
+            "tolerance": 0.001
+          },
+          "skirting": {
+            "value": 17,
+            "tolerance": 0.001
+          },
+          "tilesArea": {
+            "value": 19.44,
+            "tolerance": 0.001
+          },
+          "tiles": {
+            "value": 54,
+            "tolerance": 0.001
+          },
+          "adhesive": {
+            "value": 90,
+            "tolerance": 0.001
+          },
+          "grout": {
+            "value": 9,
+            "tolerance": 0.001
+          },
+          "mortarVolume": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 0,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.tiling/max-tile-2m",
+      "engine": "btp.tiling",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "S_c = 8 × 1,08 = 8,64 m² ; N = 8,64 / (2 × 2) = 2,16 ; joints 8 × 0,5 = 4 kg ; mortier-colle 8 × 5 = 40 kg ; plinthes 0 m — limite : carreau maximal du domaine (2 m × 2 m).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "area": {
+          "value": 8,
+          "unit": "m2"
+        },
+        "tileLength": {
+          "value": 2,
+          "unit": "m"
+        },
+        "tileWidth": {
+          "value": 2,
+          "unit": "m"
+        },
+        "laying": "ADHESIVE"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "area": {
+            "value": 8,
+            "tolerance": 0.001
+          },
+          "skirting": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "tilesArea": {
+            "value": 8.64,
+            "tolerance": 0.001
+          },
+          "tiles": {
+            "value": 2.16,
+            "tolerance": 0.001
+          },
+          "adhesive": {
+            "value": 40,
+            "tolerance": 0.001
+          },
+          "grout": {
+            "value": 4,
+            "tolerance": 0.001
+          },
+          "mortarVolume": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 0,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY", "DEFAULT.skirtingLength"]
+      }
+    },
+    {
+      "id": "btp.tiling/max-area",
+      "engine": "btp.tiling",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "S_c = 1000000 × 1,08 = 1080000 m² ; N = 1080000 / (0,2 × 0,2) = 27000000 ; joints 1000000 × 0,5 = 500000 kg ; mortier-colle 1000000 × 5 = 5000000 kg ; plinthes 0 m — limite : surface maximale du domaine.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "area": {
+          "value": 1000000,
+          "unit": "m2"
+        },
+        "tileLength": {
+          "value": 20,
+          "unit": "cm"
+        },
+        "tileWidth": {
+          "value": 20,
+          "unit": "cm"
+        },
+        "laying": "ADHESIVE"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "area": {
+            "value": 1000000,
+            "tolerance": 0.001
+          },
+          "skirting": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "tilesArea": {
+            "value": 1080000,
+            "tolerance": 0.001
+          },
+          "tiles": {
+            "value": 27000000,
+            "tolerance": 0.001
+          },
+          "adhesive": {
+            "value": 5000000,
+            "tolerance": 0.001
+          },
+          "grout": {
+            "value": 500000,
+            "tolerance": 0.001
+          },
+          "mortarVolume": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 0,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY", "DEFAULT.skirtingLength"]
+      }
+    },
+    {
+      "id": "btp.tiling/tile-above-domain",
+      "engine": "btp.tiling",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Carreau de 2,5 m > 2 m (borne du domaine) : refus.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "area": {
+          "value": 40,
+          "unit": "m2"
+        },
+        "tileLength": {
+          "value": 2.5,
+          "unit": "m"
+        },
+        "tileWidth": {
+          "value": 0.4,
+          "unit": "m"
+        },
+        "laying": "ADHESIVE"
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "tileLength.value",
+            "code": "OUT_OF_RANGE"
+          }
+        ]
+      }
+    },
+    {
+      "id": "btp.tiling/missing-tiling-grout",
+      "engine": "btp.tiling",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Paramètre btp.tiling.grout absent du jeu résolu : le calcul est refusé avant exécution (PARAMETER_MISSING).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "omitParameters": ["btp.tiling.grout"],
+      "inputs": {
+        "area": {
+          "value": 40,
+          "unit": "m2"
+        },
+        "tileLength": {
+          "value": 40,
+          "unit": "cm"
+        },
+        "tileWidth": {
+          "value": 40,
+          "unit": "cm"
+        },
+        "laying": "ADHESIVE"
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.btp.tiling.grout",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

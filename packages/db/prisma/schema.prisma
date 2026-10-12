@@ -1,4 +1,5 @@
-// Schéma ConsulPro — Phases 1 à 3 (identité, organisations, audit, référentiels, projets).
+// Schéma ConsulPro — Phases 1 à 4 (identité, organisations, audit, référentiels, projets,
+// calculs, avant-métré, quantitatifs et prix).
 // Conventions : docs/architecture/02-modele-de-donnees.md et 05-conventions.md §6.
 // L'isolation (RLS), les droits du rôle applicatif et l'immuabilité de l'audit
 // sont définis en SQL dans les migrations.
@@ -116,6 +117,9 @@ model User {
   datasetRevisionsAuthored  DatasetRevision[]     @relation("DatasetRevisionAuthor")
   notifications             Notification[]
   twoFactors                TwoFactor[]
+  takeoffAssignments        TakeoffAssignment[]   @relation("TakeoffAssigner")
+  boqsCreated               BillOfQuantities[]    @relation("BoqCreator")
+  priceLibrariesCreated     PriceLibrary[]        @relation("PriceLibraryCreator")
 
   @@map("users")
 }
@@ -192,12 +196,13 @@ model Organization {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
 
-  memberships   Membership[]
-  invitations   Invitation[]
-  standards     Standard[]
-  projects      Project[]
-  overrides     ParameterOverride[]
-  notifications Notification[]
+  memberships    Membership[]
+  invitations    Invitation[]
+  standards      Standard[]
+  projects       Project[]
+  overrides      ParameterOverride[]
+  notifications  Notification[]
+  priceLibraries PriceLibrary[]
 
   @@map("organizations")
 }
@@ -399,20 +404,24 @@ model Project {
   createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt      DateTime      @updatedAt @map("updated_at") @db.Timestamptz(3)
 
-  organization     Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  createdBy        User                     @relation("ProjectCreator", fields: [createdById], references: [id])
-  members          ProjectMember[]
-  disciplines      ProjectDiscipline[]
-  standardVersions ProjectStandardVersion[]
-  activity         ActivityEvent[]
-  overrides        ParameterOverride[]
-  studies          Study[]
-  calculations     Calculation[]
-  revisions        CalculationRevision[]
-  reviews          CalculationReview[]
-  dependencies     CalculationDependency[]
-  datasets         Dataset[]
-  datasetRevisions DatasetRevision[]
+  organization       Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdBy          User                     @relation("ProjectCreator", fields: [createdById], references: [id])
+  members            ProjectMember[]
+  disciplines        ProjectDiscipline[]
+  standardVersions   ProjectStandardVersion[]
+  activity           ActivityEvent[]
+  overrides          ParameterOverride[]
+  studies            Study[]
+  calculations       Calculation[]
+  revisions          CalculationRevision[]
+  reviews            CalculationReview[]
+  dependencies       CalculationDependency[]
+  datasets           Dataset[]
+  datasetRevisions   DatasetRevision[]
+  takeoffNodes       TakeoffNode[]
+  takeoffAssignments TakeoffAssignment[]
+  boqs               BillOfQuantities[]
+  boqItems           BoqItem[]
 
   @@unique([organizationId, code])
   @@unique([id, organizationId])
@@ -554,7 +563,10 @@ model Calculation {
   currentRevision CalculationRevision?    @relation("CurrentRevision", fields: [currentRevisionId], references: [id])
   revisions       CalculationRevision[]   @relation("Revisions")
   dependents      CalculationDependency[] @relation("DependencySource")
+  takeoff         TakeoffAssignment[]
+  boqItems        BoqItem[]               @relation("BoqItemCalculation")
 
+  @@unique([id, projectId])
   @@index([studyId])
   @@index([projectId])
   @@map("calculations")
@@ -597,8 +609,10 @@ model CalculationRevision {
   reviews      CalculationReview[]
   dependencies CalculationDependency[] @relation("DependencyTarget")
   usedBy       CalculationDependency[] @relation("DependencySourceRevision")
+  boqItems     BoqItem[]
 
   @@unique([calculationId, number])
+  @@unique([id, calculationId])
   @@map("calculation_revisions")
 }
 
@@ -728,4 +742,167 @@ model TwoFactor {
   @@index([userId])
   @@index([secret])
   @@map("two_factors")
+}
+
+// ---------------------------------------------------------------------------
+// Avant-métré, quantitatifs et prix (Phase 4). Avant-métré et quantitatifs : accès restreint
+// au projet (RLS) ; bibliothèques de prix : organisation. Montants et quantités en
+// NUMERIC(18,4) (jamais de flottant). Contrôles de cohérence : migration 20261011120000.
+// ---------------------------------------------------------------------------
+
+enum TakeoffNodeKind {
+  LOT
+  LEVEL
+  ELEMENT
+}
+
+enum BoqItemOrigin {
+  CALCULATION
+  MANUAL
+}
+
+/// Nœud de l'avant-métré : lot (racine), niveau ou ouvrage.
+model TakeoffNode {
+  id             String          @id @db.Uuid
+  organizationId String          @map("organization_id") @db.Uuid
+  projectId      String          @map("project_id") @db.Uuid
+  parentId       String?         @map("parent_id") @db.Uuid
+  kind           TakeoffNodeKind
+  code           String
+  title          String
+  version        Int             @default(1)
+  createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime        @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  project     Project             @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
+  parent      TakeoffNode?        @relation("TakeoffTree", fields: [parentId, projectId], references: [id, projectId], onDelete: NoAction)
+  children    TakeoffNode[]       @relation("TakeoffTree")
+  assignments TakeoffAssignment[]
+  boqItems    BoqItem[]
+
+  @@unique([id, projectId])
+  /// Index créé avec NULLS NOT DISTINCT (migration 20261011120000_takeoff_boq_prices).
+  @@unique([projectId, parentId, code], map: "takeoff_nodes_sibling_code_key")
+  @@map("takeoff_nodes")
+}
+
+/// Rattachement d'un calcul à un nœud de l'avant-métré (un nœud au plus par calcul).
+model TakeoffAssignment {
+  calculationId  String   @id @map("calculation_id") @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  projectId      String   @map("project_id") @db.Uuid
+  nodeId         String   @map("node_id") @db.Uuid
+  assignedById   String   @map("assigned_by_id") @db.Uuid
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  project     Project     @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
+  calculation Calculation @relation(fields: [calculationId, projectId], references: [id, projectId], onDelete: Cascade)
+  node        TakeoffNode @relation(fields: [nodeId, projectId], references: [id, projectId], onDelete: NoAction)
+  assignedBy  User        @relation("TakeoffAssigner", fields: [assignedById], references: [id])
+
+  @@index([nodeId])
+  @@map("takeoff_assignments")
+}
+
+/// Quantitatif (DQE) d'un projet ; sa structure est celle de l'avant-métré.
+model BillOfQuantities {
+  id             String    @id @db.Uuid
+  organizationId String    @map("organization_id") @db.Uuid
+  projectId      String    @map("project_id") @db.Uuid
+  title          String
+  currency       String    @db.Char(3)
+  version        Int       @default(1)
+  createdById    String    @map("created_by_id") @db.Uuid
+  syncedAt       DateTime? @map("synced_at") @db.Timestamptz(3)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  project   Project   @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
+  createdBy User      @relation("BoqCreator", fields: [createdById], references: [id])
+  items     BoqItem[]
+
+  @@unique([id, projectId])
+  @@index([projectId])
+  @@map("bills_of_quantities")
+}
+
+/// Ligne de quantitatif : issue d'une sortie de calcul (liée à sa révision) ou saisie.
+model BoqItem {
+  id                    String        @id @db.Uuid
+  organizationId        String        @map("organization_id") @db.Uuid
+  projectId             String        @map("project_id") @db.Uuid
+  boqId                 String        @map("boq_id") @db.Uuid
+  nodeId                String        @map("node_id") @db.Uuid
+  origin                BoqItemOrigin
+  calculationId         String?       @map("calculation_id") @db.Uuid
+  outputKey             String?       @map("output_key")
+  sourceRevisionId      String?       @map("source_revision_id") @db.Uuid
+  /// Ouvrage `<moteur>.<sortie>` : correspondance avec les bibliothèques de prix.
+  workKey               String?       @map("work_key")
+  designation           String
+  unit                  String
+  quantity              Decimal       @db.Decimal(18, 4)
+  overrideQuantity      Decimal?      @map("override_quantity") @db.Decimal(18, 4)
+  overrideJustification String?       @map("override_justification")
+  unitPrice             Decimal?      @map("unit_price") @db.Decimal(18, 4)
+  priceItemId           String?       @map("price_item_id") @db.Uuid
+  version               Int           @default(1)
+  createdAt             DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt             DateTime      @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  project        Project              @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
+  boq            BillOfQuantities     @relation(fields: [boqId, projectId], references: [id, projectId], onDelete: Cascade)
+  node           TakeoffNode          @relation(fields: [nodeId, projectId], references: [id, projectId], onDelete: NoAction)
+  calculation    Calculation?         @relation("BoqItemCalculation", fields: [calculationId], references: [id], onDelete: Cascade)
+  sourceRevision CalculationRevision? @relation(fields: [sourceRevisionId, calculationId], references: [id, calculationId], onDelete: NoAction)
+  priceItem      PriceItem?           @relation(fields: [priceItemId], references: [id], onDelete: SetNull)
+
+  @@unique([boqId, calculationId, outputKey])
+  @@index([boqId])
+  @@index([nodeId])
+  @@map("boq_items")
+}
+
+/// Bibliothèque de prix unitaires d'une organisation (facultative), dans une devise.
+model PriceLibrary {
+  id             String    @id @db.Uuid
+  organizationId String    @map("organization_id") @db.Uuid
+  name           String
+  currency       String    @db.Char(3)
+  validFrom      DateTime? @map("valid_from") @db.Date
+  version        Int       @default(1)
+  createdById    String    @map("created_by_id") @db.Uuid
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdBy    User         @relation("PriceLibraryCreator", fields: [createdById], references: [id])
+  items        PriceItem[]
+
+  @@unique([organizationId, name])
+  @@unique([id, organizationId])
+  @@map("price_libraries")
+}
+
+/// Prix unitaire d'une bibliothèque, éventuellement associé à un ouvrage.
+model PriceItem {
+  id             String   @id @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  libraryId      String   @map("library_id") @db.Uuid
+  code           String
+  designation    String
+  unit           String
+  price          Decimal  @db.Decimal(18, 4)
+  /// Ouvrage `<moteur>.<sortie>` auquel ce prix s'applique (facultatif, un prix par ouvrage).
+  workKey        String?  @map("work_key")
+  version        Int      @default(1)
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  library  PriceLibrary @relation(fields: [libraryId, organizationId], references: [id, organizationId], onDelete: Cascade)
+  boqItems BoqItem[]
+
+  @@unique([libraryId, code])
+  @@unique([libraryId, workKey])
+  @@map("price_items")
 }

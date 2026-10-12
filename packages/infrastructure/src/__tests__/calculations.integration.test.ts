@@ -145,7 +145,8 @@ describe('exécution : paramètres résolus, figés et empreints', () => {
   it('projet > organisation > référentiel ; snapshot et SHA-256 reproductibles', async () => {
     const calc = await newCalculation('Dalle résolue');
     const demo = await app.library.projectStandards(as('auteur').ctx, projectId);
-    const versionId = must(demo).items[0]?.versions[0]?.id ?? '';
+    // Base partagée : d'autres référentiels BTP peuvent être retenus ; on vise DEMO.
+    const versionId = must(demo).items[0]?.versions.find((v) => v.code === 'DEMO')?.id ?? '';
     must(
       await app.library.createOrgOverride(owner, {
         standardVersionId: versionId,

@@ -35,6 +35,11 @@ export const AUDIT_ACTIONS = [
   'calculation.verified',
   'calculation.rejected',
   'dataset.revision_created',
+  'boq.deleted',
+  'boq.quantity_overridden',
+  'price_library.created',
+  'price_library.updated',
+  'price_library.deleted',
 ] as const;
 
 export type AuditAction = (typeof AUDIT_ACTIONS)[number];

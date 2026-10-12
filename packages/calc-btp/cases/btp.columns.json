@@ -1,0 +1,506 @@
+{
+  "engine": "btp.columns",
+  "parameterSet": {
+    "standard": "BTP-USAGES-METRE",
+    "version": "1"
+  },
+  "cases": [
+    {
+      "id": "btp.columns/25x25-h3-x12",
+      "engine": "btp.columns",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V = 0,25 × 0,25 × 3 × 12 = 2,25 m³ ; S_c = 2 × (0,25 + 0,25) × 3 × 12 = 36 m² ; aciers = 120 kg/m³ × 2,25 m³ = 270 kg ; commandés × 1,05 = 283,5 kg ; béton ARME : V_c = 2,25 × 1,05 = 2,3625 m³ ; ciment 350 × 2,3625 = 826,875 kg ; sable 0,4 × 2,3625 = 0,945 m³ ; gravier 0,8 × 2,3625 = 1,89 m³ ; eau 0,175 × 2,3625 × 1000 = 413,4375 L ; total ciment 826,875 kg ; sacs = 826,875 / 50 = 16,5375",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "sectionA": {
+          "value": 25,
+          "unit": "cm"
+        },
+        "sectionB": {
+          "value": 25,
+          "unit": "cm"
+        },
+        "height": {
+          "value": 3,
+          "unit": "m"
+        },
+        "count": 12,
+        "steelMode": "RATIO"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "concrete": {
+            "value": 2.25,
+            "tolerance": 0.001
+          },
+          "leanConcrete": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "formwork": {
+            "value": 36,
+            "tolerance": 0.001
+          },
+          "steel": {
+            "value": 270,
+            "tolerance": 0.001
+          },
+          "steelOrdered": {
+            "value": 283.5,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 826.875,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 16.5375,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0.945,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 1.89,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 413.4375,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.columns/20x30-defaults",
+      "engine": "btp.columns",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V = 0,2 × 0,3 × 3,2 × 1 = 0,192 m³ ; S_c = 2 × (0,2 + 0,3) × 3,2 × 1 = 3,2 m² ; aciers = 120 kg/m³ × 0,192 m³ = 23,04 kg ; commandés × 1,05 = 24,192 kg ; béton ARME : V_c = 0,192 × 1,05 = 0,2016 m³ ; ciment 350 × 0,2016 = 70,56 kg ; sable 0,4 × 0,2016 = 0,08064 m³ ; gravier 0,8 × 0,2016 = 0,16128 m³ ; eau 0,175 × 0,2016 × 1000 = 35,28 L ; total ciment 70,56 kg ; sacs = 70,56 / 50 = 1,4112 (nombre et mode d’aciers par défaut)",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "sectionA": {
+          "value": 20,
+          "unit": "cm"
+        },
+        "sectionB": {
+          "value": 30,
+          "unit": "cm"
+        },
+        "height": {
+          "value": 3.2,
+          "unit": "m"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "concrete": {
+            "value": 0.192,
+            "tolerance": 0.001
+          },
+          "leanConcrete": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "formwork": {
+            "value": 3.2,
+            "tolerance": 0.001
+          },
+          "steel": {
+            "value": 23.04,
+            "tolerance": 0.001
+          },
+          "steelOrdered": {
+            "value": 24.192,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 70.56,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 1.4112,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0.08064,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0.16128,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 35.28,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY", "DEFAULT.count", "DEFAULT.steelMode"]
+      }
+    },
+    {
+      "id": "btp.columns/30x30-schedule",
+      "engine": "btp.columns",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V = 0,3 × 0,3 × 3 × 4 = 1,08 m³ ; S_c = 2 × (0,3 + 0,3) × 3 × 4 = 14,4 m² ; HA12 : π × 0,012² / 4 × 7850 = 0,887814 kg/m × 3,6 m × 16 = 51,138091 kg ; HA6 : π × 0,006² / 4 × 7850 = 0,221954 kg/m × 1,1 m × 80 = 19,53191 kg ; total 70,670001 kg ; commandés × 1,05 = 74,203501 kg ; béton ARME : V_c = 1,08 × 1,05 = 1,134 m³ ; ciment 350 × 1,134 = 396,9 kg ; sable 0,4 × 1,134 = 0,4536 m³ ; gravier 0,8 × 1,134 = 0,9072 m³ ; eau 0,175 × 1,134 × 1000 = 198,45 L ; total ciment 396,9 kg ; sacs = 396,9 / 50 = 7,938",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "sectionA": {
+          "value": 30,
+          "unit": "cm"
+        },
+        "sectionB": {
+          "value": 30,
+          "unit": "cm"
+        },
+        "height": {
+          "value": 3,
+          "unit": "m"
+        },
+        "count": 4,
+        "steelMode": "SCHEDULE",
+        "schedule": [
+          {
+            "diameter": {
+              "value": 12,
+              "unit": "mm"
+            },
+            "length": {
+              "value": 3.6,
+              "unit": "m"
+            },
+            "count": 16
+          },
+          {
+            "diameter": {
+              "value": 6,
+              "unit": "mm"
+            },
+            "length": {
+              "value": 1.1,
+              "unit": "m"
+            },
+            "count": 80
+          }
+        ]
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "concrete": {
+            "value": 1.08,
+            "tolerance": 0.001
+          },
+          "leanConcrete": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "formwork": {
+            "value": 14.4,
+            "tolerance": 0.001
+          },
+          "steel": {
+            "value": 70.6700010788,
+            "tolerance": 0.001
+          },
+          "steelOrdered": {
+            "value": 74.2035011327,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 396.9,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 7.938,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0.4536,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0.9072,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 198.45,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.columns/max-domain",
+      "engine": "btp.columns",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V = 5 × 5 × 50 × 1 = 1250 m³ ; S_c = 2 × (5 + 5) × 50 × 1 = 1000 m² ; aciers = 120 kg/m³ × 1250 m³ = 150000 kg ; commandés × 1,05 = 157500 kg ; béton ARME : V_c = 1250 × 1,05 = 1312,5 m³ ; ciment 350 × 1312,5 = 459375 kg ; sable 0,4 × 1312,5 = 525 m³ ; gravier 0,8 × 1312,5 = 1050 m³ ; eau 0,175 × 1312,5 × 1000 = 229687,5 L ; total ciment 459375 kg ; sacs = 459375 / 50 = 9187,5 — limite : section 5 m × 5 m et hauteur 50 m (bornes du domaine).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "sectionA": {
+          "value": 5,
+          "unit": "m"
+        },
+        "sectionB": {
+          "value": 5,
+          "unit": "m"
+        },
+        "height": {
+          "value": 50,
+          "unit": "m"
+        },
+        "count": 1,
+        "steelMode": "RATIO"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "concrete": {
+            "value": 1250,
+            "tolerance": 0.001
+          },
+          "leanConcrete": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "formwork": {
+            "value": 1000,
+            "tolerance": 0.001
+          },
+          "steel": {
+            "value": 150000,
+            "tolerance": 0.001
+          },
+          "steelOrdered": {
+            "value": 157500,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 459375,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 9187.5,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 525,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 1050,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 229687.5,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.columns/units-mm-cm",
+      "engine": "btp.columns",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V = 0,15 × 0,15 × 3 × 1 = 0,0675 m³ ; S_c = 2 × (0,15 + 0,15) × 3 × 1 = 1,8 m² ; aciers = 120 kg/m³ × 0,0675 m³ = 8,1 kg ; commandés × 1,05 = 8,505 kg ; béton ARME : V_c = 0,0675 × 1,05 = 0,070875 m³ ; ciment 350 × 0,070875 = 24,80625 kg ; sable 0,4 × 0,070875 = 0,02835 m³ ; gravier 0,8 × 0,070875 = 0,0567 m³ ; eau 0,175 × 0,070875 × 1000 = 12,403125 L ; total ciment 24,80625 kg ; sacs = 24,80625 / 50 = 0,496125 — limite : conversion d’unités (150 mm, 300 cm).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "sectionA": {
+          "value": 150,
+          "unit": "mm"
+        },
+        "sectionB": {
+          "value": 150,
+          "unit": "mm"
+        },
+        "height": {
+          "value": 300,
+          "unit": "cm"
+        },
+        "count": 1,
+        "steelMode": "RATIO"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "concrete": {
+            "value": 0.0675,
+            "tolerance": 0.001
+          },
+          "leanConcrete": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "formwork": {
+            "value": 1.8,
+            "tolerance": 0.001
+          },
+          "steel": {
+            "value": 8.1,
+            "tolerance": 0.001
+          },
+          "steelOrdered": {
+            "value": 8.505,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 24.80625,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 0.496125,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0.02835,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0.0567,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 12.403125,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.columns/zero-count",
+      "engine": "btp.columns",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Nombre de poteaux 0 < 1 : refus.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "sectionA": {
+          "value": 25,
+          "unit": "cm"
+        },
+        "sectionB": {
+          "value": 25,
+          "unit": "cm"
+        },
+        "height": {
+          "value": 3,
+          "unit": "m"
+        },
+        "count": 0
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "count",
+            "code": "too_small"
+          }
+        ]
+      }
+    },
+    {
+      "id": "btp.columns/missing-concrete-cement",
+      "engine": "btp.columns",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Paramètre btp.concrete.cement absent du jeu résolu : le calcul est refusé avant exécution (PARAMETER_MISSING).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "omitParameters": ["btp.concrete.cement"],
+      "inputs": {
+        "sectionA": {
+          "value": 25,
+          "unit": "cm"
+        },
+        "sectionB": {
+          "value": 25,
+          "unit": "cm"
+        },
+        "height": {
+          "value": 3,
+          "unit": "m"
+        }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.btp.concrete.cement",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

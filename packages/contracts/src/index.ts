@@ -6,3 +6,4 @@ export * from './library';
 export * from './organizations';
 export * from './projects';
 export * from './studies';
+export * from './quantities';

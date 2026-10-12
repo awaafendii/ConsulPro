@@ -1,0 +1,391 @@
+{
+  "engine": "btp.earthworks",
+  "parameterSet": {
+    "standard": "BTP-USAGES-METRE",
+    "version": "1"
+  },
+  "cases": [
+    {
+      "id": "btp.earthworks/mass-ordinary-10x8x1.5",
+      "engine": "btp.earthworks",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V_d = 10 × 8 × 1,5 × 1 = 120 m³ ; V_r = 120 − 30 = 90 m³ ; k_f(ORDINARY) = 1,2 ; V_e = 30 × 1,2 = 36 m³ ; V_df = 120 × 1,2 = 144 m³",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "excavation": "MASS",
+        "length": {
+          "value": 10,
+          "unit": "m"
+        },
+        "width": {
+          "value": 8,
+          "unit": "m"
+        },
+        "depth": {
+          "value": 1.5,
+          "unit": "m"
+        },
+        "count": 1,
+        "soil": "ORDINARY",
+        "buriedVolume": {
+          "value": 30,
+          "unit": "m3"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "excavation": {
+            "value": 120,
+            "tolerance": 0.001
+          },
+          "backfill": {
+            "value": 90,
+            "tolerance": 0.001
+          },
+          "spoilBulked": {
+            "value": 36,
+            "tolerance": 0.001
+          },
+          "excavationBulked": {
+            "value": 144,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.EARTHWORKS_BACKFILL", "BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.earthworks/trench-clay-45m",
+      "engine": "btp.earthworks",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V_d = 45 × 0,6 × 0,8 × 1 = 21,6 m³ ; V_r = 21,6 − 12 = 9,6 m³ ; k_f(CLAY) = 1,3 ; V_e = 12 × 1,3 = 15,6 m³ ; V_df = 21,6 × 1,3 = 28,08 m³ (nombre non saisi : 1)",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "excavation": "TRENCH",
+        "length": {
+          "value": 45,
+          "unit": "m"
+        },
+        "width": {
+          "value": 60,
+          "unit": "cm"
+        },
+        "depth": {
+          "value": 80,
+          "unit": "cm"
+        },
+        "soil": "CLAY",
+        "buriedVolume": {
+          "value": 12,
+          "unit": "m3"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "excavation": {
+            "value": 21.6,
+            "tolerance": 0.001
+          },
+          "backfill": {
+            "value": 9.6,
+            "tolerance": 0.001
+          },
+          "spoilBulked": {
+            "value": 15.6,
+            "tolerance": 0.001
+          },
+          "excavationBulked": {
+            "value": 28.08,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.EARTHWORKS_BACKFILL", "BTP.QUANTITIES_ONLY", "DEFAULT.count"]
+      }
+    },
+    {
+      "id": "btp.earthworks/pits-rock-8",
+      "engine": "btp.earthworks",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V_d = 1,2 × 1,2 × 1,5 × 8 = 17,28 m³ ; V_r = 17,28 − 0 = 17,28 m³ ; k_f(ROCK) = 1,5 ; V_e = 0 × 1,5 = 0 m³ ; V_df = 17,28 × 1,5 = 25,92 m³ (volume enterré non saisi : 0)",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "excavation": "PIT",
+        "length": {
+          "value": 1.2,
+          "unit": "m"
+        },
+        "width": {
+          "value": 1.2,
+          "unit": "m"
+        },
+        "depth": {
+          "value": 1.5,
+          "unit": "m"
+        },
+        "count": 8,
+        "soil": "ROCK"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "excavation": {
+            "value": 17.28,
+            "tolerance": 0.001
+          },
+          "backfill": {
+            "value": 17.28,
+            "tolerance": 0.001
+          },
+          "spoilBulked": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "excavationBulked": {
+            "value": 25.92,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.EARTHWORKS_BACKFILL", "BTP.QUANTITIES_ONLY", "DEFAULT.buriedVolume"]
+      }
+    },
+    {
+      "id": "btp.earthworks/buried-equals-excavation",
+      "engine": "btp.earthworks",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V_d = 5 × 4 × 1 × 1 = 20 m³ ; V_r = 20 − 20 = 0 m³ ; k_f(SAND) = 1,1 ; V_e = 20 × 1,1 = 22 m³ ; V_df = 20 × 1,1 = 22 m³ — limite : ouvrages = fouilles, remblai nul.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "excavation": "MASS",
+        "length": {
+          "value": 5,
+          "unit": "m"
+        },
+        "width": {
+          "value": 4,
+          "unit": "m"
+        },
+        "depth": {
+          "value": 1,
+          "unit": "m"
+        },
+        "count": 1,
+        "soil": "SAND",
+        "buriedVolume": {
+          "value": 20,
+          "unit": "m3"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "excavation": {
+            "value": 20,
+            "tolerance": 0.001
+          },
+          "backfill": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "spoilBulked": {
+            "value": 22,
+            "tolerance": 0.001
+          },
+          "excavationBulked": {
+            "value": 22,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.EARTHWORKS_BACKFILL", "BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.earthworks/max-depth-30m",
+      "engine": "btp.earthworks",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V_d = 1 × 1 × 30 × 1 = 30 m³ ; V_r = 30 − 0 = 30 m³ ; k_f(TOPSOIL) = 1,25 ; V_e = 0 × 1,25 = 0 m³ ; V_df = 30 × 1,25 = 37,5 m³ — limite : profondeur maximale du domaine (30 m).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "excavation": "PIT",
+        "length": {
+          "value": 1,
+          "unit": "m"
+        },
+        "width": {
+          "value": 1,
+          "unit": "m"
+        },
+        "depth": {
+          "value": 30,
+          "unit": "m"
+        },
+        "count": 1,
+        "soil": "TOPSOIL",
+        "buriedVolume": {
+          "value": 0,
+          "unit": "m3"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "excavation": {
+            "value": 30,
+            "tolerance": 0.001
+          },
+          "backfill": {
+            "value": 30,
+            "tolerance": 0.001
+          },
+          "spoilBulked": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "excavationBulked": {
+            "value": 37.5,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.EARTHWORKS_BACKFILL", "BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.earthworks/buried-exceeds-excavation",
+      "engine": "btp.earthworks",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V_d = 2 × 2 × 1 = 4 m³ < V_o = 5 m³ : saisie incohérente, refusée.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "excavation": "MASS",
+        "length": {
+          "value": 2,
+          "unit": "m"
+        },
+        "width": {
+          "value": 2,
+          "unit": "m"
+        },
+        "depth": {
+          "value": 1,
+          "unit": "m"
+        },
+        "soil": "ORDINARY",
+        "buriedVolume": {
+          "value": 5,
+          "unit": "m3"
+        }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "buriedVolume",
+            "code": "BURIED_EXCEEDS_EXCAVATION"
+          }
+        ]
+      }
+    },
+    {
+      "id": "btp.earthworks/missing-earthworks-bulking",
+      "engine": "btp.earthworks",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Paramètre btp.earthworks.bulking absent du jeu résolu : le calcul est refusé avant exécution (PARAMETER_MISSING).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "omitParameters": ["btp.earthworks.bulking"],
+      "inputs": {
+        "excavation": "MASS",
+        "length": {
+          "value": 10,
+          "unit": "m"
+        },
+        "width": {
+          "value": 8,
+          "unit": "m"
+        },
+        "depth": {
+          "value": 1.5,
+          "unit": "m"
+        },
+        "soil": "ORDINARY"
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.btp.earthworks.bulking",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

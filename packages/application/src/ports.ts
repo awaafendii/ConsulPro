@@ -2,6 +2,7 @@ import type { EngineRegistry, Result } from '@consulpro/calc-core';
 import type { AuditAction, OrgRole } from '@consulpro/domain';
 
 import type { CalculationRepositories } from './ports-calculations';
+import type { QuantityRepositories } from './ports-quantities';
 import type { ProjectRepositories } from './ports-projects';
 
 /*
@@ -78,7 +79,8 @@ export interface AuditRecord {
   readonly createdAt: Date;
 }
 
-export interface Repositories extends ProjectRepositories, CalculationRepositories {
+export interface Repositories
+  extends ProjectRepositories, CalculationRepositories, QuantityRepositories {
   readonly organizations: {
     create(input: {
       id: string;

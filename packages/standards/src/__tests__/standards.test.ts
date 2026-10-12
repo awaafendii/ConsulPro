@@ -384,3 +384,20 @@ describe('checkOverride', () => {
     expect(checkOverride(rate, value, justification)).toMatchObject({ ok: false, error: { code } });
   });
 });
+
+describe('référentiel BTP « Usages courants — métré »', () => {
+  it('est valide et entièrement « à vérifier », chaque valeur étant sourcée', () => {
+    const raw: unknown = JSON.parse(
+      readFileSync(
+        fileURLToPath(new URL('../../seeds/btp/usages-metre-1.json', import.meta.url)),
+        'utf8',
+      ),
+    );
+    const parsed = standardFileSchema.safeParse(raw);
+    expect(parsed.success, JSON.stringify(parsed.error?.issues)).toBe(true);
+    if (!parsed.success) return;
+    expect(parsed.data.standard).toMatchObject({ code: 'BTP-USAGES-METRE', discipline: 'BTP' });
+    expect(parsed.data.parameters.every((p) => p.verification === 'TO_VERIFY')).toBe(true);
+    expect(parsed.data.parameters.every((p) => p.source.document.length > 0)).toBe(true);
+  });
+});

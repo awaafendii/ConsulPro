@@ -18,6 +18,7 @@
     "@consulpro/standards": "workspace:*"
   },
   "devDependencies": {
+    "@consulpro/calc-btp": "workspace:*",
     "@consulpro/calc-demo": "workspace:*",
     "@consulpro/config-eslint": "workspace:*",
     "@consulpro/config-typescript": "workspace:*",

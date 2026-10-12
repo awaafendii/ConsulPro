@@ -41,9 +41,16 @@ erDiagram
   CalculationRevision ||--o{ CalculationReview : "vérifié par"
   CalculationRevision }o--|| StandardVersion : "utilise"
   CalculationRevision }o--o{ DataSetRevision : "lit"
+  Project ||--o{ TakeoffNode : "structure (avant-métré)"
+  TakeoffNode ||--o{ TakeoffAssignment : "rattache"
+  TakeoffAssignment |o--|| Calculation : "rattache"
   Project ||--o{ BillOfQuantities : "contient"
   BillOfQuantities ||--o{ BoqItem : "contient"
+  BoqItem }o--|| TakeoffNode : "chapitre"
   BoqItem }o--o| CalculationRevision : "provient de"
+  Organization ||--o{ PriceLibrary : "possède"
+  PriceLibrary ||--o{ PriceItem : "contient"
+  BoqItem }o--o| PriceItem : "chiffré par"
   Standard ||--o{ StandardVersion : "a"
   StandardVersion ||--o{ Parameter : "définit"
   StandardVersion ||--o{ Rule : "définit"
@@ -119,18 +126,22 @@ du calcul. Une exécution `INVALID` n'est pas enregistrée. Tables du lot D : `n
 `result_status` est fixé par le moteur : `OK`, `OK_WITH_WARNINGS`, `NON_COMPLIANT`,
 `INVALID` (entrées refusées) ou `ERROR` (défaut interne, jamais présenté comme un résultat).
 
-### 3.5 Quantitatifs et prix
+### 3.5 Avant-métré, quantitatifs et prix (Phase 4)
 
-| Entité             | Rôle                                         | Champs clés                                                                                                                       |
-| ------------------ | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `BillOfQuantities` | Quantitatif / DQE d'un projet (par métier ou global) | titre, discipline (optionnelle), devise, statut                                                                            |
-| `BoqSection`       | Lot / chapitre                               | code, titre, ordre, parent (arborescence)                                                                                         |
-| `BoqItem`          | Ligne de quantitatif                         | code, désignation, unité, quantité `Decimal`, prix unitaire `Decimal?` (facultatif), `source_revision_id?` (traçabilité vers le calcul), `manual_override` + justification |
-| `PriceLibrary`     | Bibliothèque de prix d'une organisation      | nom, devise, date de validité                                                                                                     |
-| `PriceItem`        | Prix unitaire personnalisable                | code, désignation, unité, prix `Decimal`                                                                                         |
+| Entité              | Rôle                                         | Champs clés                                                                                                                       |
+| ------------------- | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `TakeoffNode`       | Nœud de l'avant-métré : lot, niveau, ouvrage | `kind` (`LOT` à la racine, `LEVEL` dans un lot, `ELEMENT` dans un lot ou un niveau), code unique parmi les frères, intitulé, parent (même projet) |
+| `TakeoffAssignment` | Rattachement d'un calcul BTP à un nœud       | `calculation_id` (clé : un nœud au plus par calcul), `node_id`, auteur du rattachement                                         |
+| `BillOfQuantities`  | Quantitatif / DQE d'un projet                | titre, devise (ISO 4217), `synced_at`, `version` ; sa structure est celle de l'avant-métré (pas de table de sections distincte) |
+| `BoqItem`           | Ligne de quantitatif                         | nœud, origine (`CALCULATION` | `MANUAL`), calcul + sortie + `source_revision_id` (traçabilité), ouvrage (`work_key`), désignation, unité, quantité `NUMERIC(18,4)`, quantité retenue + justification, prix unitaire facultatif, article de prix d'origine |
+| `PriceLibrary`      | Bibliothèque de prix d'une organisation      | nom (unique), devise, date de validité                                                                                            |
+| `PriceItem`         | Prix unitaire                                | code, désignation, unité, prix `NUMERIC(18,4)`, ouvrage facultatif (un prix par ouvrage et par bibliothèque)                     |
 
-Une quantité issue d'un calcul reste liée à sa révision. Une modification manuelle exige
-une justification et reste visible comme telle (principe P4).
+Une quantité issue d'un calcul reste liée à sa révision et ne se modifie qu'en recalculant ;
+une quantité retenue différente exige une justification, reste affichée à côté de la quantité
+calculée et est journalisée (principe P4). La base contrôle l'origine des lignes, la
+justification, les montants positifs, l'appartenance du calcul au projet et de l'article de prix
+à l'organisation ; l'avant-métré et les quantitatifs d'un projet archivé sont en lecture seule.
 
 ### 3.6 Bibliothèque technique et référentiels
 

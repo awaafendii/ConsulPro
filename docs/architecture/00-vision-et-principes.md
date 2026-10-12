@@ -74,8 +74,8 @@ Points où le cahier des charges laisse une marge d'interprétation. Ces choix s
 | #   | Question                                                                                                                            | Phase concernée |
 | --- | ----------------------------------------------------------------------------------------------------------------------------------- | --------------- |
 | Q1  | ~~Confirmer I1 et un éventuel troisième niveau « Approuvé par »~~ — **Tranché (2026-10-09)** : 2 niveaux (validation par l'auteur, vérification par un second utilisateur). | 3 |
-| Q2  | Le dimensionnement structurel (BAEL 91 mod. 99) est-il attendu à terme ?                                                              | 4               |
+| Q2  | ~~Le dimensionnement structurel (BAEL 91 mod. 99) est-il attendu à terme ?~~ — **Tranché (2026-10-11)** : non. ConsulPro calcule des **quantités** ; le dimensionnement reste au bureau d'études structure (aciers par ratio ou par nomenclature saisie). | 4 |
 | Q3  | Pays cibles prioritaires (Sénégal, Côte d'Ivoire, Cameroun, Mali…) : certaines normes nationales dérivent de la NF C 15-100.         | 5               |
 | Q4  | Version de la NF C 15-100 à retenir comme référence (version 2002 et amendements, ou révision plus récente) ?                       | 5               |
 | Q5  | Lieu d'hébergement des données (contraintes de lois nationales sur la protection des données personnelles).                          | 10              |
-| Q6  | Qui fournira ou validera les cas de référence des calculs critiques ? (Un ingénieur du métier doit contre-vérifier.)                 | 4 à 7           |
+| Q6  | Qui fournira ou validera les cas de référence des calculs critiques ? — **Décision (2026-10-11)** : contre-vérification ultérieure par un ingénieur du métier ; d'ici là, les cas sont rédigés (calcul manuel détaillé) et les moteurs affichés « non vérifiés ». | 4 à 7 |

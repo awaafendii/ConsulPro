@@ -18,8 +18,17 @@ const publicPages: { name: string; path: string; heading: string | RegExp }[] = 
 ];
 
 const privatePages = () => {
-  const { orgSlug, projectId, projectCode, demoVersionId, studyId, calculationId, datasetId } =
-    fixture();
+  const {
+    orgSlug,
+    projectId,
+    projectCode,
+    demoVersionId,
+    studyId,
+    calculationId,
+    datasetId,
+    boqId,
+    priceLibraryId,
+  } = fixture();
   const project = `/${orgSlug}/projets/${projectId}`;
   const projectHeading = `${projectCode} — Immeuble R+3 Plateau`;
   return [
@@ -35,6 +44,20 @@ const privatePages = () => {
     { name: 'calcul', path: `${project}/calculs/${calculationId}`, heading: projectHeading },
     { name: 'données', path: `${project}/donnees`, heading: projectHeading },
     { name: 'jeu de données', path: `${project}/donnees/${datasetId}`, heading: projectHeading },
+    { name: 'avant-métré', path: `${project}/avant-metre`, heading: projectHeading },
+    { name: 'quantitatifs', path: `${project}/quantitatifs`, heading: projectHeading },
+    { name: 'quantitatif', path: `${project}/quantitatifs/${boqId}`, heading: projectHeading },
+    { name: 'tableau de bord BTP', path: `/${orgSlug}/btp`, heading: 'BTP / Génie civil' },
+    {
+      name: 'prix unitaires',
+      path: `/${orgSlug}/bibliotheque/prix`,
+      heading: 'Bibliothèque technique',
+    },
+    {
+      name: 'bibliothèque de prix',
+      path: `/${orgSlug}/bibliotheque/prix/${priceLibraryId}`,
+      heading: 'Bibliothèque technique',
+    },
     { name: 'recherche', path: `/${orgSlug}/recherche?q=immeuble`, heading: 'Recherche' },
     { name: 'mon compte', path: '/compte', heading: 'Mon compte' },
     { name: 'bibliothèque', path: `/${orgSlug}/bibliotheque`, heading: 'Bibliothèque technique' },

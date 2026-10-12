@@ -8,7 +8,9 @@ export {
   type EnginePresentation,
   type FormulaDoc,
   type InputPresentation,
+  type ListFieldPresentation,
   type OutputPresentation,
+  type QuantityFamily,
   type VerifyContext,
 } from './engine';
 export type {

@@ -21,6 +21,9 @@ export interface Fixture {
   readonly studyId: string;
   readonly calculationId: string;
   readonly datasetId: string;
+  /** Quantitatif chiffré (avant-métré : lot 1, semelles rattachées) et bibliothèque de prix. */
+  readonly boqId: string;
+  readonly priceLibraryId: string;
 }
 
 /** Dernier lien reçu par une adresse dans Mailpit (vérification, invitation…). */

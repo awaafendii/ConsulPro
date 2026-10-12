@@ -10,6 +10,10 @@ import { createOrganizationService } from './organizations/organization-service'
 import type { ApplicationDeps } from './ports';
 import { createProjectMemberService } from './projects/project-member-service';
 import { createProjectService } from './projects/project-service';
+import { createBoqService } from './quantities/boq-service';
+import { createBtpDashboardService } from './quantities/btp-dashboard-service';
+import { createPriceService } from './quantities/price-service';
+import { createTakeoffService } from './quantities/takeoff-service';
 
 export {
   createAccountService,
@@ -65,6 +69,38 @@ export {
 export type * from './ports';
 export type * from './ports-calculations';
 export type * from './ports-projects';
+export type * from './ports-quantities';
+export {
+  createBoqService,
+  type BoqItemView,
+  type BoqNodeView,
+  type BoqService,
+  type BoqSummary,
+  type BoqView,
+  type ItemSource,
+  type PendingChanges,
+} from './quantities/boq-service';
+export {
+  createBtpDashboardService,
+  type BtpBoqSummary,
+  type BtpCalculationStats,
+  type BtpDashboard,
+  type BtpDashboardService,
+  type BtpProjectSummary,
+} from './quantities/btp-dashboard-service';
+export {
+  createPriceService,
+  type PriceItemInput,
+  type PriceLibraryView,
+  type PriceService,
+  type WorkItem,
+} from './quantities/price-service';
+export {
+  createTakeoffService,
+  type TakeoffCalculation,
+  type TakeoffService,
+  type TakeoffView,
+} from './quantities/takeoff-service';
 export {
   authorizeProject,
   inProject,
@@ -95,6 +131,10 @@ export function createApplication(deps: ApplicationDeps) {
     studies: createStudyService(deps),
     calculations: createCalculationService(deps),
     datasets: createDatasetService(deps),
+    takeoff: createTakeoffService(deps),
+    boqs: createBoqService(deps),
+    prices: createPriceService(deps),
+    btpDashboard: createBtpDashboardService(deps),
     account: createAccountService(deps),
   };
 }

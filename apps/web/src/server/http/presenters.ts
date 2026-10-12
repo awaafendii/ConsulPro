@@ -273,33 +273,53 @@ export const engineDto = (e: AnyEngine): EngineDto => ({
   title: e.title,
   discipline: e.discipline,
   description: e.presentation.description,
-  inputs: e.presentation.inputs.map((i) =>
-    i.kind === 'quantity'
-      ? {
-          kind: 'quantity' as const,
-          key: i.key,
-          label: i.label,
+  inputs: e.presentation.inputs.map((i): EngineDto['inputs'][number] => {
+    const common = {
+      key: i.key,
+      label: i.label,
+      optional: i.optional === true,
+      ...(i.help ? { help: i.help } : {}),
+    };
+    switch (i.kind) {
+      case 'quantity':
+        return {
+          ...common,
+          kind: 'quantity',
           unitKind: i.unitKind,
           units: i.units.map((symbol) => ({ symbol, display: display(symbol) })),
-          optional: i.optional === true,
-          ...(i.help ? { help: i.help } : {}),
-        }
-      : {
-          kind: 'enum' as const,
-          key: i.key,
-          label: i.label,
-          options: i.options.map((o) => ({ ...o })),
-          optional: i.optional === true,
-          ...(i.help ? { help: i.help } : {}),
-        },
-  ),
+        };
+      case 'enum':
+        return { ...common, kind: 'enum', options: i.options.map((o) => ({ ...o })) };
+      case 'integer':
+        return { ...common, kind: 'integer', min: i.min };
+      case 'list':
+        return {
+          ...common,
+          kind: 'list',
+          maxItems: i.maxItems,
+          fields: i.fields.map((f) =>
+            f.kind === 'quantity'
+              ? {
+                  kind: 'quantity' as const,
+                  key: f.key,
+                  label: f.label,
+                  unitKind: f.unitKind,
+                  units: f.units.map((symbol) => ({ symbol, display: display(symbol) })),
+                }
+              : { kind: 'integer' as const, key: f.key, label: f.label, min: f.min },
+          ),
+        };
+    }
+  }),
   outputs: e.presentation.outputs.map((o) => ({
     key: o.key,
     label: o.label,
     unit: o.unit,
     unitKind: findUnit(o.unit)?.kind ?? 'dimensionless',
     precision: o.precision,
+    ...(o.family ? { family: o.family } : {}),
   })),
+  referenceCases: { ...(e.referenceCases ?? { total: 0, checked: 0 }) },
   parameters: e.parameters.map((p) => ({ key: p.key, description: p.description })),
   hypotheses: e.hypotheses.map((h) => ({ ...h })),
 });

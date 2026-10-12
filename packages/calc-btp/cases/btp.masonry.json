@@ -1,0 +1,590 @@
+{
+  "engine": "btp.masonry",
+  "parameterSet": {
+    "standard": "BTP-USAGES-METRE",
+    "version": "1"
+  },
+  "cases": [
+    {
+      "id": "btp.masonry/wall-12x3-t15-openings",
+      "engine": "btp.masonry",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "S_b = 12 × 3 = 36 m² ; ouvertures : 0,9 × 2,1 = 1,89 m² > 1 : déduite × 2, 1,2 × 1 = 1,2 m² > 1 : déduite × 3, 0,5 × 0,5 = 0,25 m² ≤ 1 : non déduite ; S_o = 7,38 m² ; S_n = 28,62 m² ; V_m = 28,62 × 0,15 × (1 − 0,4 × 0,2 / (0,0861)) = 0,30415 m³ ; N = 28,62 / ((0,4 + 0,01) × (0,2 + 0,01)) × 1,05 = 349,02439 ; mortier MASONRY : V_c = 0,30415 × 1,1 = 0,334565 m³ ; ciment 300 × 0,334565 = 100,369443 kg ; sable 1,1 × 0,334565 = 0,368021 m³ ; eau 0,2 × 0,334565 × 1000 = 66,912962 L ; sacs = 100,369443 / 50 = 2,007389",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "length": {
+          "value": 12,
+          "unit": "m"
+        },
+        "height": {
+          "value": 3,
+          "unit": "m"
+        },
+        "thickness": "T15",
+        "openings": [
+          {
+            "width": {
+              "value": 0.9,
+              "unit": "m"
+            },
+            "height": {
+              "value": 2.1,
+              "unit": "m"
+            },
+            "count": 2
+          },
+          {
+            "width": {
+              "value": 1.2,
+              "unit": "m"
+            },
+            "height": {
+              "value": 1,
+              "unit": "m"
+            },
+            "count": 3
+          },
+          {
+            "width": {
+              "value": 0.5,
+              "unit": "m"
+            },
+            "height": {
+              "value": 0.5,
+              "unit": "m"
+            },
+            "count": 4
+          }
+        ]
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "grossArea": {
+            "value": 36,
+            "tolerance": 0.001
+          },
+          "openingsDeducted": {
+            "value": 7.38,
+            "tolerance": 0.001
+          },
+          "area": {
+            "value": 28.62,
+            "tolerance": 0.001
+          },
+          "mortarVolume": {
+            "value": 0.304149825784,
+            "tolerance": 0.001
+          },
+          "blocks10": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "blocks15": {
+            "value": 349.024390244,
+            "tolerance": 0.001
+          },
+          "blocks20": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 100.369442509,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 2.00738885017,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0.368021289199,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 66.9129616725,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.masonry/wall-8x2.8-t20",
+      "engine": "btp.masonry",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "S_b = 8 × 2,8 = 22,4 m² ; S_o = 0 m² ; S_n = 22,4 m² ; V_m = 22,4 × 0,2 × (1 − 0,4 × 0,2 / (0,0861)) = 0,317398 m³ ; N = 22,4 / ((0,4 + 0,01) × (0,2 + 0,01)) × 1,05 = 273,170732 ; mortier MASONRY : V_c = 0,317398 × 1,1 = 0,349138 m³ ; ciment 300 × 0,349138 = 104,741463 kg ; sable 1,1 × 0,349138 = 0,384052 m³ ; eau 0,2 × 0,349138 × 1000 = 69,827642 L ; sacs = 104,741463 / 50 = 2,094829",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "length": {
+          "value": 8,
+          "unit": "m"
+        },
+        "height": {
+          "value": 280,
+          "unit": "cm"
+        },
+        "thickness": "T20"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "grossArea": {
+            "value": 22.4,
+            "tolerance": 0.001
+          },
+          "openingsDeducted": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "area": {
+            "value": 22.4,
+            "tolerance": 0.001
+          },
+          "mortarVolume": {
+            "value": 0.317398373984,
+            "tolerance": 0.001
+          },
+          "blocks10": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "blocks15": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "blocks20": {
+            "value": 273.170731707,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 104.741463415,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 2.09482926829,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0.38405203252,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 69.8276422764,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.masonry/wall-15x3-t10-garage-door",
+      "engine": "btp.masonry",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "S_b = 15 × 3 = 45 m² ; ouvertures : 2,4 × 2,2 = 5,28 m² > 1 : déduite × 1 ; S_o = 5,28 m² ; S_n = 39,72 m² ; V_m = 39,72 × 0,1 × (1 − 0,4 × 0,2 / (0,0861)) = 0,281408 m³ ; N = 39,72 / ((0,4 + 0,01) × (0,2 + 0,01)) × 1,05 = 484,390244 ; mortier MASONRY : V_c = 0,281408 × 1,1 = 0,309548 m³ ; ciment 300 × 0,309548 = 92,86453 kg ; sable 1,1 × 0,309548 = 0,340503 m³ ; eau 0,2 × 0,309548 × 1000 = 61,909686 L ; sacs = 92,86453 / 50 = 1,857291",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "length": {
+          "value": 15,
+          "unit": "m"
+        },
+        "height": {
+          "value": 3,
+          "unit": "m"
+        },
+        "thickness": "T10",
+        "openings": [
+          {
+            "width": {
+              "value": 2.4,
+              "unit": "m"
+            },
+            "height": {
+              "value": 2.2,
+              "unit": "m"
+            },
+            "count": 1
+          }
+        ]
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "grossArea": {
+            "value": 45,
+            "tolerance": 0.001
+          },
+          "openingsDeducted": {
+            "value": 5.28,
+            "tolerance": 0.001
+          },
+          "area": {
+            "value": 39.72,
+            "tolerance": 0.001
+          },
+          "mortarVolume": {
+            "value": 0.281407665505,
+            "tolerance": 0.001
+          },
+          "blocks10": {
+            "value": 484.390243902,
+            "tolerance": 0.001
+          },
+          "blocks15": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "blocks20": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 92.8645296167,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 1.85729059233,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0.340503275261,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 61.9096864111,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.masonry/openings-at-threshold",
+      "engine": "btp.masonry",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "S_b = 5 × 3 = 15 m² ; ouvertures : 1 × 1 = 1 m² ≤ 1 : non déduite, 0,5 × 2 = 1 m² ≤ 1 : non déduite ; S_o = 0 m² ; S_n = 15 m² ; V_m = 15 × 0,15 × (1 − 0,4 × 0,2 / (0,0861)) = 0,159408 m³ ; N = 15 / ((0,4 + 0,01) × (0,2 + 0,01)) × 1,05 = 182,926829 ; mortier MASONRY : V_c = 0,159408 × 1,1 = 0,175348 m³ ; ciment 300 × 0,175348 = 52,60453 kg ; sable 1,1 × 0,175348 = 0,192883 m³ ; eau 0,2 × 0,175348 × 1000 = 35,069686 L ; sacs = 52,60453 / 50 = 1,052091 — limite : ouvertures égales au seuil (1 m²), non déduites.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "length": {
+          "value": 5,
+          "unit": "m"
+        },
+        "height": {
+          "value": 3,
+          "unit": "m"
+        },
+        "thickness": "T15",
+        "openings": [
+          {
+            "width": {
+              "value": 1,
+              "unit": "m"
+            },
+            "height": {
+              "value": 1,
+              "unit": "m"
+            },
+            "count": 2
+          },
+          {
+            "width": {
+              "value": 0.5,
+              "unit": "m"
+            },
+            "height": {
+              "value": 2,
+              "unit": "m"
+            },
+            "count": 1
+          }
+        ]
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "grossArea": {
+            "value": 15,
+            "tolerance": 0.001
+          },
+          "openingsDeducted": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "area": {
+            "value": 15,
+            "tolerance": 0.001
+          },
+          "mortarVolume": {
+            "value": 0.159407665505,
+            "tolerance": 0.001
+          },
+          "blocks10": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "blocks15": {
+            "value": 182.926829268,
+            "tolerance": 0.001
+          },
+          "blocks20": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 52.6045296167,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 1.05209059233,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0.192883275261,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 35.0696864111,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.masonry/openings-equal-wall",
+      "engine": "btp.masonry",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "S_b = 4 × 2,5 = 10 m² ; ouvertures : 4 × 2,5 = 10 m² > 1 : déduite × 1 ; S_o = 10 m² ; S_n = 0 m² ; V_m = 0 × 0,2 × (1 − 0,4 × 0,2 / (0,0861)) = 0 m³ ; N = 0 / ((0,4 + 0,01) × (0,2 + 0,01)) × 1,05 = 0 ; sacs = 0 / 50 = 0 — limite : ouvertures = surface du mur, quantités nulles.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "length": {
+          "value": 4,
+          "unit": "m"
+        },
+        "height": {
+          "value": 2.5,
+          "unit": "m"
+        },
+        "thickness": "T20",
+        "openings": [
+          {
+            "width": {
+              "value": 4,
+              "unit": "m"
+            },
+            "height": {
+              "value": 2.5,
+              "unit": "m"
+            },
+            "count": 1
+          }
+        ]
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "grossArea": {
+            "value": 10,
+            "tolerance": 0.001
+          },
+          "openingsDeducted": {
+            "value": 10,
+            "tolerance": 0.001
+          },
+          "area": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "mortarVolume": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "blocks10": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "blocks15": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "blocks20": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 0,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.masonry/openings-exceed-wall",
+      "engine": "btp.masonry",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Ouvertures 2 × 2 × 2 = 8 m² > mur 3 × 2 = 6 m² : refus.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "length": {
+          "value": 3,
+          "unit": "m"
+        },
+        "height": {
+          "value": 2,
+          "unit": "m"
+        },
+        "thickness": "T15",
+        "openings": [
+          {
+            "width": {
+              "value": 2,
+              "unit": "m"
+            },
+            "height": {
+              "value": 2,
+              "unit": "m"
+            },
+            "count": 2
+          }
+        ]
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "openings",
+            "code": "OPENINGS_EXCEED_WALL"
+          }
+        ]
+      }
+    },
+    {
+      "id": "btp.masonry/missing-masonry-joint",
+      "engine": "btp.masonry",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Paramètre btp.masonry.joint absent du jeu résolu : le calcul est refusé avant exécution (PARAMETER_MISSING).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "omitParameters": ["btp.masonry.joint"],
+      "inputs": {
+        "length": {
+          "value": 12,
+          "unit": "m"
+        },
+        "height": {
+          "value": 3,
+          "unit": "m"
+        },
+        "thickness": "T15"
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.btp.masonry.joint",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

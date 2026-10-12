@@ -124,6 +124,8 @@ que la mutation. Événements audités (au minimum) :
 - projets : création, modification, archivage, membres ;
 - calculs : nouvelle révision, validation, vérification, rejet ;
 - référentiels : publication, dépréciation, surcharges ;
+- quantitatifs et prix : quantité retenue (justifiée), suppression d’un quantitatif, bibliothèques
+  de prix (création, modification, suppression) ;
 - documents : dépôt, suppression, purge ; rapports : génération ; imports : exécution.
 
 Aucun secret ni mot de passe n'est journalisé. Les valeurs sensibles sont masquées dans

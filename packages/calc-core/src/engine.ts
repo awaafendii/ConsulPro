@@ -22,9 +22,26 @@ export interface FormulaDoc {
   readonly source: string;
 }
 
+/** Champ d'une ligne de liste (ouverture, barre d'acier…) : grandeur ou entier. */
+export type ListFieldPresentation =
+  | {
+      readonly key: string;
+      readonly label: string;
+      readonly kind: 'quantity';
+      readonly unitKind: UnitKind;
+      readonly units: readonly UnitSymbol[];
+    }
+  | {
+      readonly key: string;
+      readonly label: string;
+      readonly kind: 'integer';
+      readonly min: number;
+    };
+
 /**
  * Présentation d'une entrée : construit le formulaire de saisie (aucun calcul dans l'interface).
- * Une grandeur se saisit `{ value, unit }` dans l'une des unités proposées.
+ * Une grandeur se saisit `{ value, unit }` dans l'une des unités proposées ; un entier, comme
+ * un nombre ; une liste, comme un tableau de lignes.
  */
 export type InputPresentation =
   | {
@@ -44,14 +61,56 @@ export type InputPresentation =
       readonly options: readonly { readonly value: string; readonly label: string }[];
       readonly optional?: boolean;
       readonly help?: string;
+    }
+  | {
+      readonly key: string;
+      readonly label: string;
+      readonly kind: 'integer';
+      readonly min: number;
+      readonly optional?: boolean;
+      readonly help?: string;
+    }
+  | {
+      readonly key: string;
+      readonly label: string;
+      readonly kind: 'list';
+      readonly fields: readonly ListFieldPresentation[];
+      readonly maxItems: number;
+      readonly optional?: boolean;
+      readonly help?: string;
     };
 
-/** Présentation d'une sortie : la valeur stockée est en SI (`unit`), affichée avec `precision` décimales. */
+/**
+ * Famille d'une sortie dans le quantitatif : un ouvrage (ligne de DQE) ou un matériau
+ * (décomposition). Sans famille, la sortie n'alimente pas le quantitatif.
+ */
+export type QuantityFamily =
+  | 'EARTHWORKS'
+  | 'CONCRETE'
+  | 'FORMWORK'
+  | 'STEEL'
+  | 'MASONRY'
+  | 'RENDER'
+  | 'FINISHES'
+  | 'PAINTING'
+  | 'MATERIAL';
+
+/**
+ * Présentation d'une sortie : la valeur est exprimée dans l'unité `unit` (SI ou unité d'usage,
+ * ex. litres d'eau) et affichée avec `precision` décimales, sans arrondi de la valeur stockée.
+ */
 export interface OutputPresentation {
   readonly key: string;
   readonly label: string;
   readonly unit: UnitSymbol;
   readonly precision: number;
+  readonly family?: QuantityFamily;
+  /**
+   * Matériau générique (ciment, sable, aciers…) : la décomposition d'un quantitatif cumule
+   * ses quantités entre calculs. Absent : matériau propre à une référence (format de
+   * carreau, hauteur d'entrevous…), présenté calcul par calcul, jamais additionné.
+   */
+  readonly additive?: boolean;
 }
 
 export interface EnginePresentation {
@@ -90,6 +149,11 @@ export interface EngineDefinition<I, O> {
   readonly hypotheses: readonly { readonly code: string; readonly text: string }[];
   /** Libellés et précisions d'affichage (le serveur construit la vue du résultat). */
   readonly presentation: EnginePresentation;
+  /**
+   * Cas de référence du moteur (06-strategie-de-tests.md §3) : tant que tous ne sont pas
+   * contre-vérifiés par un ingénieur du métier, le moteur est affiché « non vérifié ».
+   */
+  readonly referenceCases?: { readonly total: number; readonly checked: number };
   calculate(input: I, ctx: CalcContext): Result<O, CalcFailure>;
   verify(input: I, output: O, ctx: VerifyContext): readonly Check[];
 }

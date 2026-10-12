@@ -18,6 +18,7 @@ import {
 import { orgRoute, userRoute, type RouteDefinition, type ServerDeps } from './route';
 import { createCalculationRoutes } from './routes-calculations';
 import { createProjectRoutes } from './routes-projects';
+import { createQuantityRoutes } from './routes-quantities';
 
 const ORG = '/api/v1/organizations/:orgSlug';
 
@@ -177,5 +178,6 @@ export function createRoutes(deps: ServerDeps): RouteDefinition[] {
 
     ...createProjectRoutes(deps),
     ...createCalculationRoutes(deps),
+    ...createQuantityRoutes(deps),
   ];
 }

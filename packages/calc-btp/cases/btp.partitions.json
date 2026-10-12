@@ -1,0 +1,492 @@
+{
+  "engine": "btp.partitions",
+  "parameterSet": {
+    "standard": "BTP-USAGES-METRE",
+    "version": "1"
+  },
+  "cases": [
+    {
+      "id": "btp.partitions/blocks-6x2.8-door",
+      "engine": "btp.partitions",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "S = 6 × 2,8 − 1,68 = 15,12 m² ; V_m = 15,12 × 0,1 × (1 − 0,4 × 0,2 / (0,0861)) = 0,107122 m³ ; N = 15,12 / ((0,4 + 0,01) × (0,2 + 0,01)) × 1,05 = 184,390244 ; mortier MASONRY : V_c = 0,107122 × 1,1 = 0,117834 m³ ; ciment 300 × 0,117834 = 35,350244 kg ; sable 1,1 × 0,117834 = 0,129618 m³ ; eau 0,2 × 0,117834 × 1000 = 23,566829 L ; sacs = 35,350244 / 50 = 0,707005",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "type": "BLOCKS",
+        "length": {
+          "value": 6,
+          "unit": "m"
+        },
+        "height": {
+          "value": 2.8,
+          "unit": "m"
+        },
+        "openingsArea": {
+          "value": 1.68,
+          "unit": "m2"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "area": {
+            "value": 15.12,
+            "tolerance": 0.001
+          },
+          "blocks10": {
+            "value": 184.390243902,
+            "tolerance": 0.001
+          },
+          "boards": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "rails": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "studs": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "mortarVolume": {
+            "value": 0.10712195122,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 35.3502439024,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 0.707004878049,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0.129617560976,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 23.5668292683,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.partitions/boards-6x2.7",
+      "engine": "btp.partitions",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "S = 6 × 2,7 − 0 = 16,2 m² ; N_p = 2 × 16,2 / 3 × 1,1 = 11,88 ; rails 2 × 6 = 12 m ; montants (⌊6 / 0,6⌋ + 1) × 2,7 = 11 × 2,7 = 29,7 m (ouvertures non saisies : 0)",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "type": "BOARDS",
+        "length": {
+          "value": 6,
+          "unit": "m"
+        },
+        "height": {
+          "value": 2.7,
+          "unit": "m"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "area": {
+            "value": 16.2,
+            "tolerance": 0.001
+          },
+          "blocks10": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "boards": {
+            "value": 11.88,
+            "tolerance": 0.001
+          },
+          "rails": {
+            "value": 12,
+            "tolerance": 0.001
+          },
+          "studs": {
+            "value": 29.7,
+            "tolerance": 0.001
+          },
+          "mortarVolume": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 0,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY", "DEFAULT.openingsArea"]
+      }
+    },
+    {
+      "id": "btp.partitions/boards-4.5x2.5-door",
+      "engine": "btp.partitions",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "S = 4,5 × 2,5 − 1,6 = 9,65 m² ; N_p = 2 × 9,65 / 3 × 1,1 = 7,076667 ; rails 2 × 4,5 = 9 m ; montants (⌊4,5 / 0,6⌋ + 1) × 2,5 = 8 × 2,5 = 20 m",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "type": "BOARDS",
+        "length": {
+          "value": 4.5,
+          "unit": "m"
+        },
+        "height": {
+          "value": 2.5,
+          "unit": "m"
+        },
+        "openingsArea": {
+          "value": 1.6,
+          "unit": "m2"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "area": {
+            "value": 9.65,
+            "tolerance": 0.001
+          },
+          "blocks10": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "boards": {
+            "value": 7.07666666667,
+            "tolerance": 0.001
+          },
+          "rails": {
+            "value": 9,
+            "tolerance": 0.001
+          },
+          "studs": {
+            "value": 20,
+            "tolerance": 0.001
+          },
+          "mortarVolume": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 0,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.partitions/openings-equal-wall",
+      "engine": "btp.partitions",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "S = 3 × 2,5 − 7,5 = 0 m² ; V_m = 0 × 0,1 × (1 − 0,4 × 0,2 / (0,0861)) = 0 m³ ; N = 0 / ((0,4 + 0,01) × (0,2 + 0,01)) × 1,05 = 0 ; sacs = 0 / 50 = 0 — limite : ouvertures = surface de la cloison, quantités nulles.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "type": "BLOCKS",
+        "length": {
+          "value": 3,
+          "unit": "m"
+        },
+        "height": {
+          "value": 2.5,
+          "unit": "m"
+        },
+        "openingsArea": {
+          "value": 7.5,
+          "unit": "m2"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "area": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "blocks10": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "boards": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "rails": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "studs": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "mortarVolume": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 0,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.partitions/boards-one-spacing",
+      "engine": "btp.partitions",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "S = 0,6 × 2,5 − 0 = 1,5 m² ; N_p = 2 × 1,5 / 3 × 1,1 = 1,1 ; rails 2 × 0,6 = 1,2 m ; montants (⌊0,6 / 0,6⌋ + 1) × 2,5 = 2 × 2,5 = 5 m — limite : longueur égale à l’entraxe (deux montants) ; ouvertures nulles saisies.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "type": "BOARDS",
+        "length": {
+          "value": 0.6,
+          "unit": "m"
+        },
+        "height": {
+          "value": 2.5,
+          "unit": "m"
+        },
+        "openingsArea": {
+          "value": 0,
+          "unit": "m2"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "area": {
+            "value": 1.5,
+            "tolerance": 0.001
+          },
+          "blocks10": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "boards": {
+            "value": 1.1,
+            "tolerance": 0.001
+          },
+          "rails": {
+            "value": 1.2,
+            "tolerance": 0.001
+          },
+          "studs": {
+            "value": 5,
+            "tolerance": 0.001
+          },
+          "mortarVolume": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cement": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "cementBags": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "sand": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "gravel": {
+            "value": 0,
+            "tolerance": 0.001
+          },
+          "water": {
+            "value": 0,
+            "tolerance": 0.001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["BTP.QUANTITIES_ONLY"]
+      }
+    },
+    {
+      "id": "btp.partitions/openings-exceed-wall",
+      "engine": "btp.partitions",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Ouvertures 8 m² > cloison 3 × 2,5 = 7,5 m² : refus.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "inputs": {
+        "type": "BOARDS",
+        "length": {
+          "value": 3,
+          "unit": "m"
+        },
+        "height": {
+          "value": 2.5,
+          "unit": "m"
+        },
+        "openingsArea": {
+          "value": 8,
+          "unit": "m2"
+        }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "openingsArea",
+            "code": "OPENINGS_EXCEED_WALL"
+          }
+        ]
+      }
+    },
+    {
+      "id": "btp.partitions/missing-partition-board_area",
+      "engine": "btp.partitions",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Paramètre btp.partition.board_area absent du jeu résolu : le calcul est refusé avant exécution (PARAMETER_MISSING).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "BTP-USAGES-METRE",
+        "version": "1"
+      },
+      "omitParameters": ["btp.partition.board_area"],
+      "inputs": {
+        "type": "BOARDS",
+        "length": {
+          "value": 6,
+          "unit": "m"
+        },
+        "height": {
+          "value": 2.7,
+          "unit": "m"
+        }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.btp.partition.board_area",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

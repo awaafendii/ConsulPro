@@ -40,10 +40,11 @@ const cli = (...args: string[]) =>
   );
 
 /**
- * Référentiel de démonstration publié, comme en exploitation : un administrateur de la
- * plateforme (rôle attribué par la CLI) publie le fichier validé (idempotent).
+ * Référentiels publiés, comme en exploitation : un administrateur de la plateforme (rôle
+ * attribué par la CLI) publie les fichiers validés (idempotent) — démonstration et usages
+ * du métré BTP (Phase 4).
  */
-async function publishDemoStandard(): Promise<string> {
+async function publishStandards(): Promise<string> {
   const email = 'plateforme.e2e@consulpro.test';
   await adminQuery(
     `INSERT INTO users (id, name, email, email_verified, updated_at)
@@ -51,10 +52,12 @@ async function publishDemoStandard(): Promise<string> {
     [email],
   );
   cli('platform:grant-admin', email);
-  const file = fileURLToPath(
-    new URL('../../../packages/standards/seeds/demo/demo-1.json', import.meta.url),
-  );
-  cli('standards:load', file, '--publish-as', email);
+  for (const seed of ['demo/demo-1.json', 'btp/usages-metre-1.json']) {
+    const file = fileURLToPath(
+      new URL(`../../../packages/standards/seeds/${seed}`, import.meta.url),
+    );
+    cli('standards:load', file, '--publish-as', email);
+  }
   const [row] = await adminQuery<{ id: string }>(
     `SELECT v.id FROM standard_versions v JOIN standards s ON s.id = v.standard_id
       WHERE s.organization_id IS NULL AND s.code = 'DEMO' AND v.label = '1' AND v.status = 'PUBLISHED'`,
@@ -67,7 +70,7 @@ async function publishDemoStandard(): Promise<string> {
 // eslint-disable-next-line no-restricted-syntax
 export default async function globalSetup(): Promise<void> {
   await adminQuery('DELETE FROM rate_limits');
-  const demoVersionId = await publishDemoStandard();
+  const demoVersionId = await publishStandards();
   const stamp = Date.now().toString(36);
   const base = {
     ownerEmail: `awa.diop.${stamp}@bet-sahel.test`,
@@ -132,6 +135,48 @@ export default async function globalSetup(): Promise<void> {
     },
   });
   const datasetId = await created('/datasets', { kind: 'ROOMS', title: 'Pièces du R+1' });
+
+  // Métré BTP (Phase 4) : un lot, des semelles rattachées, un quantitatif chiffré.
+  const lotId = await created('/takeoff/nodes', {
+    parentId: null,
+    kind: 'LOT',
+    code: '1',
+    title: 'Fondations',
+  });
+  const footingId = await created(`/studies/${studyId}/calculations`, {
+    title: 'Semelles S1',
+    engineId: 'btp.footings',
+  });
+  const m = (value: number) => ({ value, unit: 'm' });
+  await created(`/calculations/${footingId}/runs`, {
+    inputs: { type: 'ISOLATED', length: m(1.2), width: m(1.2), height: m(0.4), count: 6 },
+  });
+  const assigned = await api.put(`${projectApi}/takeoff/assignments/${footingId}`, {
+    data: { nodeId: lotId },
+  });
+  if (assigned.status() !== 204) throw new Error(`Rattachement : ${String(assigned.status())}`);
+  const boqId = await created('/boqs', { title: 'DQE fondations' });
+  const libraries = `/api/v1/organizations/${base.orgSlug}/price-libraries`;
+  const library = await api.post(libraries, {
+    data: { name: 'Prix Dakar 2026', currency: 'XOF', validFrom: '2026-01-01' },
+  });
+  if (library.status() !== 201) throw new Error(`Bibliothèque : ${String(library.status())}`);
+  const { id: priceLibraryId } = (await library.json()) as { id: string };
+  const item = await api.post(`${libraries}/${priceLibraryId}/items`, {
+    data: {
+      code: 'GO-01',
+      designation: 'Béton armé en fondation',
+      unit: 'm3',
+      price: '65000',
+      workKey: 'btp.footings.concrete',
+    },
+  });
+  if (item.status() !== 201) throw new Error(`Article : ${String(item.status())}`);
+  const applied = await api.post(`${projectApi}/boqs/${boqId}/prices`, {
+    data: { libraryId: priceLibraryId },
+  });
+  if (applied.status() !== 200)
+    throw new Error(`Application des prix : ${String(applied.status())}`);
   const fixture: Fixture = {
     ...base,
     projectId,
@@ -140,6 +185,8 @@ export default async function globalSetup(): Promise<void> {
     studyId,
     calculationId,
     datasetId,
+    boqId,
+    priceLibraryId,
   };
 
   mkdirSync('e2e/.auth', { recursive: true });

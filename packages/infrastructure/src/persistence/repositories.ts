@@ -10,6 +10,7 @@ import type {
 import type { Prisma } from '@consulpro/db';
 
 import { createCalculationRepositories } from './calculation-repositories';
+import { createQuantityRepositories } from './quantity-repositories';
 import { createProjectRepositories } from './project-repositories';
 
 type Tx = Prisma.TransactionClient;
@@ -73,6 +74,7 @@ export function createRepositories(tx: Tx): Repositories {
   return {
     ...createProjectRepositories(tx),
     ...createCalculationRepositories(tx),
+    ...createQuantityRepositories(tx),
     organizations: {
       async create({ id, name, slug }) {
         try {

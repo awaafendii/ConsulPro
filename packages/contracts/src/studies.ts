@@ -30,6 +30,21 @@ export const studySchema = z.object({
 export type StudyDto = z.infer<typeof studySchema>;
 export const studyListSchema = z.object({ items: z.array(studySchema) });
 
+const unitOptionSchema = z.object({ symbol: z.string(), display: z.string() });
+
+/** Champ d'une ligne de liste (ouverture, barre…). */
+export const listFieldSchema = z.discriminatedUnion('kind', [
+  z.object({
+    kind: z.literal('quantity'),
+    key: z.string(),
+    label: z.string(),
+    unitKind: z.string(),
+    units: z.array(unitOptionSchema),
+  }),
+  z.object({ kind: z.literal('integer'), key: z.string(), label: z.string(), min: z.number() }),
+]);
+export type ListFieldDto = z.infer<typeof listFieldSchema>;
+
 /** Moteur proposé pour un métier, avec de quoi construire le formulaire de saisie. */
 export const engineSchema = z.object({
   id: z.string(),
@@ -44,7 +59,24 @@ export const engineSchema = z.object({
         key: z.string(),
         label: z.string(),
         unitKind: z.string(),
-        units: z.array(z.object({ symbol: z.string(), display: z.string() })),
+        units: z.array(unitOptionSchema),
+        optional: z.boolean(),
+        help: z.string().optional(),
+      }),
+      z.object({
+        kind: z.literal('integer'),
+        key: z.string(),
+        label: z.string(),
+        min: z.number(),
+        optional: z.boolean(),
+        help: z.string().optional(),
+      }),
+      z.object({
+        kind: z.literal('list'),
+        key: z.string(),
+        label: z.string(),
+        fields: z.array(listFieldSchema),
+        maxItems: z.number().int(),
         optional: z.boolean(),
         help: z.string().optional(),
       }),
@@ -65,8 +97,11 @@ export const engineSchema = z.object({
       unit: z.string(),
       unitKind: z.string(),
       precision: z.number().int(),
+      family: z.string().optional(),
     }),
   ),
+  /** Cas de référence contre-vérifiés par un ingénieur du métier / total. */
+  referenceCases: z.object({ total: z.number().int(), checked: z.number().int() }),
   parameters: z.array(z.object({ key: z.string(), description: z.string() })),
   hypotheses: z.array(z.object({ code: z.string(), text: z.string() })),
 });
@@ -103,10 +138,14 @@ export const calculationListSchema = z.object({ items: z.array(calculationSchema
 export const calculationBodySchema = z.object({ title, engineId: z.string().min(1).max(80) });
 
 /** Valeur d'entrée : grandeur, option, ou reprise de la sortie d'un autre calcul du projet. */
+const quantityValue = z.object({ value: z.number(), unit: z.string().min(1).max(20) });
+
 export const inputValueSchema = z.union([
-  z.object({ value: z.number(), unit: z.string().min(1).max(20) }),
+  quantityValue,
   z.string().max(200),
+  z.number(),
   z.object({ fromCalculation: z.uuid(), output: z.string().min(1).max(80) }),
+  z.array(z.record(z.string().max(80), z.union([quantityValue, z.number()]))).max(200),
 ]);
 export type InputValueDto = z.infer<typeof inputValueSchema>;
 

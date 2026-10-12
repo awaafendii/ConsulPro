@@ -24,8 +24,8 @@ référentiels versionnés.
 | 0     | Architecture          | Validée                     |
 | 1     | Foundation            | Validée                     |
 | 2     | Design System         | Validée                     |
-| 3     | Projets               | **Terminée — en revue**     |
-| 4     | BTP                   | À faire                     |
+| 3     | Projets               | Validée                     |
+| 4     | BTP                   | **Terminée — en revue**     |
 | 5     | Électricité           | À faire                     |
 | 6     | Plomberie / Sanitaire | À faire                     |
 | 7     | Topographie           | À faire                     |

@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@consulpro/application": "workspace:*",
+    "@consulpro/calc-btp": "workspace:*",
     "@consulpro/calc-core": "workspace:*",
     "@consulpro/calc-demo": "workspace:*",
     "@consulpro/db": "workspace:*",

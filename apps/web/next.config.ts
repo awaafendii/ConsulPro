@@ -15,6 +15,7 @@ const config: NextConfig = {
   // Packages internes publiés en TypeScript source (01-arborescence.md).
   transpilePackages: [
     '@consulpro/application',
+    '@consulpro/calc-btp',
     '@consulpro/calc-core',
     '@consulpro/contracts',
     '@consulpro/db',

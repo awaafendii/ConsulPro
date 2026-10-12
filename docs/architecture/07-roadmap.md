@@ -109,7 +109,7 @@ flowchart LR
 
 ---
 
-## Phase 3 — Projets + socle calcul et référentiels *(terminée le 2026-10-09, en revue)*
+## Phase 3 — Projets + socle calcul et référentiels *(validée le 2026-10-11)*
 
 **Livrables**
 - Projets : création, modification, archivage, métiers activés, membres, permissions projet, fil d'activité.
@@ -162,17 +162,57 @@ flowchart LR
 
 ---
 
-## Phase 4 — BTP
+## Phase 4 — BTP *(terminée le 2026-10-12, en revue)*
 
 **Livrables** : moteurs `btp.*` ([03 §3.1](03-modules.md)), avant-métré, quantitatifs,
 décomposition en matériaux, bibliothèque de prix unitaires facultatifs, référentiel
 « Usages courants — métré » (valeurs `TO_VERIFY` modifiables), tableau de bord BTP.
 
+- 13 moteurs de quantités (terrassement, semelles, longrines, poteaux, poutres, dalles, escaliers,
+  maçonnerie, blocs, cloisons, enduits, carrelage, peinture) ; aciers par ratio ou par nomenclature
+  saisie ; saisie de listes (ouvertures, barres) et d'entiers dans le formulaire de calcul.
+- Avant-métré : arborescence lot → niveau → ouvrage par projet, rattachement des calculs BTP.
+- Quantitatifs (DQE) : lignes reprises des sorties d'ouvrage des calculs rattachés, liées à leur
+  révision ; mise à jour depuis l'avant-métré (prix et quantités retenues conservés) ; lignes
+  saisies ; quantité retenue justifiée et journalisée ; sous-totaux par nœud ; décomposition en
+  matériaux des révisions reprises.
+- Bibliothèques de prix de l'organisation (devise, validité, articles liés à un ouvrage) ;
+  application à un quantitatif de même devise.
+- Tableau de bord BTP de l'organisation ; module BTP actif dans la navigation.
+
 **Critères de sortie**
-- [ ] Chaque moteur : seuils de [06 §3.2](06-strategie-de-tests.md) atteints.
-- [ ] Traçabilité de bout en bout : ligne de quantitatif → révision → entrées et paramètres.
-- [ ] Quantitatif exploitable sans aucun prix ; totaux corrects avec des prix (`Decimal`, devise).
-- [ ] Q2 (dimensionnement structurel) tranchée.
+- [x] Chaque moteur : seuils de [06 §3.2](06-strategie-de-tests.md) atteints — 3 cas nominaux,
+  2 limites, 2 refus par moteur ; couverture de `calc-btp` 100 % des lignes, 98 % des branches.
+  Reste la contre-vérification des cas par un ingénieur (`checkedBy`, Q6) : les moteurs sont
+  affichés « non contre-vérifiés » dans les résultats, les quantitatifs et le tableau de bord.
+- [x] Traçabilité de bout en bout : ligne de quantitatif → révision (lien vers la révision exacte,
+  statut de contrôle, révision remplacée signalée) → entrées et paramètres figés.
+- [x] Quantitatif exploitable sans aucun prix ; totaux corrects avec des prix (décimales exactes
+  `NUMERIC(18,4)` transportées en chaînes, arrondi bancaire à l'unité monétaire de la devise).
+- [x] Q2 (dimensionnement structurel) tranchée le 2026-10-11 : quantités seulement.
+
+**Écarts et décisions**
+- `btp.foundations` n'est pas un moteur : un agrégat recalculé ferait compter deux fois semelles,
+  longrines et béton de propreté dans le DQE. L'agrégat « Fondations » est le sous-total du lot
+  correspondant de l'avant-métré.
+- La structure du quantitatif (lots, chapitres) est celle de l'avant-métré : pas de table
+  `BoqSection` distincte ; plusieurs quantitatifs d'un projet partagent la même structure.
+- Une ligne calculée est identifiée par (calcul, sortie) ; sa quantité suit le calcul et ne se
+  modifie que par une quantité retenue justifiée. Elle se retire en détachant le calcul.
+- Montant d'une ligne = quantité retenue × prix unitaire, arrondi au pair à l'unité monétaire ;
+  sous-totaux et total = somme des montants de ligne (le DQE se recompte à la main).
+- Matériaux : seuls les matériaux génériques (ciment, sable, gravier, eau, aciers, blocs, colle,
+  joint) se cumulent entre calculs (`additive`) ; les autres (formats de carreaux, entrevous,
+  peintures, plaques…) restent présentés calcul par calcul.
+- Un article de prix par ouvrage et par bibliothèque ; aucune conversion de devise ; la
+  suppression d'une bibliothèque laisse les prix déjà reportés sur les lignes, sans lien.
+- Statut de quantitatif (brouillon / figé) non livré : le contrôle reste celui des révisions de
+  calcul ; à réévaluer avec les rapports (Phase 9).
+
+**Bilan chiffré** : 135 tests des moteurs BTP, 77 tests du domaine, 69 tests applicatifs ;
+949 tests d’intégration sur PostgreSQL (dont 902 côté API, 881 pour la matrice de permissions
+étendue aux 25 nouvelles routes) ; 82 tests E2E (parcours de métré, bibliothèque de prix,
+accessibilité des six nouvelles pages en clair et en sombre, de 360 à 1920 px).
 
 ---
 
