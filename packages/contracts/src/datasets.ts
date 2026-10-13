@@ -27,6 +27,23 @@ export const datasetKindSchema = z.object({
         units: z.array(z.object({ symbol: z.string(), display: z.string() })),
         positive: z.boolean(),
       }),
+      z.object({
+        type: z.literal('choice'),
+        key: z.string(),
+        label: z.string(),
+        required: z.boolean(),
+        options: z.array(z.object({ value: z.string(), label: z.string() })),
+      }),
+      z.object({
+        type: z.literal('number'),
+        key: z.string(),
+        label: z.string(),
+        required: z.boolean(),
+        integer: z.boolean(),
+        min: z.number(),
+        exclusiveMin: z.boolean(),
+        max: z.number(),
+      }),
     ]),
   ),
 });
@@ -59,6 +76,7 @@ export const datasetListSchema = z.object({ items: z.array(datasetSchema) });
 
 const cell = z.union([
   z.string().max(2000),
+  z.number(),
   z.object({ value: z.number(), unit: z.string().max(20) }),
   z.null(),
 ]);

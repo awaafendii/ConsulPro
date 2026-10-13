@@ -87,6 +87,11 @@ Le calcul des courants de court-circuit (I_cc) n'est pas listé dans le cahier d
 charges : il est accepté **en entrée** (valeur fournie par le distributeur ou par une
 étude) et non calculé. On pourra l'ajouter plus tard.
 
+Mise en œuvre (Phase 5) : le bilan de puissance lit l'arbre `ELEC_BOARD_TREE` du projet
+(révision courante, tracée). Les courants admissibles couvrent l'âme cuivre et les méthodes de
+référence B, C et E ; la protection vérifie I_B ≤ I_n et I2 = k2 · I_n ≤ 1,45 I_z, sans courbes
+de déclenchement B / C / D (voir [07](07-roadmap.md), écarts de la Phase 5).
+
 ### 3.3 Plomberie & Sanitaire — Phase 6
 
 | Module                | Type        | Moteur                        | Calcule                                                                                                                    |

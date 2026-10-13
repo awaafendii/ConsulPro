@@ -6,7 +6,7 @@
  * À chaque phase terminée, relever LATEST_DELIVERED_PHASE ; un test E2E vérifie que
  * chaque module disponible mène à une page qui existe.
  */
-export const LATEST_DELIVERED_PHASE = 4;
+export const LATEST_DELIVERED_PHASE = 5;
 
 export type ModuleSection = 'workspace' | 'trades' | 'organization';
 
@@ -46,6 +46,7 @@ export const MODULES: readonly ModuleDescriptor[] = [
     shortcut: 'g a',
     permission: 'audit.read',
   },
+  { id: 'settings', section: 'organization', path: 'organisation/parametres', phase: 5 },
 ];
 
 export function isModuleAvailable(

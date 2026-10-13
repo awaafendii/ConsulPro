@@ -1,0 +1,474 @@
+{
+  "engine": "elec.voltage-drop",
+  "parameterSet": {
+    "standard": "NFC15-100+UTE-C15-105",
+    "version": "2002+2003"
+  },
+  "cases": [
+    {
+      "id": "elec.voltage-drop/mono-16A-30m-2.5mm2",
+      "engine": "elec.voltage-drop",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "b = 2 ; ρ1 = 0,0225 Ω·mm²/m ; λ = 0,08 mΩ/m ; sin φ = 0,43589 ; ΔU = 2 × (0,0225 × 30 / 2,5 × 0,9 + 0,00008 × 30 × 0,43589) × 16 = 7,809476 V ; U0 = 230 V ; ΔU% = 100 ΔU / U0 = 3,395424 % ; amont 0 % ; cumul 3,395424 % ; limite (PUBLIC_LV, OTHER) 5 % → conforme.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "current": {
+          "value": 16,
+          "unit": "A"
+        },
+        "length": {
+          "value": 30,
+          "unit": "m"
+        },
+        "section": {
+          "value": 2.5,
+          "unit": "mm2"
+        },
+        "material": "CU",
+        "system": "MONO",
+        "voltage": {
+          "value": 230,
+          "unit": "V"
+        },
+        "cosPhi": {
+          "value": 0.9,
+          "unit": "1"
+        },
+        "usage": "OTHER",
+        "supply": "PUBLIC_LV"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "voltageDrop": {
+            "value": 7.809476344,
+            "tolerance": 0.000001
+          },
+          "voltageDropPercent": {
+            "value": 3.395424497,
+            "tolerance": 0.000001
+          },
+          "cumulativePercent": {
+            "value": 3.395424497,
+            "tolerance": 0.000001
+          },
+          "limitPercent": {
+            "value": 5,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "elec.voltage-drop.limit",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["DEFAULT.upstream", "ELEC.STEADY_STATE"]
+      }
+    },
+    {
+      "id": "elec.voltage-drop/tri-63A-80m-16mm2-aluminium",
+      "engine": "elec.voltage-drop",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "b = 1 ; ρ1 = 0,036 Ω·mm²/m ; λ = 0,08 mΩ/m ; sin φ = 0,526783 ; ΔU = 1 × (0,036 × 80 / 16 × 0,85 + 0,00008 × 80 × 0,526783) × 63 = 9,851399 V ; U0 = 230,940108 V ; ΔU% = 100 ΔU / U0 = 4,265781 % ; amont 1,5 % ; cumul 5,765781 % ; limite (PRIVATE_SUBSTATION, OTHER) 8 % → conforme.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "current": {
+          "value": 63,
+          "unit": "A"
+        },
+        "length": {
+          "value": 80,
+          "unit": "m"
+        },
+        "section": {
+          "value": 16,
+          "unit": "mm2"
+        },
+        "material": "AL",
+        "system": "TRI",
+        "voltage": {
+          "value": 400,
+          "unit": "V"
+        },
+        "cosPhi": {
+          "value": 0.85,
+          "unit": "1"
+        },
+        "usage": "OTHER",
+        "supply": "PRIVATE_SUBSTATION",
+        "upstream": {
+          "value": 1.5,
+          "unit": "%"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "voltageDrop": {
+            "value": 9.85139878,
+            "tolerance": 0.000001
+          },
+          "voltageDropPercent": {
+            "value": 4.265780803,
+            "tolerance": 0.000001
+          },
+          "cumulativePercent": {
+            "value": 5.765780803,
+            "tolerance": 0.000001
+          },
+          "limitPercent": {
+            "value": 8,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "elec.voltage-drop.limit",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["ELEC.STEADY_STATE"]
+      }
+    },
+    {
+      "id": "elec.voltage-drop/lighting-over-limit",
+      "engine": "elec.voltage-drop",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "b = 2 ; ρ1 = 0,0225 Ω·mm²/m ; λ = 0,08 mΩ/m ; sin φ = 0 ; ΔU = 2 × (0,0225 × 60 / 1,5 × 1 + 0,00008 × 60 × 0) × 10 = 18 V ; U0 = 230 V ; ΔU% = 100 ΔU / U0 = 7,826087 % ; amont 0 % ; cumul 7,826087 % ; limite (PUBLIC_LV, LIGHTING) 3 % → NON conforme.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "current": {
+          "value": 10,
+          "unit": "A"
+        },
+        "length": {
+          "value": 60,
+          "unit": "m"
+        },
+        "section": {
+          "value": 1.5,
+          "unit": "mm2"
+        },
+        "material": "CU",
+        "system": "MONO",
+        "voltage": {
+          "value": 230,
+          "unit": "V"
+        },
+        "cosPhi": {
+          "value": 1,
+          "unit": "1"
+        },
+        "usage": "LIGHTING",
+        "supply": "PUBLIC_LV"
+      },
+      "expected": {
+        "resultStatus": "NON_COMPLIANT",
+        "outputs": {
+          "voltageDrop": {
+            "value": 18,
+            "tolerance": 0.000001
+          },
+          "voltageDropPercent": {
+            "value": 7.826086957,
+            "tolerance": 0.000001
+          },
+          "cumulativePercent": {
+            "value": 7.826086957,
+            "tolerance": 0.000001
+          },
+          "limitPercent": {
+            "value": 3,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "elec.voltage-drop.limit",
+            "status": "FAIL"
+          }
+        ],
+        "hypotheses": ["DEFAULT.upstream", "ELEC.STEADY_STATE"]
+      }
+    },
+    {
+      "id": "elec.voltage-drop/cumulative-equals-limit",
+      "engine": "elec.voltage-drop",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "b = 2 ; ρ1 = 0,0225 Ω·mm²/m ; λ = 0,08 mΩ/m ; sin φ = 0 ; ΔU = 2 × (0,0225 × 46 / 4,5 × 1 + 0,00008 × 46 × 0) × 10 = 4,6 V ; U0 = 230 V ; ΔU% = 100 ΔU / U0 = 2 % ; amont 3 % ; cumul 5 % ; limite (PUBLIC_LV, OTHER) 5 % → conforme.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "current": {
+          "value": 10,
+          "unit": "A"
+        },
+        "length": {
+          "value": 46,
+          "unit": "m"
+        },
+        "section": {
+          "value": 4.5,
+          "unit": "mm2"
+        },
+        "material": "CU",
+        "system": "MONO",
+        "voltage": {
+          "value": 230,
+          "unit": "V"
+        },
+        "cosPhi": {
+          "value": 1,
+          "unit": "1"
+        },
+        "usage": "OTHER",
+        "supply": "PUBLIC_LV",
+        "upstream": {
+          "value": 3,
+          "unit": "%"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "voltageDrop": {
+            "value": 4.6,
+            "tolerance": 0.000001
+          },
+          "voltageDropPercent": {
+            "value": 2,
+            "tolerance": 0.000001
+          },
+          "cumulativePercent": {
+            "value": 5,
+            "tolerance": 0.000001
+          },
+          "limitPercent": {
+            "value": 5,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "elec.voltage-drop.limit",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["ELEC.STEADY_STATE"]
+      }
+    },
+    {
+      "id": "elec.voltage-drop/maximum-length-2000m",
+      "engine": "elec.voltage-drop",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "b = 1 ; ρ1 = 0,0225 Ω·mm²/m ; λ = 0,08 mΩ/m ; sin φ = 0,6 ; ΔU = 1 × (0,0225 × 2000 / 240 × 0,8 + 0,00008 × 2000 × 0,6) × 5 = 1,23 V ; U0 = 230,940108 V ; ΔU% = 100 ΔU / U0 = 0,532606 % ; amont 0 % ; cumul 0,532606 % ; limite (PRIVATE_SUBSTATION, OTHER) 8 % → conforme.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "current": {
+          "value": 5,
+          "unit": "A"
+        },
+        "length": {
+          "value": 2000,
+          "unit": "m"
+        },
+        "section": {
+          "value": 240,
+          "unit": "mm2"
+        },
+        "material": "CU",
+        "system": "TRI",
+        "voltage": {
+          "value": 400,
+          "unit": "V"
+        },
+        "cosPhi": {
+          "value": 0.8,
+          "unit": "1"
+        },
+        "usage": "OTHER",
+        "supply": "PRIVATE_SUBSTATION",
+        "upstream": {
+          "value": 0,
+          "unit": "%"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "voltageDrop": {
+            "value": 1.23,
+            "tolerance": 0.000001
+          },
+          "voltageDropPercent": {
+            "value": 0.532605623,
+            "tolerance": 0.000001
+          },
+          "cumulativePercent": {
+            "value": 0.532605623,
+            "tolerance": 0.000001
+          },
+          "limitPercent": {
+            "value": 8,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "elec.voltage-drop.limit",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["ELEC.STEADY_STATE"]
+      }
+    },
+    {
+      "id": "elec.voltage-drop/zero-section",
+      "engine": "elec.voltage-drop",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Section nulle : hors du domaine admissible, entrée refusée.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "current": {
+          "value": 10,
+          "unit": "A"
+        },
+        "length": {
+          "value": 10,
+          "unit": "m"
+        },
+        "section": {
+          "value": 0,
+          "unit": "mm2"
+        },
+        "material": "CU",
+        "system": "MONO",
+        "voltage": {
+          "value": 230,
+          "unit": "V"
+        },
+        "cosPhi": {
+          "value": 1,
+          "unit": "1"
+        },
+        "usage": "OTHER",
+        "supply": "PUBLIC_LV"
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "section.value",
+            "code": "OUT_OF_RANGE"
+          }
+        ]
+      }
+    },
+    {
+      "id": "elec.voltage-drop/missing-resistivity",
+      "engine": "elec.voltage-drop",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Résistivité des conducteurs absente du référentiel : calcul refusé.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "omitParameters": ["elec.conductor.resistivity"],
+      "inputs": {
+        "current": {
+          "value": 10,
+          "unit": "A"
+        },
+        "length": {
+          "value": 10,
+          "unit": "m"
+        },
+        "section": {
+          "value": 2.5,
+          "unit": "mm2"
+        },
+        "material": "CU",
+        "system": "MONO",
+        "voltage": {
+          "value": 230,
+          "unit": "V"
+        },
+        "cosPhi": {
+          "value": 1,
+          "unit": "1"
+        },
+        "usage": "OTHER",
+        "supply": "PUBLIC_LV"
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.elec.conductor.resistivity",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

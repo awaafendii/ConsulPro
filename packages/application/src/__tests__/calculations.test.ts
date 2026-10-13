@@ -622,7 +622,10 @@ describe('données de projet', () => {
         disciplines: ['ELEC'],
       }),
     );
-    expect(must(await app.datasets.kinds(w.author.ctx, elec.id))).toEqual([]);
+    // Seuls les types du métier activé sont proposés (arborescence électrique, Phase 5).
+    expect(must(await app.datasets.kinds(w.author.ctx, elec.id)).map((k) => k.id)).toEqual([
+      'ELEC_BOARD_TREE',
+    ]);
     expect(
       await app.datasets.create(w.author.ctx, elec.id, { kind: 'ROOMS', title: 'Pièces' }),
     ).toMatchObject({

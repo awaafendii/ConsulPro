@@ -33,7 +33,8 @@
       "plumbing": "Plomberie & Sanitaire",
       "topography": "Topographie",
       "members": "Membres",
-      "audit": "Journal d’audit"
+      "audit": "Journal d’audit",
+      "settings": "Paramètres"
     },
     "myOrganizations": "Mes organisations",
     "allOrganizations": "Toutes mes organisations",
@@ -188,7 +189,8 @@
     "actions": {
       "organization": {
         "created": "Organisation créée",
-        "ownership_transferred": "Propriété transférée"
+        "ownership_transferred": "Propriété transférée",
+        "updated": "Organisation modifiée"
       },
       "member": {
         "role_changed": "Rôle modifié",
@@ -563,7 +565,7 @@
     "none": "Pas encore calculé",
     "empty": "Aucun calcul dans cette étude.",
     "obsolete": "Obsolète",
-    "obsoleteNotice": "Une révision reprise par ce calcul a été remplacée : recalculez pour utiliser les valeurs à jour.",
+    "obsoleteNotice": "Une valeur ou un jeu de données repris par ce calcul a changé depuis : recalculez pour utiliser les données à jour.",
     "engineUnavailable": "Le moteur de ce calcul n’est pas disponible sur ce serveur : calcul impossible.",
     "createTitle": "Nouveau calcul",
     "createTitleField": "Intitulé du calcul",
@@ -649,7 +651,14 @@
     "listEmpty": "Aucune ligne.",
     "listCell": "{field}, ligne {row}",
     "listRemove": "Supprimer la ligne {row} de {label}",
-    "listAdd": "Ajouter une ligne ({label})"
+    "listAdd": "Ajouter une ligne ({label})",
+    "datasetOf": "Jeu de données pour {label}",
+    "datasetPlaceholder": "Choisir un jeu de données…",
+    "datasetNone": "Aucun jeu de données de ce type dans le projet : créez-le depuis l’onglet Données.",
+    "datasetOption": "{title} — révision {number}, {rows, plural, one {# ligne} other {# lignes}}",
+    "datasetEmptyOption": "{title} — aucune révision enregistrée",
+    "datasetsRead": "Données lues",
+    "datasetRead": "« {title} », révision {number} ({rows, plural, one {# ligne} other {# lignes}})"
   },
   "datasets": {
     "description": "Jeux de données typés et versionnés : chaque enregistrement crée une révision immuable.",
@@ -680,7 +689,8 @@
     "viewing": "Révision {number} affichée.",
     "backToCurrent": "Revenir à la révision courante",
     "rowErrors": "Lignes invalides : rien n’a été enregistré.",
-    "actions": "Actions"
+    "actions": "Actions",
+    "choose": "Choisir…"
   },
   "notifications": {
     "title": "Notifications",
@@ -986,5 +996,53 @@
     "alerts": "Alertes",
     "noAlert": "Aucune alerte.",
     "open": "Ouvrir"
+  },
+  "elec": {
+    "title": "Électricité",
+    "description": "Bilans de puissance, départs non conformes et calculs à vérifier des projets électriques auxquels vous avez accès.",
+    "enginesTitle": "Moteurs électriques non contre-vérifiés",
+    "engines": "{checked} cas de référence contre-vérifiés sur {cases} ({verified} moteur(s) sur {total}) : les résultats sont à contrôler avant tout usage.",
+    "standardsNotice": "Les valeurs normatives livrées (NF C 15-100 2002 et UTE C 15-105 2003) sont « à vérifier » : contrôlez-les avec les textes officiels avant de publier vos propres versions.",
+    "empty": "Aucun projet électrique actif accessible.",
+    "emptyHint": "Activez le métier Électricité sur un projet pour suivre ici ses bilans de puissance et ses circuits.",
+    "open": "Ouvrir les projets",
+    "truncated": "Seuls les 50 projets les plus récents sont présentés.",
+    "calculations": "Calculs",
+    "calculationsTotal": "{count, plural, =0 {Aucun calcul électrique} one {# calcul électrique} other {# calculs électriques}}",
+    "verified": "Vérifiés",
+    "toVerify": "À vérifier",
+    "notComputed": "Non calculés",
+    "rejected": "Rejetés",
+    "obsolete": "À recalculer",
+    "nonCompliant": "Non conformes",
+    "balances": "Bilans de puissance",
+    "noBalance": "Aucun bilan de puissance calculé.",
+    "balance": "Bilan",
+    "absorbedPower": "P absorbée",
+    "apparentPower": "S apparente",
+    "current": "Courant",
+    "state": "État",
+    "outdated": "À recalculer",
+    "alerts": "Alertes",
+    "noAlert": "Aucune alerte.",
+    "nonCompliantList": "Calculs non conformes"
+  },
+  "organizationSettings": {
+    "title": "Paramètres de l’organisation",
+    "description": "Nom, pays et devise proposée aux nouveaux quantitatifs et bibliothèques de prix.",
+    "general": "Informations générales",
+    "name": "Nom de l’organisation",
+    "country": "Pays",
+    "countryNone": "Non renseigné",
+    "countryHelp": "Information de l’organisation : le pays ne choisit aucun référentiel. Sa devise usuelle est proposée ci-dessous.",
+    "currency": "Devise",
+    "currencyHelp": "Proposée à la création d’un quantitatif ou d’une bibliothèque de prix. Les quantitatifs existants gardent leur devise : aucune conversion n’est faite.",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "saved": "Paramètres enregistrés.",
+    "readOnly": "Seuls le propriétaire et les administrateurs de l’organisation modifient ces paramètres.",
+    "validation": {
+      "name": "Le nom doit comporter entre 2 et 120 caractères."
+    }
   }
 }

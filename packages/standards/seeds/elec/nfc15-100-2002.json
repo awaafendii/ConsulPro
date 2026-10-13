@@ -1,0 +1,397 @@
+{
+  "standard": {
+    "code": "NFC15-100",
+    "title": "NF C 15-100 — Installations électriques à basse tension",
+    "publisher": "AFNOR",
+    "discipline": "ELEC",
+    "nature": "NORM"
+  },
+  "version": {
+    "label": "2002",
+    "sourceNotes": "Édition de décembre 2002 et ses amendements, retenue par la décision Q4 du 2026-10-13. Les valeurs sont saisies par ConsulPro en citant leur tableau ; aucune n’est vérifiée : chaque bureau d’études les confirme sur son exemplaire de la norme, ou les surcharge avec justification."
+  },
+  "parameters": [
+    {
+      "key": "elec.cable.iz",
+      "label": "Courants admissibles des canalisations (cuivre, 30 °C, un circuit)",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "method",
+            "kind": "CATEGORY",
+            "values": ["B", "C", "E"]
+          },
+          {
+            "name": "insulation",
+            "kind": "CATEGORY",
+            "values": ["PVC", "PR"]
+          },
+          {
+            "name": "loaded",
+            "kind": "CATEGORY",
+            "values": ["2", "3"]
+          },
+          {
+            "name": "section",
+            "kind": "NUMERIC",
+            "unit": "mm2",
+            "values": [1.5, 2.5, 4, 6, 10, 16, 25, 35, 50, 70, 95, 120, 150, 185, 240],
+            "lookup": "EXACT"
+          }
+        ],
+        "unit": "A",
+        "cells": [
+          17.5,
+          24,
+          32,
+          41,
+          57,
+          76,
+          101,
+          125,
+          151,
+          192,
+          232,
+          269,
+          null,
+          null,
+          null,
+          15.5,
+          21,
+          28,
+          36,
+          50,
+          68,
+          89,
+          110,
+          134,
+          171,
+          207,
+          239,
+          null,
+          null,
+          null,
+          23,
+          31,
+          42,
+          54,
+          75,
+          100,
+          133,
+          164,
+          198,
+          253,
+          306,
+          354,
+          null,
+          null,
+          null,
+          20,
+          28,
+          37,
+          48,
+          66,
+          88,
+          117,
+          144,
+          175,
+          222,
+          269,
+          312,
+          null,
+          null,
+          null,
+          19.5,
+          27,
+          36,
+          46,
+          63,
+          85,
+          112,
+          138,
+          168,
+          213,
+          258,
+          299,
+          344,
+          392,
+          461,
+          17.5,
+          24,
+          32,
+          41,
+          57,
+          76,
+          96,
+          119,
+          144,
+          184,
+          223,
+          259,
+          299,
+          341,
+          403,
+          24,
+          33,
+          45,
+          58,
+          80,
+          107,
+          138,
+          171,
+          209,
+          269,
+          328,
+          382,
+          441,
+          506,
+          599,
+          22,
+          30,
+          40,
+          52,
+          71,
+          96,
+          119,
+          147,
+          179,
+          229,
+          278,
+          322,
+          371,
+          424,
+          500,
+          22,
+          30,
+          40,
+          51,
+          70,
+          94,
+          119,
+          148,
+          180,
+          232,
+          282,
+          328,
+          379,
+          434,
+          514,
+          18.5,
+          25,
+          34,
+          43,
+          60,
+          80,
+          101,
+          126,
+          153,
+          196,
+          238,
+          276,
+          319,
+          364,
+          430,
+          26,
+          36,
+          49,
+          63,
+          86,
+          115,
+          149,
+          185,
+          225,
+          289,
+          352,
+          410,
+          473,
+          542,
+          641,
+          23,
+          32,
+          42,
+          54,
+          75,
+          100,
+          127,
+          158,
+          192,
+          246,
+          298,
+          346,
+          399,
+          456,
+          538
+        ]
+      },
+      "source": {
+        "document": "NF C 15-100 (décembre 2002) et amendements",
+        "clause": "523",
+        "table": "52H",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire de la norme avant tout usage (décision Q4 du 2026-10-13). Méthodes de référence B, C et E, conducteurs en cuivre ; méthode B non renseignée au-delà de 120 mm². Valeurs alignées sur la CEI 60364-5-52 (tableaux B.52.2 à B.52.5, B.52.10, B.52.12)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "elec.cable.temperature_factor",
+      "label": "Facteur de correction de température ambiante (air)",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "insulation",
+            "kind": "CATEGORY",
+            "values": ["PVC", "PR"]
+          },
+          {
+            "name": "ambient",
+            "kind": "NUMERIC",
+            "unit": "degC",
+            "values": [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60],
+            "lookup": "NEXT_UPPER"
+          }
+        ],
+        "unit": "1",
+        "cells": [
+          1.22, 1.17, 1.12, 1.06, 1, 0.94, 0.87, 0.79, 0.71, 0.61, 0.5, 1.15, 1.12, 1.08, 1.04, 1,
+          0.96, 0.91, 0.87, 0.82, 0.76, 0.71
+        ]
+      },
+      "source": {
+        "document": "NF C 15-100 (décembre 2002) et amendements",
+        "clause": "523",
+        "table": "52K",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire de la norme avant tout usage (décision Q4 du 2026-10-13). Lecture à la température du tableau immédiatement supérieure (sens de la sécurité)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "elec.cable.grouping_factor",
+      "label": "Facteur de correction pour groupement de circuits",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "arrangement",
+            "kind": "CATEGORY",
+            "values": ["BUNCHED", "SINGLE_LAYER"]
+          },
+          {
+            "name": "circuits",
+            "kind": "NUMERIC",
+            "unit": "1",
+            "values": [1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 16, 20],
+            "lookup": "NEXT_UPPER"
+          }
+        ],
+        "unit": "1",
+        "cells": [
+          1, 0.8, 0.7, 0.65, 0.6, 0.57, 0.54, 0.52, 0.5, 0.45, 0.41, 0.38, 1, 0.85, 0.79, 0.75,
+          0.73, 0.72, 0.72, 0.71, 0.7, 0.7, 0.7, 0.7
+        ]
+      },
+      "source": {
+        "document": "NF C 15-100 (décembre 2002) et amendements",
+        "clause": "523",
+        "table": "52N",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire de la norme avant tout usage (décision Q4 du 2026-10-13). BUNCHED : jointifs en faisceau, enfermés ou noyés ; SINGLE_LAYER : simple couche sur paroi ou plancher. Nombre de circuits lu à la valeur du tableau immédiatement supérieure."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "elec.voltage_drop.limit",
+      "label": "Chute de tension maximale entre l’origine de l’installation et l’utilisation",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "supply",
+            "kind": "CATEGORY",
+            "values": ["PUBLIC_LV", "PRIVATE_SUBSTATION"]
+          },
+          {
+            "name": "usage",
+            "kind": "CATEGORY",
+            "values": ["LIGHTING", "OTHER"]
+          }
+        ],
+        "unit": "%",
+        "cells": [3, 5, 6, 8]
+      },
+      "source": {
+        "document": "NF C 15-100 (décembre 2002) et amendements",
+        "clause": "525",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire de la norme avant tout usage (décision Q4 du 2026-10-13). PUBLIC_LV : alimentation directe par le réseau public BT ; PRIVATE_SUBSTATION : poste HTA/BT privé."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "elec.overload.i2_limit",
+      "label": "Rapport maximal entre le courant conventionnel de fonctionnement I2 et Iz",
+      "kind": "SCALAR",
+      "value": 1.45,
+      "unit": "1",
+      "source": {
+        "document": "NF C 15-100 (décembre 2002) et amendements",
+        "clause": "433.1",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire de la norme avant tout usage (décision Q4 du 2026-10-13)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "elec.rcd.sockets_max",
+      "label": "Sensibilité maximale du dispositif différentiel des circuits de prises de courant",
+      "kind": "SCALAR",
+      "value": 30,
+      "unit": "mA",
+      "source": {
+        "document": "NF C 15-100 (décembre 2002) et amendements",
+        "clause": "411.3.3",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire de la norme avant tout usage (décision Q4 du 2026-10-13)."
+      },
+      "verification": "TO_VERIFY"
+    }
+  ],
+  "rules": [
+    {
+      "code": "elec.protection.ib-le-in",
+      "description": "Le courant d’emploi n’excède pas le courant assigné de la protection (I_B ≤ I_n).",
+      "severity": "BLOCKING",
+      "clause": "433.1",
+      "parameterKeys": [],
+      "implementation": "elec.protection/ib-le-in"
+    },
+    {
+      "code": "elec.protection.overload",
+      "description": "Protection contre les surcharges : I2 ≤ 1,45 × Iz.",
+      "severity": "BLOCKING",
+      "clause": "433.1",
+      "parameterKeys": ["elec.overload.i2_limit"],
+      "implementation": "elec.protection/overload"
+    },
+    {
+      "code": "elec.protection.breaking-capacity",
+      "description": "Le pouvoir de coupure de la protection est au moins égal au courant de court-circuit présumé.",
+      "severity": "BLOCKING",
+      "clause": "434.5",
+      "parameterKeys": [],
+      "implementation": "elec.protection/breaking-capacity"
+    },
+    {
+      "code": "elec.protection.rcd-sockets",
+      "description": "Les circuits de prises de courant sont protégés par un dispositif différentiel à haute sensibilité.",
+      "severity": "BLOCKING",
+      "clause": "411.3.3",
+      "parameterKeys": ["elec.rcd.sockets_max"],
+      "implementation": "elec.protection/rcd-sockets"
+    },
+    {
+      "code": "elec.voltage-drop.limit",
+      "description": "La chute de tension cumulée depuis l’origine ne dépasse pas la limite applicable.",
+      "severity": "BLOCKING",
+      "clause": "525",
+      "parameterKeys": ["elec.voltage_drop.limit"],
+      "implementation": "elec.voltage-drop/limit"
+    }
+  ]
+}

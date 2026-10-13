@@ -182,7 +182,7 @@ test('révisions : recalcul, comparaison, dépendance et obsolescence', async ({
   await expect(diff.getByText('volumeWithWaste')).toBeVisible();
 
   await page.goto(massUrl);
-  await expect(page.getByText(/Une révision reprise par ce calcul a été remplacée/)).toBeVisible();
+  await expect(page.getByText(/repris par ce calcul a changé depuis/)).toBeVisible();
   await page.goto(studyUrl);
   await expect(
     page.getByRole('grid', { name: 'Calculs de l’étude' }).getByText('Obsolète'),

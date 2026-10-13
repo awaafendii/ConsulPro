@@ -2,6 +2,7 @@ import { createAccountService } from './account/account-service';
 import { createAuditService } from './audit/audit-service';
 import { createCalculationService } from './calculations/calculation-service';
 import { createDatasetService } from './calculations/dataset-service';
+import { createElecDashboardService } from './calculations/elec-dashboard-service';
 import { createStudyService } from './calculations/study-service';
 import { createLibraryService } from './library/library-service';
 import { createInvitationService } from './organizations/invitation-service';
@@ -30,6 +31,14 @@ export {
   type RevisionView,
 } from './calculations/calculation-service';
 export { createDatasetService, type DatasetService } from './calculations/dataset-service';
+export {
+  createElecDashboardService,
+  type ElecDashboard,
+  type ElecDashboardService,
+  type ElecPowerBalanceSummary,
+  type ElecProjectSummary,
+} from './calculations/elec-dashboard-service';
+export { engineVerification, type EngineVerification } from './calculations/engine-verification';
 export { toCalculationView } from './calculations/presenter';
 export { createStudyService, type StudyService } from './calculations/study-service';
 export {
@@ -135,6 +144,7 @@ export function createApplication(deps: ApplicationDeps) {
     boqs: createBoqService(deps),
     prices: createPriceService(deps),
     btpDashboard: createBtpDashboardService(deps),
+    elecDashboard: createElecDashboardService(deps),
     account: createAccountService(deps),
   };
 }

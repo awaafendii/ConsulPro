@@ -139,7 +139,10 @@ export class ParameterReader {
     if (UNITS[parameter.unit].kind !== UNITS[unit].kind) {
       throw new ParameterAccessError(key, `${key} ne peut pas être lu en ${unit}.`);
     }
-    return fromSI(toSI(parameter.value, parameter.unit), unit);
+    // Même unité : valeur telle quelle (aucun aller-retour flottant par le SI).
+    return parameter.unit === unit
+      ? parameter.value
+      : fromSI(toSI(parameter.value, parameter.unit), unit);
   }
 
   enumValue(key: string): string {
@@ -154,6 +157,29 @@ export class ParameterReader {
     if (parameter.kind !== 'TABLE')
       throw new ParameterAccessError(key, `${key} n'est pas une table.`);
     return readTable(parameter.table, coordinates);
+  }
+
+  /**
+   * Valeurs d'un axe numérique d'une table, converties dans l'unité demandée : pour choisir
+   * parmi les valeurs normalisées (la plus petite section qui convient, par exemple).
+   */
+  axisValues(key: string, axis: string, unit: UnitSymbol): readonly number[] {
+    const parameter = this.access(key);
+    if (parameter.kind !== 'TABLE')
+      throw new ParameterAccessError(key, `${key} n'est pas une table.`);
+    const found = parameter.table.axes.find((a) => a.name === axis);
+    if (found?.kind !== 'NUMERIC') {
+      throw new ParameterAccessError(key, `${key} n'a pas d'axe numérique « ${axis} ».`);
+    }
+    if (UNITS[found.unit].kind !== UNITS[unit].kind) {
+      throw new ParameterAccessError(
+        key,
+        `L'axe ${axis} de ${key} ne peut pas être lu en ${unit}.`,
+      );
+    }
+    return found.unit === unit
+      ? [...found.values]
+      : found.values.map((v) => fromSI(toSI(v, found.unit), unit));
   }
 
   has(key: string): boolean {

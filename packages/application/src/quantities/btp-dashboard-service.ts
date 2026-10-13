@@ -12,6 +12,7 @@ import { guarded, type OrgContext } from '../context';
 import type { AppError } from '../errors';
 import type { ApplicationDeps } from '../ports';
 import { isOrgManager } from '../projects/project-context';
+import { engineVerification, type EngineVerification } from '../calculations/engine-verification';
 import { contextOf } from '../scope';
 import { asCurrency, syncPlanOf } from './boq-service';
 
@@ -63,12 +64,7 @@ export interface BtpDashboard {
   /** Projets BTP accessibles au-delà de ceux présentés. */
   readonly truncated: boolean;
   /** Moteurs BTP et cas de référence contre-vérifiés (06-strategie-de-tests §3.2). */
-  readonly engines: {
-    readonly total: number;
-    readonly verified: number;
-    readonly cases: number;
-    readonly checkedCases: number;
-  };
+  readonly engines: EngineVerification;
 }
 
 export function createBtpDashboardService({
@@ -152,26 +148,10 @@ export function createBtpDashboardService({
               boqs,
             });
           }
-          const btpEngines = engines
-            .list()
-            .filter((e) => e.discipline === 'BTP' && e.referenceCases);
           return ok({
             projects: summaries,
             truncated: btp.length > MAX_PROJECTS,
-            engines: {
-              total: btpEngines.length,
-              verified: btpEngines.filter(
-                (e) =>
-                  e.referenceCases &&
-                  e.referenceCases.total > 0 &&
-                  e.referenceCases.checked === e.referenceCases.total,
-              ).length,
-              cases: btpEngines.reduce((sum, e) => sum + (e.referenceCases?.total ?? 0), 0),
-              checkedCases: btpEngines.reduce(
-                (sum, e) => sum + (e.referenceCases?.checked ?? 0),
-                0,
-              ),
-            },
+            engines: engineVerification(engines, 'BTP'),
           });
         }),
       );

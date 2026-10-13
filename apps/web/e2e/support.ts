@@ -24,6 +24,10 @@ export interface Fixture {
   /** Quantitatif chiffré (avant-métré : lot 1, semelles rattachées) et bibliothèque de prix. */
   readonly boqId: string;
   readonly priceLibraryId: string;
+  /** Projet électrique : arbre de tableaux, bilan de puissance qui le lit, départ non conforme. */
+  readonly elecProjectId: string;
+  readonly elecDatasetId: string;
+  readonly elecCalculationId: string;
 }
 
 /** Dernier lien reçu par une adresse dans Mailpit (vérification, invitation…). */

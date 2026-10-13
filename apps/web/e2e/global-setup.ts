@@ -41,8 +41,8 @@ const cli = (...args: string[]) =>
 
 /**
  * Référentiels publiés, comme en exploitation : un administrateur de la plateforme (rôle
- * attribué par la CLI) publie les fichiers validés (idempotent) — démonstration et usages
- * du métré BTP (Phase 4).
+ * attribué par la CLI) publie les fichiers validés (idempotent) — démonstration, usages
+ * du métré BTP (Phase 4), NF C 15-100 et guide UTE C 15-105 (Phase 5).
  */
 async function publishStandards(): Promise<string> {
   const email = 'plateforme.e2e@consulpro.test';
@@ -52,7 +52,12 @@ async function publishStandards(): Promise<string> {
     [email],
   );
   cli('platform:grant-admin', email);
-  for (const seed of ['demo/demo-1.json', 'btp/usages-metre-1.json']) {
+  for (const seed of [
+    'demo/demo-1.json',
+    'btp/usages-metre-1.json',
+    'elec/nfc15-100-2002.json',
+    'elec/ute-c15-105-2003.json',
+  ]) {
     const file = fileURLToPath(
       new URL(`../../../packages/standards/seeds/${seed}`, import.meta.url),
     );
@@ -177,6 +182,91 @@ export default async function globalSetup(): Promise<void> {
   });
   if (applied.status() !== 200)
     throw new Error(`Application des prix : ${String(applied.status())}`);
+  // Électricité (Phase 5) : tableaux et départs, bilan lu depuis le jeu, départ non conforme.
+  const elecProject = await api.post(`/api/v1/organizations/${base.orgSlug}/projects`, {
+    data: {
+      code: `EL-${stamp.toUpperCase()}`,
+      name: 'Clinique de Kaloum',
+      location: 'Conakry',
+      disciplines: ['ELEC'],
+    },
+  });
+  if (elecProject.status() !== 201)
+    throw new Error(`Projet électrique : ${String(elecProject.status())}`);
+  const { id: elecProjectId } = (await elecProject.json()) as { id: string };
+  const elecApi = `/api/v1/organizations/${base.orgSlug}/projects/${elecProjectId}`;
+  const elecCreated = async (path: string, data: unknown, headers: Record<string, string> = {}) => {
+    const response = await api.post(`${elecApi}${path}`, { data, headers });
+    if (response.status() !== 201)
+      throw new Error(`${path} : ${String(response.status())} ${await response.text()}`);
+    return ((await response.json()) as { id: string }).id;
+  };
+  const elecStudyId = await elecCreated('/studies', { discipline: 'ELEC', title: 'Distribution' });
+  const elecDatasetId = await elecCreated('/datasets', {
+    kind: 'ELEC_BOARD_TREE',
+    title: 'Tableaux et départs',
+  });
+  const kw = (value: number) => ({ value, unit: 'kW' });
+  await elecCreated(
+    `/datasets/${elecDatasetId}/revisions`,
+    {
+      rows: [
+        { code: 'TGBT', type: 'BOARD', designation: 'Tableau général' },
+        { code: 'TD1', parent: 'TGBT', type: 'BOARD', designation: 'Bloc opératoire' },
+        {
+          code: 'P1',
+          parent: 'TD1',
+          type: 'LOAD',
+          designation: 'Prises',
+          power: kw(0.3),
+          count: 12,
+          ku: 0.5,
+          cosPhi: 0.9,
+        },
+        {
+          code: 'E1',
+          parent: 'TD1',
+          type: 'LOAD',
+          designation: 'Éclairage',
+          power: kw(1.2),
+          cosPhi: 0.95,
+        },
+        {
+          code: 'C1',
+          parent: 'TGBT',
+          type: 'LOAD',
+          designation: 'Climatisation',
+          power: kw(9),
+          cosPhi: 0.85,
+        },
+      ],
+    },
+    { 'if-match': '"1"' },
+  );
+  const elecCalculationId = await elecCreated(`/studies/${elecStudyId}/calculations`, {
+    title: 'Bilan général',
+    engineId: 'elec.power-balance',
+  });
+  await elecCreated(`/calculations/${elecCalculationId}/runs`, {
+    inputs: {
+      tree: { fromDataset: elecDatasetId },
+      system: 'TRI',
+      voltage: { value: 400, unit: 'V' },
+    },
+  });
+  const protectionId = await elecCreated(`/studies/${elecStudyId}/calculations`, {
+    title: 'Départ climatisation',
+    engineId: 'elec.protection',
+  });
+  await elecCreated(`/calculations/${protectionId}/runs`, {
+    inputs: {
+      current: { value: 30, unit: 'A' },
+      iz: { value: 20, unit: 'A' },
+      device: 'BREAKER',
+      circuitType: 'OTHER',
+    },
+  });
+
   const fixture: Fixture = {
     ...base,
     projectId,
@@ -187,6 +277,9 @@ export default async function globalSetup(): Promise<void> {
     datasetId,
     boqId,
     priceLibraryId,
+    elecProjectId,
+    elecDatasetId,
+    elecCalculationId,
   };
 
   mkdirSync('e2e/.auth', { recursive: true });

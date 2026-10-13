@@ -401,3 +401,30 @@ describe('référentiel BTP « Usages courants — métré »', () => {
     expect(parsed.data.parameters.every((p) => p.source.document.length > 0)).toBe(true);
   });
 });
+
+describe('référentiels Électricité (NF C 15-100 2002, UTE C 15-105)', () => {
+  const read = (file: string): unknown =>
+    JSON.parse(
+      readFileSync(fileURLToPath(new URL(`../../seeds/elec/${file}`, import.meta.url)), 'utf8'),
+    );
+
+  it.each([
+    ['nfc15-100-2002.json', 'NFC15-100', 'NORM'],
+    ['ute-c15-105-2003.json', 'UTE-C15-105', 'GUIDE'],
+  ])('%s est valide, sourcé et entièrement « à vérifier »', (file, code, nature) => {
+    const parsed = standardFileSchema.safeParse(read(file));
+    expect(parsed.success, JSON.stringify(parsed.error?.issues)).toBe(true);
+    if (!parsed.success) return;
+    expect(parsed.data.standard).toMatchObject({ code, discipline: 'ELEC', nature });
+    expect(parsed.data.parameters.every((p) => p.verification === 'TO_VERIFY')).toBe(true);
+    expect(parsed.data.parameters.every((p) => p.source.document.length > 0)).toBe(true);
+    // Chaque règle ne cite que des paramètres du référentiel.
+    const keys = new Set(parsed.data.parameters.map((p) => p.key));
+    for (const rule of parsed.data.rules) {
+      expect(
+        rule.parameterKeys.every((k) => keys.has(k)),
+        rule.code,
+      ).toBe(true);
+    }
+  });
+});

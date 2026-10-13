@@ -25,8 +25,8 @@ référentiels versionnés.
 | 1     | Foundation            | Validée                     |
 | 2     | Design System         | Validée                     |
 | 3     | Projets               | Validée                     |
-| 4     | BTP                   | **Terminée — en revue**     |
-| 5     | Électricité           | À faire                     |
+| 4     | BTP                   | Validée                     |
+| 5     | Électricité           | Validée                     |
 | 6     | Plomberie / Sanitaire | À faire                     |
 | 7     | Topographie           | À faire                     |
 | 8     | Imports / Documents   | À faire                     |
@@ -39,8 +39,11 @@ facultative, fuseau horaire), organisations, membres et transfert de propriété
 surcharges justifiées par organisation ou par projet), **études et calculs** exécutés par le serveur
 en révisions immuables (comparaison, dépendances et obsolescence), contrôle à deux niveaux (l'auteur
 valide, un autre ingénieur vérifie), données de projet versionnées, notifications et recherche.
-Les seuls moteurs disponibles sont des moteurs de **démonstration, sans valeur technique**
-(développement et test) ; les moteurs métier arrivent à partir de la Phase 4.
+Métiers livrés : **BTP** (avant-métré, 13 moteurs de quantités, quantitatifs, bibliothèques de
+prix) et **Électricité** (arbre des tableaux et départs, bilan de puissance, courant d'emploi,
+circuits, sections, chutes de tension, protections, sur la NF C 15-100 et l'UTE C 15-105). Les
+moteurs ne sont pas encore contre-vérifiés par un ingénieur du métier et les valeurs normatives
+livrées sont « à vérifier » : l'interface le signale dans chaque résultat.
 
 ## Démarrage local
 

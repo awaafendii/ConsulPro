@@ -17,6 +17,8 @@ export interface OrganizationRecord {
   readonly slug: string;
   readonly country: string | null;
   readonly currency: string;
+  /** Verrouillage optimiste. */
+  readonly version: number;
   readonly createdAt: Date;
 }
 
@@ -88,6 +90,12 @@ export interface Repositories
       slug: string;
     }): Promise<Result<OrganizationRecord, 'SLUG_TAKEN'>>;
     findById(id: string): Promise<OrganizationRecord | null>;
+    /** `false` si la version attendue ne correspond plus (modification concurrente). */
+    update(
+      id: string,
+      values: { name: string; country: string | null; currency: string },
+      expectedVersion: number,
+    ): Promise<boolean>;
   };
   readonly memberships: {
     listOrganizationsOfUser(userId: string): Promise<MyOrganization[]>;

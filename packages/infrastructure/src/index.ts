@@ -1,5 +1,6 @@
 import { createApplication, type Application, type Mailer } from '@consulpro/application';
 import { BTP_ENGINES } from '@consulpro/calc-btp';
+import { ELEC_ENGINES } from '@consulpro/calc-elec';
 import { EngineRegistry } from '@consulpro/calc-core';
 import { DEMO_ENGINES } from '@consulpro/calc-demo';
 import { createDatabase, type Database } from '@consulpro/db';
@@ -35,6 +36,7 @@ export interface InfrastructureConfig {
 export function createEngineRegistry(options: { demoEngines: boolean }): EngineRegistry {
   const registry = new EngineRegistry();
   for (const engine of BTP_ENGINES) registry.register(engine);
+  for (const engine of ELEC_ENGINES) registry.register(engine);
   if (options.demoEngines) for (const engine of DEMO_ENGINES) registry.register(engine);
   return registry;
 }

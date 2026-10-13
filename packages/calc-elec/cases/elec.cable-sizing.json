@@ -1,0 +1,492 @@
+{
+  "engine": "elec.cable-sizing",
+  "parameterSet": {
+    "standard": "NFC15-100+UTE-C15-105",
+    "version": "2002+2003"
+  },
+  "cases": [
+    {
+      "id": "elec.cable-sizing/mono-18A-B-PVC-35C",
+      "engine": "elec.cable-sizing",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "I_B = 18 A ; I_n = 20 A (plus petit calibre normalisé ≥ I_B) ; k2 = 1,45 ; I2 = 29 A ; θ = 35 °C ; f_T = 0,94 ; f_G = 1 ; f = 0,94 ; I_z,tab requis = k2 I_n / (1,45 f) = 1,45 × 20 / (1,45 × 0,94) = 21,276596 A ; plus petite section du tableau 52H : 2,5 mm² (I_z,tab = 24 A) ; I_z corrigé = 24 × 0,94 = 22,56 A ; contrôles : I_B ≤ I_n vérifié ; I2 ≤ 1,45 I_z (29 ≤ 32,712) vérifié.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "current": {
+          "value": 18,
+          "unit": "A"
+        },
+        "device": "BREAKER",
+        "system": "MONO",
+        "method": "B",
+        "insulation": "PVC",
+        "ambient": {
+          "value": 35,
+          "unit": "degC"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "rating": {
+            "value": 20,
+            "tolerance": 0.000001
+          },
+          "conventionalCurrent": {
+            "value": 29,
+            "tolerance": 0.000001
+          },
+          "section": {
+            "value": 2.5,
+            "tolerance": 0.000001
+          },
+          "izTable": {
+            "value": 24,
+            "tolerance": 0.000001
+          },
+          "izCorrected": {
+            "value": 22.56,
+            "tolerance": 0.000001
+          },
+          "temperatureFactor": {
+            "value": 0.94,
+            "tolerance": 0.000001
+          },
+          "groupingFactor": {
+            "value": 1,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "elec.protection.ib-le-in",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.protection.overload",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": [
+          "DEFAULT.circuits",
+          "DEFAULT.rating",
+          "ELEC.COPPER",
+          "ELEC.LOADED_CONDUCTORS",
+          "ELEC.STEADY_STATE"
+        ]
+      }
+    },
+    {
+      "id": "elec.cable-sizing/tri-55A-C-PR-40C-3-circuits",
+      "engine": "elec.cable-sizing",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "I_B = 55 A ; I_n = 63 A (plus petit calibre normalisé ≥ I_B) ; k2 = 1,45 ; I2 = 91,35 A ; θ = 40 °C ; f_T = 0,91 ; f_G = 0,79 ; f = 0,7189 ; I_z,tab requis = k2 I_n / (1,45 f) = 1,45 × 63 / (1,45 × 0,7189) = 87,633885 A ; plus petite section du tableau 52H : 16 mm² (I_z,tab = 96 A) ; I_z corrigé = 96 × 0,7189 = 69,0144 A ; contrôles : I_B ≤ I_n vérifié ; I2 ≤ 1,45 I_z (91,35 ≤ 100,07088) vérifié.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "current": {
+          "value": 55,
+          "unit": "A"
+        },
+        "device": "BREAKER",
+        "system": "TRI",
+        "method": "C",
+        "insulation": "PR",
+        "ambient": {
+          "value": 40,
+          "unit": "degC"
+        },
+        "circuits": 3,
+        "arrangement": "SINGLE_LAYER"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "rating": {
+            "value": 63,
+            "tolerance": 0.000001
+          },
+          "conventionalCurrent": {
+            "value": 91.35,
+            "tolerance": 0.000001
+          },
+          "section": {
+            "value": 16,
+            "tolerance": 0.000001
+          },
+          "izTable": {
+            "value": 96,
+            "tolerance": 0.000001
+          },
+          "izCorrected": {
+            "value": 69.0144,
+            "tolerance": 0.000001
+          },
+          "temperatureFactor": {
+            "value": 0.91,
+            "tolerance": 0.000001
+          },
+          "groupingFactor": {
+            "value": 0.79,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "elec.protection.ib-le-in",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.protection.overload",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": [
+          "DEFAULT.rating",
+          "ELEC.COPPER",
+          "ELEC.LOADED_CONDUCTORS",
+          "ELEC.STEADY_STATE"
+        ]
+      }
+    },
+    {
+      "id": "elec.cable-sizing/fuse-gG-23A-E-PVC",
+      "engine": "elec.cable-sizing",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "I_B = 23 A ; I_n = 25 A (plus petit calibre normalisé ≥ I_B) ; k2 = 1,6 ; I2 = 40 A ; θ = 30 °C ; f_T = 1 ; f_G = 1 ; f = 1 ; I_z,tab requis = k2 I_n / (1,45 f) = 1,6 × 25 / (1,45 × 1) = 27,586207 A ; plus petite section du tableau 52H : 4 mm² (I_z,tab = 34 A) ; I_z corrigé = 34 × 1 = 34 A ; contrôles : I_B ≤ I_n vérifié ; I2 ≤ 1,45 I_z (40 ≤ 49,3) vérifié.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "current": {
+          "value": 23,
+          "unit": "A"
+        },
+        "device": "FUSE_GG",
+        "system": "TRI",
+        "method": "E",
+        "insulation": "PVC",
+        "ambient": {
+          "value": 30,
+          "unit": "degC"
+        },
+        "circuits": 1
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "rating": {
+            "value": 25,
+            "tolerance": 0.000001
+          },
+          "conventionalCurrent": {
+            "value": 40,
+            "tolerance": 0.000001
+          },
+          "section": {
+            "value": 4,
+            "tolerance": 0.000001
+          },
+          "izTable": {
+            "value": 34,
+            "tolerance": 0.000001
+          },
+          "izCorrected": {
+            "value": 34,
+            "tolerance": 0.000001
+          },
+          "temperatureFactor": {
+            "value": 1,
+            "tolerance": 0.000001
+          },
+          "groupingFactor": {
+            "value": 1,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "elec.protection.ib-le-in",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.protection.overload",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": [
+          "DEFAULT.rating",
+          "ELEC.COPPER",
+          "ELEC.LOADED_CONDUCTORS",
+          "ELEC.STEADY_STATE"
+        ]
+      }
+    },
+    {
+      "id": "elec.cable-sizing/ib-equals-in-ambient-37C",
+      "engine": "elec.cable-sizing",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "I_B = 32 A ; I_n = 32 A (saisi) ; k2 = 1,45 ; I2 = 46,4 A ; θ = 37 °C ; f_T = 0,87 ; f_G = 1 ; f = 0,87 ; I_z,tab requis = k2 I_n / (1,45 f) = 1,45 × 32 / (1,45 × 0,87) = 36,781609 A ; plus petite section du tableau 52H : 6 mm² (I_z,tab = 46 A) ; I_z corrigé = 46 × 0,87 = 40,02 A ; contrôles : I_B ≤ I_n vérifié ; I2 ≤ 1,45 I_z (46,4 ≤ 58,029) vérifié.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "current": {
+          "value": 32,
+          "unit": "A"
+        },
+        "device": "BREAKER",
+        "rating": {
+          "value": 32,
+          "unit": "A"
+        },
+        "system": "MONO",
+        "method": "C",
+        "insulation": "PVC",
+        "ambient": {
+          "value": 37,
+          "unit": "degC"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "rating": {
+            "value": 32,
+            "tolerance": 0.000001
+          },
+          "conventionalCurrent": {
+            "value": 46.4,
+            "tolerance": 0.000001
+          },
+          "section": {
+            "value": 6,
+            "tolerance": 0.000001
+          },
+          "izTable": {
+            "value": 46,
+            "tolerance": 0.000001
+          },
+          "izCorrected": {
+            "value": 40.02,
+            "tolerance": 0.000001
+          },
+          "temperatureFactor": {
+            "value": 0.87,
+            "tolerance": 0.000001
+          },
+          "groupingFactor": {
+            "value": 1,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "elec.protection.ib-le-in",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.protection.overload",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": [
+          "DEFAULT.circuits",
+          "ELEC.COPPER",
+          "ELEC.LOADED_CONDUCTORS",
+          "ELEC.STEADY_STATE"
+        ]
+      }
+    },
+    {
+      "id": "elec.cable-sizing/rating-below-ib",
+      "engine": "elec.cable-sizing",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "I_B = 20 A ; I_n = 16 A (saisi) ; k2 = 1,45 ; I2 = 23,2 A ; θ = 30 °C ; f_T = 1 ; f_G = 1 ; f = 1 ; I_z,tab requis = k2 I_n / (1,45 f) = 1,45 × 16 / (1,45 × 1) = 16 A ; plus petite section du tableau 52H : 2,5 mm² (I_z,tab = 21 A) ; I_z corrigé = 21 × 1 = 21 A ; contrôles : I_B ≤ I_n NON vérifié ; I2 ≤ 1,45 I_z (23,2 ≤ 30,45) vérifié.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "current": {
+          "value": 20,
+          "unit": "A"
+        },
+        "device": "BREAKER",
+        "rating": {
+          "value": 16,
+          "unit": "A"
+        },
+        "system": "TRI",
+        "method": "B",
+        "insulation": "PVC",
+        "ambient": {
+          "value": 30,
+          "unit": "degC"
+        },
+        "circuits": 1
+      },
+      "expected": {
+        "resultStatus": "NON_COMPLIANT",
+        "outputs": {
+          "rating": {
+            "value": 16,
+            "tolerance": 0.000001
+          },
+          "conventionalCurrent": {
+            "value": 23.2,
+            "tolerance": 0.000001
+          },
+          "section": {
+            "value": 2.5,
+            "tolerance": 0.000001
+          },
+          "izTable": {
+            "value": 21,
+            "tolerance": 0.000001
+          },
+          "izCorrected": {
+            "value": 21,
+            "tolerance": 0.000001
+          },
+          "temperatureFactor": {
+            "value": 1,
+            "tolerance": 0.000001
+          },
+          "groupingFactor": {
+            "value": 1,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "elec.protection.ib-le-in",
+            "status": "FAIL"
+          },
+          {
+            "rule": "elec.protection.overload",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["ELEC.COPPER", "ELEC.LOADED_CONDUCTORS", "ELEC.STEADY_STATE"]
+      }
+    },
+    {
+      "id": "elec.cable-sizing/grouped-without-arrangement",
+      "engine": "elec.cable-sizing",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Trois circuits jointifs sans disposition précisée : le facteur de groupement ne peut être lu, entrée refusée.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "current": {
+          "value": 20,
+          "unit": "A"
+        },
+        "device": "BREAKER",
+        "system": "MONO",
+        "method": "B",
+        "insulation": "PVC",
+        "ambient": {
+          "value": 30,
+          "unit": "degC"
+        },
+        "circuits": 3
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "arrangement",
+            "code": "ARRANGEMENT_REQUIRED"
+          }
+        ]
+      }
+    },
+    {
+      "id": "elec.cable-sizing/missing-iz-table",
+      "engine": "elec.cable-sizing",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Table des courants admissibles absente du référentiel : calcul refusé.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "omitParameters": ["elec.cable.iz"],
+      "inputs": {
+        "current": {
+          "value": 20,
+          "unit": "A"
+        },
+        "device": "BREAKER",
+        "system": "MONO",
+        "method": "B",
+        "insulation": "PVC",
+        "ambient": {
+          "value": 30,
+          "unit": "degC"
+        }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.elec.cable.iz",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

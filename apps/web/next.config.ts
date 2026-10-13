@@ -16,6 +16,7 @@ const config: NextConfig = {
   transpilePackages: [
     '@consulpro/application',
     '@consulpro/calc-btp',
+    '@consulpro/calc-elec',
     '@consulpro/calc-core',
     '@consulpro/contracts',
     '@consulpro/db',

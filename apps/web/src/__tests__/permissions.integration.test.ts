@@ -16,6 +16,8 @@ import { Harness, type Actor, type CallOptions } from './harness';
 /** Statut attendu quand l'accès est accordé. */
 const SUCCESS: Readonly<Record<string, number>> = {
   'members.list': 200,
+  'organization.get': 200,
+  'organization.update': 200,
   'members.update': 200,
   'members.remove': 204,
   'invitations.list': 200,
@@ -104,6 +106,7 @@ const SUCCESS: Readonly<Record<string, number>> = {
   'priceItems.update': 200,
   'priceItems.remove': 204,
   'btp.dashboard': 200,
+  'elec.dashboard': 200,
 };
 
 const slab = {
@@ -257,6 +260,21 @@ async function created(response: Response): Promise<string> {
 /** Construit une requête valide pour une route d'organisation (données fraîches à chaque appel). */
 const orgRequests: Readonly<Record<string, () => Promise<Request>>> = {
   'members.list': () => Promise.resolve({}),
+  'organization.get': () => Promise.resolve({}),
+  // Mêmes valeurs que l'état courant : la modification réussie ne change rien (idempotente).
+  'organization.update': async () => {
+    const response = await h.call('organization.get', { actor: owner, params: { orgSlug } });
+    const current = (await response.json()) as {
+      name: string;
+      country: string | null;
+      currency: string;
+      version: number;
+    };
+    return {
+      body: { name: current.name, country: current.country, currency: current.currency },
+      headers: { 'if-match': `"${String(current.version)}"` },
+    };
+  },
   'members.update': async () => {
     const member = await h.addMember(orgSlug, owner, 'VIEWER');
     return {
@@ -337,6 +355,7 @@ const orgRequests: Readonly<Record<string, () => Promise<Request>>> = {
     return { params: { libraryId, itemId }, headers: { 'if-match': '"1"' } };
   },
   'btp.dashboard': () => Promise.resolve({}),
+  'elec.dashboard': () => Promise.resolve({}),
   'organization.transfer': async () => {
     const target = await h.addMember(orgSlug, owner, 'VIEWER');
     return {

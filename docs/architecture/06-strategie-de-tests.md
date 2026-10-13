@@ -144,6 +144,12 @@ Ordre des étapes, chacune bloquante :
 
 En CI nocturne : Stryker (mutation), audit des dépendances, E2E complets.
 
+Mutation (Phase 5) : `pnpm --filter @consulpro/calc-elec test:mutation` (lanceur `command`, chaque
+mutant activé par variable d'environnement ; rapport JSON dans `reports/mutation/`). Un test de
+contrat vérifie aussi, pour chaque moteur, que tout ce que l'interface affiche est décrit :
+entrées et sorties présentées comme le schéma les déclare, unités connues, étapes de calcul,
+hypothèses et vérifications renseignées.
+
 ## 7. Définition de « terminé »
 
 Une fonctionnalité est terminée quand :

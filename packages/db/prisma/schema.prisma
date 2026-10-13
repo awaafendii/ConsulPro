@@ -422,6 +422,7 @@ model Project {
   takeoffAssignments TakeoffAssignment[]
   boqs               BillOfQuantities[]
   boqItems           BoqItem[]
+  datasetLinks       CalculationDatasetLink[]
 
   @@unique([organizationId, code])
   @@unique([id, organizationId])
@@ -602,14 +603,15 @@ model CalculationRevision {
   authorId              String         @map("author_id") @db.Uuid
   createdAt             DateTime       @default(now()) @map("created_at") @db.Timestamptz(3)
 
-  project      Project                 @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
-  calculation  Calculation             @relation("Revisions", fields: [calculationId], references: [id], onDelete: Cascade)
-  currentOf    Calculation?            @relation("CurrentRevision")
-  author       User                    @relation("RevisionAuthor", fields: [authorId], references: [id])
+  project      Project                  @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
+  calculation  Calculation              @relation("Revisions", fields: [calculationId], references: [id], onDelete: Cascade)
+  currentOf    Calculation?             @relation("CurrentRevision")
+  author       User                     @relation("RevisionAuthor", fields: [authorId], references: [id])
   reviews      CalculationReview[]
-  dependencies CalculationDependency[] @relation("DependencyTarget")
-  usedBy       CalculationDependency[] @relation("DependencySourceRevision")
+  dependencies CalculationDependency[]  @relation("DependencyTarget")
+  usedBy       CalculationDependency[]  @relation("DependencySourceRevision")
   boqItems     BoqItem[]
+  datasetLinks CalculationDatasetLink[]
 
   @@unique([calculationId, number])
   @@unique([id, calculationId])
@@ -674,10 +676,11 @@ model Dataset {
   createdAt         DateTime   @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt         DateTime   @updatedAt @map("updated_at") @db.Timestamptz(3)
 
-  project         Project           @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
-  createdBy       User              @relation("DatasetCreator", fields: [createdById], references: [id])
-  currentRevision DatasetRevision?  @relation("CurrentDatasetRevision", fields: [currentRevisionId], references: [id])
-  revisions       DatasetRevision[] @relation("DatasetRevisions")
+  project          Project                  @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
+  createdBy        User                     @relation("DatasetCreator", fields: [createdById], references: [id])
+  currentRevision  DatasetRevision?         @relation("CurrentDatasetRevision", fields: [currentRevisionId], references: [id])
+  revisions        DatasetRevision[]        @relation("DatasetRevisions")
+  calculationLinks CalculationDatasetLink[]
 
   @@index([projectId])
   @@map("datasets")
@@ -696,12 +699,14 @@ model DatasetRevision {
   authorId       String   @map("author_id") @db.Uuid
   createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
 
-  project   Project  @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
-  dataset   Dataset  @relation("DatasetRevisions", fields: [datasetId], references: [id], onDelete: Cascade)
-  currentOf Dataset? @relation("CurrentDatasetRevision")
-  author    User     @relation("DatasetRevisionAuthor", fields: [authorId], references: [id])
+  project          Project                  @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
+  dataset          Dataset                  @relation("DatasetRevisions", fields: [datasetId], references: [id], onDelete: Cascade)
+  currentOf        Dataset?                 @relation("CurrentDatasetRevision")
+  author           User                     @relation("DatasetRevisionAuthor", fields: [authorId], references: [id])
+  calculationLinks CalculationDatasetLink[]
 
   @@unique([datasetId, number])
+  @@unique([id, datasetId])
   @@map("dataset_revisions")
 }
 
@@ -905,4 +910,28 @@ model PriceItem {
   @@unique([libraryId, code])
   @@unique([libraryId, workKey])
   @@map("price_items")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 5 : entrées de calcul lues dans un jeu de données du projet (insertion seule).
+// ---------------------------------------------------------------------------
+
+/// Révision de jeu de données lue par une révision de calcul (traçabilité, obsolescence).
+model CalculationDatasetLink {
+  id                String @id @default(uuid(7)) @db.Uuid
+  organizationId    String @map("organization_id") @db.Uuid
+  projectId         String @map("project_id") @db.Uuid
+  revisionId        String @map("revision_id") @db.Uuid
+  input             String
+  datasetId         String @map("dataset_id") @db.Uuid
+  datasetRevisionId String @map("dataset_revision_id") @db.Uuid
+
+  project         Project             @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
+  revision        CalculationRevision @relation(fields: [revisionId], references: [id], onDelete: Cascade)
+  dataset         Dataset             @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+  datasetRevision DatasetRevision     @relation(fields: [datasetRevisionId, datasetId], references: [id, datasetId], onDelete: Cascade)
+
+  @@unique([revisionId, input])
+  @@index([datasetId])
+  @@map("calculation_dataset_links")
 }

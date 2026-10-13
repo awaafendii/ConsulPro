@@ -1,10 +1,10 @@
 import { err, ok, type Result } from '@consulpro/calc-core';
-import { validateNewOrganization } from '@consulpro/domain';
+import { validateNewOrganization, validateOrganizationSettings } from '@consulpro/domain';
 
-import type { OrgContext, UserContext } from '../context';
-import { appError, fromDomain, notFound, type AppError } from '../errors';
-import type { ApplicationDeps, MyOrganization } from '../ports';
-import { auditBase, orgScope, userScope } from '../scope';
+import { guarded, type OrgContext, type UserContext } from '../context';
+import { appError, fromDomain, notFound, reread, staleVersion, type AppError } from '../errors';
+import type { ApplicationDeps, MyOrganization, OrganizationRecord } from '../ports';
+import { auditBase, contextOf, orgScope, userScope } from '../scope';
 
 export function createOrganizationService({ uow, ids }: Pick<ApplicationDeps, 'uow' | 'ids'>) {
   return {
@@ -50,6 +50,54 @@ export function createOrganizationService({ uow, ids }: Pick<ApplicationDeps, 'u
           metadata: { name: valid.value.name, slug: valid.value.slug },
         });
         return ok({ ...created.value, role: 'OWNER' as const, membershipId });
+      });
+    },
+
+    /** Paramètres de l'organisation courante. */
+    async current(ctx: OrgContext): Promise<Result<OrganizationRecord, AppError>> {
+      return guarded(ctx, 'org.read', () =>
+        uow.run(contextOf(ctx), async (repos) => {
+          const organization = await repos.organizations.findById(ctx.organization.id);
+          return organization ? ok(organization) : err(notFound('Organisation'));
+        }),
+      );
+    },
+
+    /**
+     * Modifie le nom, le pays et la devise proposée aux nouveaux quantitatifs (décision Q3).
+     * Les quantitatifs existants gardent leur devise : aucune conversion n'est faite.
+     */
+    async update(
+      ctx: OrgContext,
+      input: { name: string; country: string | null; currency: string },
+      expectedVersion: number,
+    ): Promise<Result<OrganizationRecord, AppError>> {
+      return guarded(ctx, 'org.update', async () => {
+        const valid = validateOrganizationSettings(input);
+        if (!valid.ok) return err(fromDomain(valid.error));
+        const id = ctx.organization.id;
+        return uow.run(contextOf(ctx), async (repos) => {
+          const current = await repos.organizations.findById(id);
+          if (!current) return err(notFound('Organisation'));
+          if (current.version !== expectedVersion) return err(staleVersion());
+          const changes = Object.fromEntries(
+            (['name', 'country', 'currency'] as const)
+              .filter((key) => current[key] !== valid.value[key])
+              .map((key) => [key, { from: current[key], to: valid.value[key] }]),
+          );
+          if (Object.keys(changes).length === 0) return ok(current);
+          if (!(await repos.organizations.update(id, valid.value, expectedVersion))) {
+            return err(staleVersion());
+          }
+          await repos.audit.append({
+            ...auditBase(ctx, id),
+            action: 'organization.updated',
+            targetType: 'organization',
+            targetId: id,
+            metadata: changes,
+          });
+          return ok(reread(await repos.organizations.findById(id), 'Organisation'));
+        });
       });
     },
 

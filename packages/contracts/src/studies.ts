@@ -81,6 +81,15 @@ export const engineSchema = z.object({
         help: z.string().optional(),
       }),
       z.object({
+        kind: z.literal('dataset'),
+        key: z.string(),
+        label: z.string(),
+        /** Type de jeu de données attendu (ex. ELEC_BOARD_TREE). */
+        datasetKind: z.string(),
+        optional: z.boolean(),
+        help: z.string().optional(),
+      }),
+      z.object({
         kind: z.literal('enum'),
         key: z.string(),
         label: z.string(),
@@ -145,6 +154,8 @@ export const inputValueSchema = z.union([
   z.string().max(200),
   z.number(),
   z.object({ fromCalculation: z.uuid(), output: z.string().min(1).max(80) }),
+  /** Lignes de la révision courante d'un jeu de données du projet. */
+  z.object({ fromDataset: z.uuid() }),
   z.array(z.record(z.string().max(80), z.union([quantityValue, z.number()]))).max(200),
 ]);
 export type InputValueDto = z.infer<typeof inputValueSchema>;
@@ -171,6 +182,17 @@ export const dependencySchema = z.object({
   obsolete: z.boolean(),
 });
 
+/** Jeu de données lu par la révision (révision exacte, tracée). */
+export const datasetLinkSchema = z.object({
+  input: z.string(),
+  datasetId: z.uuid(),
+  datasetTitle: z.string(),
+  datasetRevisionNumber: z.number().int(),
+  rowCount: z.number().int(),
+  /** Une révision plus récente du jeu existe : le calcul est à refaire. */
+  obsolete: z.boolean(),
+});
+
 export const revisionSchema = revisionSummarySchema.extend({
   calculationId: z.uuid(),
   isCurrent: z.boolean(),
@@ -180,6 +202,7 @@ export const revisionSchema = revisionSummarySchema.extend({
   view: calculationViewSchema,
   reviews: z.array(reviewSchema),
   dependencies: z.array(dependencySchema),
+  datasets: z.array(datasetLinkSchema),
   /** Actions possibles pour l'utilisateur courant (le serveur revérifie). */
   can: z.object({ validate: z.boolean(), verify: z.boolean() }),
 });
@@ -221,3 +244,51 @@ export const linkableOutputsSchema = z.object({
     }),
   ),
 });
+
+// --- Tableau de bord Électricité --------------------------------------------------------------
+
+export const elecDashboardSchema = z.object({
+  projects: z.array(
+    z.object({
+      project: z.object({ id: z.uuid(), code: z.string(), name: z.string() }),
+      calculations: z.object({
+        total: z.number().int(),
+        notComputed: z.number().int(),
+        verified: z.number().int(),
+        toVerify: z.number().int(),
+        rejected: z.number().int(),
+        nonCompliant: z.number().int(),
+        obsolete: z.number().int(),
+      }),
+      powerBalances: z.array(
+        z.object({
+          calculationId: z.uuid(),
+          title: z.string(),
+          revisionNumber: z.number().int(),
+          workflowStatus: workflowStatusSchema,
+          resultStatus: resultStatusSchema,
+          absorbedPower: z.number().nullable(),
+          apparentPower: z.number().nullable(),
+          current: z.number().nullable(),
+          obsolete: z.boolean(),
+        }),
+      ),
+      nonCompliant: z.array(
+        z.object({
+          calculationId: z.uuid(),
+          title: z.string(),
+          engineId: z.string(),
+          engineTitle: z.string(),
+        }),
+      ),
+    }),
+  ),
+  truncated: z.boolean(),
+  engines: z.object({
+    total: z.number().int(),
+    verified: z.number().int(),
+    cases: z.number().int(),
+    checkedCases: z.number().int(),
+  }),
+});
+export type ElecDashboardDto = z.infer<typeof elecDashboardSchema>;

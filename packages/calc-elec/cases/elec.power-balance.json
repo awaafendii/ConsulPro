@@ -1,0 +1,852 @@
+{
+  "engine": "elec.power-balance",
+  "parameterSet": {
+    "standard": "NFC15-100+UTE-C15-105",
+    "version": "2002+2003"
+  },
+  "cases": [
+    {
+      "id": "elec.power-balance/tgbt-two-feeders",
+      "engine": "elec.power-balance",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "ECL : P = 10 × 2 × 0,75 = 15 kW ; Q = P tan φ = 15 × 0,484322 = 7,264832 kvar ; MOT : P = 1 × 3 × 1 = 3 kW ; Q = P tan φ = 3 × 0,75 = 2,25 kvar ; TGBT (2 circuit(s)) : ks = 0,9 (référentiel) ; P = 0,9 × 18 = 16,2 kW ; Q = 0,9 × 9,514832 = 8,563348 kvar ; origine : S = √(P² + Q²) = 18,324053 kVA ; cos φ = P / S = 0,884084 ; I = S / (√3 U) = 26,448493 A ; puissance installée = 23 kW",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "tree": [
+          {
+            "code": "TGBT",
+            "parent": null,
+            "type": "BOARD",
+            "designation": null,
+            "power": null,
+            "count": null,
+            "ku": null,
+            "cosPhi": null,
+            "ks": null
+          },
+          {
+            "code": "ECL",
+            "parent": "TGBT",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 2,
+              "unit": "kW"
+            },
+            "count": 10,
+            "ku": 0.75,
+            "cosPhi": 0.9,
+            "ks": null
+          },
+          {
+            "code": "MOT",
+            "parent": "TGBT",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 3,
+              "unit": "kW"
+            },
+            "count": 1,
+            "ku": 1,
+            "cosPhi": 0.8,
+            "ks": null
+          }
+        ],
+        "system": "TRI",
+        "voltage": {
+          "value": 400,
+          "unit": "V"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "installedPower": {
+            "value": 23,
+            "tolerance": 0.000001
+          },
+          "absorbedPower": {
+            "value": 16.2,
+            "tolerance": 0.000001
+          },
+          "reactivePower": {
+            "value": 8.563348415,
+            "tolerance": 0.000001
+          },
+          "apparentPower": {
+            "value": 18.324053484,
+            "tolerance": 0.000001
+          },
+          "powerFactor": {
+            "value": 0.884083864,
+            "tolerance": 0.000001
+          },
+          "current": {
+            "value": 26.448493029,
+            "tolerance": 0.000001
+          },
+          "boards": {
+            "value": 1,
+            "tolerance": 0.000001
+          },
+          "loads": {
+            "value": 2,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["ELEC.BALANCE_ARITHMETIC", "ELEC.STEADY_STATE"]
+      }
+    },
+    {
+      "id": "elec.power-balance/two-levels",
+      "engine": "elec.power-balance",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "ECL : P = 6 × 1 × 1 = 6 kW ; Q = P tan φ = 6 × 0 = 0 kvar ; PC : P = 4 × 2 × 0,5 = 4 kW ; Q = P tan φ = 4 × 0,484322 = 1,937288 kvar ; CLIM : P = 1 × 7,5 × 0,8 = 6 kW ; Q = P tan φ = 6 × 0,619744 = 3,718466 kvar ; SURP : P = 2 × 4 × 0,75 = 6 kW ; Q = P tan φ = 6 × 0,75 = 4,5 kvar ; TD1 (4 circuit(s)) : ks = 0,8 (référentiel) ; P = 0,8 × 22 = 17,6 kW ; Q = 0,8 × 10,155754 = 8,124604 kvar ; POMPE : P = 1 × 5 × 1 = 5 kW ; Q = P tan φ = 5 × 0,619744 = 3,098722 kvar ; TGBT (2 circuit(s)) : ks = 0,8 (saisi) ; P = 0,8 × 22,6 = 18,08 kW ; Q = 0,8 × 11,223325 = 8,97866 kvar ; origine : S = √(P² + Q²) = 20,186697 kVA ; cos φ = P / S = 0,895639 ; I = S / (√3 U) = 29,136987 A ; puissance installée = 34,5 kW",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "tree": [
+          {
+            "code": "TGBT",
+            "parent": null,
+            "type": "BOARD",
+            "designation": null,
+            "power": null,
+            "count": null,
+            "ku": null,
+            "cosPhi": null,
+            "ks": 0.8
+          },
+          {
+            "code": "TD1",
+            "parent": "TGBT",
+            "type": "BOARD",
+            "designation": null,
+            "power": null,
+            "count": null,
+            "ku": null,
+            "cosPhi": null,
+            "ks": null
+          },
+          {
+            "code": "POMPE",
+            "parent": "TGBT",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 5,
+              "unit": "kW"
+            },
+            "count": 1,
+            "ku": 1,
+            "cosPhi": 0.85,
+            "ks": null
+          },
+          {
+            "code": "ECL",
+            "parent": "TD1",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 1,
+              "unit": "kW"
+            },
+            "count": 6,
+            "ku": 1,
+            "cosPhi": 1,
+            "ks": null
+          },
+          {
+            "code": "PC",
+            "parent": "TD1",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 2,
+              "unit": "kW"
+            },
+            "count": 4,
+            "ku": 0.5,
+            "cosPhi": 0.9,
+            "ks": null
+          },
+          {
+            "code": "CLIM",
+            "parent": "TD1",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 7.5,
+              "unit": "kW"
+            },
+            "count": 1,
+            "ku": 0.8,
+            "cosPhi": 0.85,
+            "ks": null
+          },
+          {
+            "code": "SURP",
+            "parent": "TD1",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 4,
+              "unit": "kW"
+            },
+            "count": 2,
+            "ku": 0.75,
+            "cosPhi": 0.8,
+            "ks": null
+          }
+        ],
+        "system": "TRI",
+        "voltage": {
+          "value": 400,
+          "unit": "V"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "installedPower": {
+            "value": 34.5,
+            "tolerance": 0.000001
+          },
+          "absorbedPower": {
+            "value": 18.08,
+            "tolerance": 0.000001
+          },
+          "reactivePower": {
+            "value": 8.978660201,
+            "tolerance": 0.000001
+          },
+          "apparentPower": {
+            "value": 20.18669708,
+            "tolerance": 0.000001
+          },
+          "powerFactor": {
+            "value": 0.895639338,
+            "tolerance": 0.000001
+          },
+          "current": {
+            "value": 29.136987483,
+            "tolerance": 0.000001
+          },
+          "boards": {
+            "value": 2,
+            "tolerance": 0.000001
+          },
+          "loads": {
+            "value": 5,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["ELEC.BALANCE_ARITHMETIC", "ELEC.STEADY_STATE"]
+      }
+    },
+    {
+      "id": "elec.power-balance/defaults-single-phase",
+      "engine": "elec.power-balance",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "L1 : P = 1 × 1,5 × 1 = 1,5 kW ; Q = P tan φ = 1,5 × 0,328684 = 0,493026 kvar ; L2 : P = 1 × 2 × 1 = 2 kW ; Q = P tan φ = 2 × 0,484322 = 0,968644 kvar ; L3 : P = 1 × 1 × 1 = 1 kW ; Q = P tan φ = 1 × 0 = 0 kvar ; TD (3 circuit(s)) : ks = 0,9 (référentiel) ; P = 0,9 × 4,5 = 4,05 kW ; Q = 0,9 × 1,46167 = 1,315503 kvar ; origine : S = √(P² + Q²) = 4,258292 kVA ; cos φ = P / S = 0,951086 ; I = S / V = 18,514312 A ; puissance installée = 4,5 kW",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "tree": [
+          {
+            "code": "TD",
+            "parent": null,
+            "type": "BOARD",
+            "designation": null,
+            "power": null,
+            "count": null,
+            "ku": null,
+            "cosPhi": null,
+            "ks": null
+          },
+          {
+            "code": "L1",
+            "parent": "TD",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 1.5,
+              "unit": "kW"
+            },
+            "count": null,
+            "ku": null,
+            "cosPhi": 0.95,
+            "ks": null
+          },
+          {
+            "code": "L2",
+            "parent": "TD",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 2,
+              "unit": "kW"
+            },
+            "count": null,
+            "ku": null,
+            "cosPhi": 0.9,
+            "ks": null
+          },
+          {
+            "code": "L3",
+            "parent": "TD",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 1,
+              "unit": "kW"
+            },
+            "count": null,
+            "ku": null,
+            "cosPhi": 1,
+            "ks": null
+          }
+        ],
+        "system": "MONO",
+        "voltage": {
+          "value": 230,
+          "unit": "V"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "installedPower": {
+            "value": 4.5,
+            "tolerance": 0.000001
+          },
+          "absorbedPower": {
+            "value": 4.05,
+            "tolerance": 0.000001
+          },
+          "reactivePower": {
+            "value": 1.315503331,
+            "tolerance": 0.000001
+          },
+          "apparentPower": {
+            "value": 4.258291795,
+            "tolerance": 0.000001
+          },
+          "powerFactor": {
+            "value": 0.951085598,
+            "tolerance": 0.000001
+          },
+          "current": {
+            "value": 18.514312153,
+            "tolerance": 0.000001
+          },
+          "boards": {
+            "value": 1,
+            "tolerance": 0.000001
+          },
+          "loads": {
+            "value": 3,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [],
+        "hypotheses": [
+          "DEFAULT.tree.count",
+          "DEFAULT.tree.ku",
+          "ELEC.BALANCE_ARITHMETIC",
+          "ELEC.STEADY_STATE"
+        ]
+      }
+    },
+    {
+      "id": "elec.power-balance/single-load-cos-1",
+      "engine": "elec.power-balance",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "L1 : P = 1 × 10 × 1 = 10 kW ; Q = P tan φ = 10 × 0 = 0 kvar ; TGBT (1 circuit(s)) : ks = 1 (référentiel) ; P = 1 × 10 = 10 kW ; Q = 1 × 0 = 0 kvar ; origine : S = √(P² + Q²) = 10 kVA ; cos φ = P / S = 1 ; I = S / (√3 U) = 14,433757 A ; puissance installée = 10 kW",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "tree": [
+          {
+            "code": "TGBT",
+            "parent": null,
+            "type": "BOARD",
+            "designation": null,
+            "power": null,
+            "count": null,
+            "ku": null,
+            "cosPhi": null,
+            "ks": null
+          },
+          {
+            "code": "L1",
+            "parent": "TGBT",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 10,
+              "unit": "kW"
+            },
+            "count": 1,
+            "ku": 1,
+            "cosPhi": 1,
+            "ks": null
+          }
+        ],
+        "system": "TRI",
+        "voltage": {
+          "value": 400,
+          "unit": "V"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "installedPower": {
+            "value": 10,
+            "tolerance": 0.000001
+          },
+          "absorbedPower": {
+            "value": 10,
+            "tolerance": 0.000001
+          },
+          "reactivePower": {
+            "value": 0,
+            "tolerance": 0.000001
+          },
+          "apparentPower": {
+            "value": 10,
+            "tolerance": 0.000001
+          },
+          "powerFactor": {
+            "value": 1,
+            "tolerance": 0.000001
+          },
+          "current": {
+            "value": 14.43375673,
+            "tolerance": 0.000001
+          },
+          "boards": {
+            "value": 1,
+            "tolerance": 0.000001
+          },
+          "loads": {
+            "value": 1,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["ELEC.BALANCE_ARITHMETIC", "ELEC.STEADY_STATE"]
+      }
+    },
+    {
+      "id": "elec.power-balance/twelve-circuits",
+      "engine": "elec.power-balance",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "D1 : P = 1 × 1 × 1 = 1 kW ; Q = P tan φ = 1 × 0 = 0 kvar ; D2 : P = 1 × 1 × 1 = 1 kW ; Q = P tan φ = 1 × 0 = 0 kvar ; D3 : P = 1 × 1 × 1 = 1 kW ; Q = P tan φ = 1 × 0 = 0 kvar ; D4 : P = 1 × 1 × 1 = 1 kW ; Q = P tan φ = 1 × 0 = 0 kvar ; D5 : P = 1 × 1 × 1 = 1 kW ; Q = P tan φ = 1 × 0 = 0 kvar ; D6 : P = 1 × 1 × 1 = 1 kW ; Q = P tan φ = 1 × 0 = 0 kvar ; D7 : P = 1 × 1 × 1 = 1 kW ; Q = P tan φ = 1 × 0 = 0 kvar ; D8 : P = 1 × 1 × 1 = 1 kW ; Q = P tan φ = 1 × 0 = 0 kvar ; D9 : P = 1 × 1 × 1 = 1 kW ; Q = P tan φ = 1 × 0 = 0 kvar ; D10 : P = 1 × 1 × 1 = 1 kW ; Q = P tan φ = 1 × 0 = 0 kvar ; D11 : P = 1 × 1 × 1 = 1 kW ; Q = P tan φ = 1 × 0 = 0 kvar ; D12 : P = 1 × 1 × 1 = 1 kW ; Q = P tan φ = 1 × 0 = 0 kvar ; TGBT (12 circuit(s)) : ks = 0,6 (référentiel) ; P = 0,6 × 12 = 7,2 kW ; Q = 0,6 × 0 = 0 kvar ; origine : S = √(P² + Q²) = 7,2 kVA ; cos φ = P / S = 1 ; I = S / (√3 U) = 10,392305 A ; puissance installée = 12 kW",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "tree": [
+          {
+            "code": "TGBT",
+            "parent": null,
+            "type": "BOARD",
+            "designation": null,
+            "power": null,
+            "count": null,
+            "ku": null,
+            "cosPhi": null,
+            "ks": null
+          },
+          {
+            "code": "D1",
+            "parent": "TGBT",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 1,
+              "unit": "kW"
+            },
+            "count": 1,
+            "ku": 1,
+            "cosPhi": 1,
+            "ks": null
+          },
+          {
+            "code": "D2",
+            "parent": "TGBT",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 1,
+              "unit": "kW"
+            },
+            "count": 1,
+            "ku": 1,
+            "cosPhi": 1,
+            "ks": null
+          },
+          {
+            "code": "D3",
+            "parent": "TGBT",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 1,
+              "unit": "kW"
+            },
+            "count": 1,
+            "ku": 1,
+            "cosPhi": 1,
+            "ks": null
+          },
+          {
+            "code": "D4",
+            "parent": "TGBT",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 1,
+              "unit": "kW"
+            },
+            "count": 1,
+            "ku": 1,
+            "cosPhi": 1,
+            "ks": null
+          },
+          {
+            "code": "D5",
+            "parent": "TGBT",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 1,
+              "unit": "kW"
+            },
+            "count": 1,
+            "ku": 1,
+            "cosPhi": 1,
+            "ks": null
+          },
+          {
+            "code": "D6",
+            "parent": "TGBT",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 1,
+              "unit": "kW"
+            },
+            "count": 1,
+            "ku": 1,
+            "cosPhi": 1,
+            "ks": null
+          },
+          {
+            "code": "D7",
+            "parent": "TGBT",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 1,
+              "unit": "kW"
+            },
+            "count": 1,
+            "ku": 1,
+            "cosPhi": 1,
+            "ks": null
+          },
+          {
+            "code": "D8",
+            "parent": "TGBT",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 1,
+              "unit": "kW"
+            },
+            "count": 1,
+            "ku": 1,
+            "cosPhi": 1,
+            "ks": null
+          },
+          {
+            "code": "D9",
+            "parent": "TGBT",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 1,
+              "unit": "kW"
+            },
+            "count": 1,
+            "ku": 1,
+            "cosPhi": 1,
+            "ks": null
+          },
+          {
+            "code": "D10",
+            "parent": "TGBT",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 1,
+              "unit": "kW"
+            },
+            "count": 1,
+            "ku": 1,
+            "cosPhi": 1,
+            "ks": null
+          },
+          {
+            "code": "D11",
+            "parent": "TGBT",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 1,
+              "unit": "kW"
+            },
+            "count": 1,
+            "ku": 1,
+            "cosPhi": 1,
+            "ks": null
+          },
+          {
+            "code": "D12",
+            "parent": "TGBT",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 1,
+              "unit": "kW"
+            },
+            "count": 1,
+            "ku": 1,
+            "cosPhi": 1,
+            "ks": null
+          }
+        ],
+        "system": "TRI",
+        "voltage": {
+          "value": 400,
+          "unit": "V"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "installedPower": {
+            "value": 12,
+            "tolerance": 0.000001
+          },
+          "absorbedPower": {
+            "value": 7.2,
+            "tolerance": 0.000001
+          },
+          "reactivePower": {
+            "value": 0,
+            "tolerance": 0.000001
+          },
+          "apparentPower": {
+            "value": 7.2,
+            "tolerance": 0.000001
+          },
+          "powerFactor": {
+            "value": 1,
+            "tolerance": 0.000001
+          },
+          "current": {
+            "value": 10.392304845,
+            "tolerance": 0.000001
+          },
+          "boards": {
+            "value": 1,
+            "tolerance": 0.000001
+          },
+          "loads": {
+            "value": 12,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["ELEC.BALANCE_ARITHMETIC", "ELEC.STEADY_STATE"]
+      }
+    },
+    {
+      "id": "elec.power-balance/two-origins",
+      "engine": "elec.power-balance",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Deux tableaux sans amont : l’arborescence n’a pas d’origine unique, entrée refusée.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "tree": [
+          {
+            "code": "TGBT",
+            "parent": null,
+            "type": "BOARD",
+            "designation": null,
+            "power": null,
+            "count": null,
+            "ku": null,
+            "cosPhi": null,
+            "ks": null
+          },
+          {
+            "code": "TGBT2",
+            "parent": null,
+            "type": "BOARD",
+            "designation": null,
+            "power": null,
+            "count": null,
+            "ku": null,
+            "cosPhi": null,
+            "ks": null
+          },
+          {
+            "code": "L1",
+            "parent": "TGBT",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 1,
+              "unit": "kW"
+            },
+            "count": 1,
+            "ku": 1,
+            "cosPhi": 1,
+            "ks": null
+          }
+        ],
+        "system": "TRI",
+        "voltage": {
+          "value": 400,
+          "unit": "V"
+        }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "tree.0.parent",
+            "code": "TREE_INVALID"
+          }
+        ]
+      }
+    },
+    {
+      "id": "elec.power-balance/missing-ks-table",
+      "engine": "elec.power-balance",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Table des coefficients de simultanéité absente du référentiel : calcul refusé.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "omitParameters": ["elec.ks.distribution"],
+      "inputs": {
+        "tree": [
+          {
+            "code": "TGBT",
+            "parent": null,
+            "type": "BOARD",
+            "designation": null,
+            "power": null,
+            "count": null,
+            "ku": null,
+            "cosPhi": null,
+            "ks": null
+          },
+          {
+            "code": "L1",
+            "parent": "TGBT",
+            "type": "LOAD",
+            "designation": null,
+            "power": {
+              "value": 1,
+              "unit": "kW"
+            },
+            "count": 1,
+            "ku": 1,
+            "cosPhi": 1,
+            "ks": null
+          }
+        ],
+        "system": "TRI",
+        "voltage": {
+          "value": 400,
+          "unit": "V"
+        }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.elec.ks.distribution",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

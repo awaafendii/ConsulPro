@@ -29,3 +29,7 @@ storybook-static/
 apps/web/e2e/.auth/
 apps/web/playwright-report/
 apps/web/test-results/
+
+# Tests de mutation (Stryker)
+.stryker-tmp/
+**/reports/mutation/

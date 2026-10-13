@@ -1,0 +1,151 @@
+{
+  "standard": {
+    "code": "UTE-C15-105",
+    "title": "UTE C 15-105 — Guide pratique : détermination des sections de conducteurs et choix des dispositifs de protection",
+    "publisher": "UTE",
+    "discipline": "ELEC",
+    "nature": "GUIDE"
+  },
+  "version": {
+    "label": "2003",
+    "sourceNotes": "Méthodes de calcul des sections et des chutes de tension, associées à la NF C 15-100 (2002). Valeurs saisies par ConsulPro, toutes « à vérifier »."
+  },
+  "parameters": [
+    {
+      "key": "elec.conductor.resistivity",
+      "label": "Résistivité des conducteurs en service normal (ρ1), pour la chute de tension",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "material",
+            "kind": "CATEGORY",
+            "values": ["CU", "AL"]
+          }
+        ],
+        "unit": "ohm.mm2/m",
+        "cells": [0.0225, 0.036]
+      },
+      "source": {
+        "document": "UTE C 15-105 (guide pratique, 2003)",
+        "clause": "D",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire de la norme avant tout usage (décision Q4 du 2026-10-13). ρ1 = 1,25 ρ0 (résistivité à 20 °C)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "elec.conductor.reactance",
+      "label": "Réactance linéique des conducteurs (λ)",
+      "kind": "SCALAR",
+      "value": 0.08,
+      "unit": "mohm/m",
+      "source": {
+        "document": "UTE C 15-105 (guide pratique, 2003)",
+        "clause": "D",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire de la norme avant tout usage (décision Q4 du 2026-10-13)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "elec.ks.distribution",
+      "label": "Coefficient de simultanéité d’un tableau de distribution selon le nombre de circuits",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "circuits",
+            "kind": "NUMERIC",
+            "unit": "1",
+            "values": [1, 2, 4, 6, 10],
+            "lookup": "NEXT_LOWER"
+          }
+        ],
+        "unit": "1",
+        "cells": [1, 0.9, 0.8, 0.7, 0.6]
+      },
+      "source": {
+        "document": "UTE C 15-105 (guide pratique, 2003)",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire de la norme avant tout usage (décision Q4 du 2026-10-13). 1 circuit : 1 ; 2 à 3 : 0,9 ; 4 à 5 : 0,8 ; 6 à 9 : 0,7 ; 10 et plus : 0,6 (d’après la NF EN 60439-1)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "elec.protection.k2",
+      "label": "Courant conventionnel de fonctionnement I2 / In, par dispositif et calibre normalisé",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "device",
+            "kind": "CATEGORY",
+            "values": ["BREAKER", "FUSE_GG"]
+          },
+          {
+            "name": "rating",
+            "kind": "NUMERIC",
+            "unit": "A",
+            "values": [
+              2, 4, 6, 10, 16, 20, 25, 32, 40, 50, 63, 80, 100, 125, 160, 200, 250, 315, 320, 400,
+              500, 630
+            ],
+            "lookup": "EXACT"
+          }
+        ],
+        "unit": "1",
+        "cells": [
+          1.45,
+          1.45,
+          1.45,
+          1.45,
+          1.45,
+          1.45,
+          1.45,
+          1.45,
+          1.45,
+          1.45,
+          1.45,
+          1.45,
+          1.45,
+          1.45,
+          1.45,
+          1.45,
+          1.45,
+          null,
+          1.45,
+          1.45,
+          1.45,
+          1.45,
+          2.1,
+          2.1,
+          1.9,
+          1.9,
+          1.6,
+          1.6,
+          1.6,
+          1.6,
+          1.6,
+          1.6,
+          1.6,
+          1.6,
+          1.6,
+          1.6,
+          1.6,
+          1.6,
+          1.6,
+          1.6,
+          null,
+          1.6,
+          1.6,
+          1.6
+        ]
+      },
+      "source": {
+        "document": "UTE C 15-105 (guide pratique, 2003)",
+        "clause": "B",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire de la norme avant tout usage (décision Q4 du 2026-10-13). Disjoncteurs (NF EN 60898-1 et 60947-2) : 1,45 ; fusibles gG (NF EN 60269-2) : 2,1 jusqu’à 4 A, 1,9 jusqu’à 16 A exclu, 1,6 au-delà. Les calibres de l’axe sont les calibres normalisés retenus ; une case vide indique un calibre absent de la gamme du dispositif."
+      },
+      "verification": "TO_VERIFY"
+    }
+  ],
+  "rules": []
+}

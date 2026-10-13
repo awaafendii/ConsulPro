@@ -1,6 +1,8 @@
 import { err, ok, type Result } from '@consulpro/calc-core';
 
 import type { DomainError } from '../errors';
+import { isCurrency, type Currency } from '../quantities/currency';
+import { isCountry, type Country } from './countries';
 
 export const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 export const SLUG_MIN = 3;
@@ -50,4 +52,38 @@ export function validateNewOrganization(
     });
   }
   return ok({ name, slug });
+}
+
+export interface OrganizationSettings {
+  readonly name: string;
+  readonly country: Country | null;
+  readonly currency: Currency;
+}
+
+/** Paramètres modifiables d'une organisation : nom, pays, devise des quantitatifs. */
+export function validateOrganizationSettings(input: {
+  readonly name: string;
+  readonly country: string | null;
+  readonly currency: string;
+}): Result<OrganizationSettings, DomainError> {
+  const name = input.name.trim();
+  if (name.length < 2 || name.length > NAME_MAX) {
+    return err({
+      code: 'ORGANIZATION_NAME_INVALID',
+      message: `Le nom doit comporter entre 2 et ${NAME_MAX} caractères.`,
+    });
+  }
+  if (input.country !== null && !isCountry(input.country)) {
+    return err({
+      code: 'ORGANIZATION_COUNTRY_INVALID',
+      message: `Le pays « ${input.country} » n’est pas proposé.`,
+    });
+  }
+  if (!isCurrency(input.currency)) {
+    return err({
+      code: 'ORGANIZATION_CURRENCY_INVALID',
+      message: `La devise « ${input.currency} » n’est pas proposée.`,
+    });
+  }
+  return ok({ name, country: input.country, currency: input.currency });
 }

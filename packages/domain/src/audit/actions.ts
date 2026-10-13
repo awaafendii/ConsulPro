@@ -10,6 +10,7 @@ export const AUDIT_ACTIONS = [
   'auth.two_factor_enabled',
   'auth.two_factor_disabled',
   'organization.created',
+  'organization.updated',
   'organization.ownership_transferred',
   'member.role_changed',
   'member.removed',

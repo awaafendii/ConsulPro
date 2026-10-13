@@ -20,7 +20,10 @@ export default async function PricesPage({ params }: { params: Promise<{ orgSlug
   const ctx = await requireOrganization(orgSlug);
   const t = await getTranslations('prices');
   const tLibrary = await getTranslations('library');
-  const libraries = await getServer().infra.app.prices.list(ctx);
+  const { app } = getServer().infra;
+  const libraries = await app.prices.list(ctx);
+  // Devise proposée : celle de l'organisation (paramètres), modifiable à la création.
+  const organization = await app.organizations.current(ctx);
 
   return (
     <>
@@ -30,6 +33,7 @@ export default async function PricesPage({ params }: { params: Promise<{ orgSlug
         <PriceLibrariesView
           orgSlug={ctx.organization.slug}
           canManage={can(ctx.role, 'price.manage')}
+          defaultCurrency={organization.ok ? organization.value.currency : 'XOF'}
           libraries={libraries.value.map(priceLibraryDto)}
         />
       ) : (

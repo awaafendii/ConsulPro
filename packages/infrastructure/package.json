@@ -17,6 +17,7 @@
     "@consulpro/calc-btp": "workspace:*",
     "@consulpro/calc-core": "workspace:*",
     "@consulpro/calc-demo": "workspace:*",
+    "@consulpro/calc-elec": "workspace:*",
     "@consulpro/db": "workspace:*",
     "@consulpro/domain": "workspace:*",
     "@consulpro/standards": "workspace:*",

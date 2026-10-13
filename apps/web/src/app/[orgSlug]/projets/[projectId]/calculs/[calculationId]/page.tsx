@@ -79,6 +79,12 @@ export default async function CalculationPage({
   const linkable = canRun
     ? await app.calculations.linkableOutputs(ctx, project.id, calculation.id)
     : null;
+  // Jeux de données proposés aux entrées « jeu de données » du moteur.
+  const datasetKinds = new Set(
+    engine?.presentation.inputs.flatMap((i) => (i.kind === 'dataset' ? [i.datasetKind] : [])) ?? [],
+  );
+  const datasets =
+    canRun && datasetKinds.size > 0 ? await app.datasets.list(ctx, project.id) : null;
   // Formulaire pré-rempli avec la dernière saisie (révision courante).
   const current =
     calculation.current && calculation.current.id !== revision?.id
@@ -125,6 +131,19 @@ export default async function CalculationPage({
             engine={engineDto(engine)}
             initialInputs={lastInputs}
             linkable={linkable?.ok === true ? linkable.value.map(linkableOutputDto) : []}
+            datasets={
+              datasets?.ok === true
+                ? datasets.value
+                    .filter((d) => datasetKinds.has(d.kind))
+                    .map((d) => ({
+                      id: d.id,
+                      kind: d.kind,
+                      title: d.title,
+                      revisionNumber: d.current?.number ?? null,
+                      rowCount: d.current?.rowCount ?? 0,
+                    }))
+                : []
+            }
           />
         </Section>
       )}
@@ -186,6 +205,32 @@ export default async function CalculationPage({
                         title: d.sourceCalculationTitle,
                         number: d.sourceRevisionNumber,
                       })}
+                      {d.obsolete && (
+                        <span className="ml-2 font-medium text-warning-subtle-foreground">
+                          ({t('dependencyObsolete')})
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {revision.datasets.length > 0 && (
+              <div className="space-y-2">
+                <h3 className="font-medium">{t('datasetsRead')}</h3>
+                <ul className="list-inside list-disc text-sm">
+                  {revision.datasets.map((d) => (
+                    <li key={d.input}>
+                      <AppLink
+                        href={`${base}/donnees/${d.datasetId}`}
+                        className="text-primary underline-offset-4 hover:underline"
+                      >
+                        {t('datasetRead', {
+                          title: d.datasetTitle,
+                          number: d.datasetRevisionNumber,
+                          rows: d.rowCount,
+                        })}
+                      </AppLink>
                       {d.obsolete && (
                         <span className="ml-2 font-medium text-warning-subtle-foreground">
                           ({t('dependencyObsolete')})

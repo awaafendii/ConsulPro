@@ -26,6 +26,8 @@ import {
 import type { ApplicationDeps, Repositories } from '../ports';
 import type {
   CalculationListItem,
+  DatasetLinkEntry,
+  DatasetLinkRecord,
   DependencyEntry,
   DependencyRecord,
   ReviewRecord,
@@ -56,6 +58,15 @@ const isLink = (value: unknown): value is InputLink =>
   typeof (value as InputLink).fromCalculation === 'string' &&
   typeof (value as InputLink).output === 'string';
 
+/** Entrée lue dans la révision courante d'un jeu de données du projet. */
+interface DatasetInputLink {
+  readonly fromDataset: string;
+}
+const isDatasetLink = (value: unknown): value is DatasetInputLink =>
+  typeof value === 'object' &&
+  value !== null &&
+  typeof (value as DatasetInputLink).fromDataset === 'string';
+
 export interface CalculationSummary extends CalculationListItem {
   readonly engineTitle: string;
   readonly engineAvailable: boolean;
@@ -68,6 +79,8 @@ export interface RevisionView {
   readonly view: CalculationView;
   readonly reviews: readonly ReviewRecord[];
   readonly dependencies: readonly (DependencyRecord & { readonly obsolete: boolean })[];
+  /** Jeux de données lus ; `obsolete` : une révision plus récente du jeu existe. */
+  readonly datasets: readonly (DatasetLinkRecord & { readonly obsolete: boolean })[];
   readonly can: { readonly validate: boolean; readonly verify: boolean };
 }
 
@@ -82,6 +95,10 @@ export interface LinkableOutput {
 }
 
 const linkError = (message: string) => appError('VALIDATION', 'INPUT_LINK_INVALID', message);
+const datasetError = (input: string, message: string) =>
+  appError('VALIDATION', 'INPUT_DATASET_INVALID', message, [
+    { path: input, code: 'INPUT_DATASET_INVALID', message },
+  ]);
 
 export function createCalculationService({
   uow,
@@ -115,23 +132,67 @@ export function createCalculationService({
 
   /**
    * Remplace les entrées liées par la sortie de la révision courante de leur calcul source
-   * (même projet, résultat disponible). Renvoie les entrées résolues et les dépendances.
+   * (même projet, résultat disponible), et les entrées « jeu de données » par les lignes de
+   * la révision courante du jeu choisi. Renvoie les entrées résolues et les liens à tracer.
    */
   async function resolveLinks(
     repos: Repositories,
     pctx: ProjectContext,
     calculationId: string,
     rawInputs: Readonly<Record<string, unknown>>,
+    engine: AnyEngine,
   ): Promise<
     Result<
-      { inputs: Record<string, unknown>; links: Omit<DependencyEntry, 'revisionId'>[] },
+      {
+        inputs: Record<string, unknown>;
+        links: Omit<DependencyEntry, 'revisionId'>[];
+        datasets: Omit<DatasetLinkEntry, 'revisionId'>[];
+      },
       AppError
     >
   > {
     const orgId = pctx.organization.id;
     const inputs: Record<string, unknown> = {};
     const links: Omit<DependencyEntry, 'revisionId'>[] = [];
+    const datasets: Omit<DatasetLinkEntry, 'revisionId'>[] = [];
     for (const [key, value] of Object.entries(rawInputs)) {
+      const presentation = engine.presentation.inputs.find((i) => i.key === key);
+      if (presentation?.kind === 'dataset') {
+        // Traçabilité : une entrée « jeu de données » se lit toujours dans un jeu du projet.
+        if (!isDatasetLink(value)) {
+          return err(datasetError(key, 'Choisissez un jeu de données du projet.'));
+        }
+        const dataset = await repos.datasets.findById(orgId, pctx.project.id, value.fromDataset);
+        if (!dataset) return err(datasetError(key, 'Jeu de données introuvable dans le projet.'));
+        if (dataset.kind !== presentation.datasetKind) {
+          return err(
+            datasetError(
+              key,
+              `Le jeu « ${dataset.title} » n’est pas du type attendu par ce calcul.`,
+            ),
+          );
+        }
+        const revision = dataset.currentRevisionId
+          ? await repos.datasets.findRevision(orgId, dataset.id, dataset.currentRevisionId)
+          : null;
+        if (!revision) {
+          return err(
+            datasetError(
+              key,
+              `Le jeu « ${dataset.title} » n’a encore aucune révision enregistrée.`,
+            ),
+          );
+        }
+        inputs[key] = revision.rows;
+        datasets.push({
+          organizationId: orgId,
+          projectId: pctx.project.id,
+          input: key,
+          datasetId: dataset.id,
+          datasetRevisionId: revision.id,
+        });
+        continue;
+      }
       if (!isLink(value)) {
         inputs[key] = value;
         continue;
@@ -165,7 +226,7 @@ export function createCalculationService({
         output: value.output,
       });
     }
-    return ok({ inputs, links });
+    return ok({ inputs, links, datasets });
   }
 
   /** Paramètres du moteur : référentiels retenus pour le métier, surcharges org > projet. */
@@ -218,6 +279,10 @@ export function createCalculationService({
     const dependencies = (await repos.dependencies.listForRevision(orgId, revision.id)).map(
       (d) => ({ ...d, obsolete: isObsolete([d]) }),
     );
+    const datasets = (await repos.datasetLinks.listForRevision(orgId, revision.id)).map((d) => ({
+      ...d,
+      obsolete: d.datasetCurrentRevisionId !== d.datasetRevisionId,
+    }));
     const writable = pctx.project.status === 'ACTIVE';
     const author = revision.authorId === pctx.actor.userId;
     const review = (type: ReviewType) =>
@@ -234,6 +299,7 @@ export function createCalculationService({
       view: toCalculationView(revision),
       reviews,
       dependencies,
+      datasets,
       can: {
         validate:
           writable &&
@@ -475,7 +541,7 @@ export function createCalculationService({
           );
         }
 
-        const linked = await resolveLinks(repos, pctx, calculationId, rawInputs);
+        const linked = await resolveLinks(repos, pctx, calculationId, rawInputs, engine);
         if (!linked.ok) return linked;
         const params = await parametersFor(repos, pctx, engine, study.discipline);
         if (!params.ok) {
@@ -540,6 +606,9 @@ export function createCalculationService({
         });
         if (!created.ok) return err(staleVersion());
         await repos.dependencies.create(linked.value.links.map((l) => ({ ...l, revisionId: id })));
+        await repos.datasetLinks.create(
+          linked.value.datasets.map((d) => ({ ...d, revisionId: id })),
+        );
         if (
           !(await repos.calculations.setCurrentRevision(
             orgId,

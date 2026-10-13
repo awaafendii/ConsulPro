@@ -20,6 +20,7 @@ import {
   datasetDto,
   datasetKindDto,
   datasetRevisionDto,
+  elecDashboardDto,
   engineDto,
   linkableOutputDto,
   notificationDto,
@@ -396,6 +397,17 @@ export function createCalculationRoutes(deps: ServerDeps): RouteDefinition[] {
         return result.ok
           ? ok({ status: 201, body: datasetRevisionDto(result.value), etag: version + 1 })
           : result;
+      },
+    }),
+
+    // --- Tableau de bord Électricité -------------------------------------------------------
+    orgRoute(deps, 'project.read', {
+      id: 'elec.dashboard',
+      method: 'GET',
+      path: `${ORG}/elec/dashboard`,
+      async run({ ctx }) {
+        const result = await app.elecDashboard.get(ctx);
+        return result.ok ? ok({ status: 200, body: elecDashboardDto(result.value) }) : result;
       },
     }),
 

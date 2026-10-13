@@ -72,6 +72,11 @@ déclarée `additive` (matériau générique). `referenceCases` (cas rédigés /
 ingénieur) commande l'affichage « moteur non contre-vérifié ». Les entrées acceptent aussi des
 entiers et des listes de lignes (ouvertures, nomenclature d'aciers).
 
+Entrée « jeu de données » (Phase 5) : une entrée peut désigner un type de jeu de données du
+projet (`kind: 'dataset'`, ex. `ELEC_BOARD_TREE`). La saisie est `{ fromDataset: <id> }` ;
+le serveur lit la révision courante du jeu, la valide avec le schéma du moteur et trace la
+révision lue (`calculation_dataset_links`). Le moteur reste pur : il reçoit des lignes.
+
 ## 4. Étapes du pipeline
 
 | Étape            | Comportement                                                                                                                                                                                                                         | Échec ⇒                    |

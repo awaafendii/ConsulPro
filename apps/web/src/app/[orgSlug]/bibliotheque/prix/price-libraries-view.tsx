@@ -31,18 +31,20 @@ interface Props {
   readonly orgSlug: string;
   readonly canManage: boolean;
   readonly libraries: readonly PriceLibraryDto[];
+  /** Devise de l'organisation, proposée à la création. */
+  readonly defaultCurrency: string;
 }
 
 /** Date AAAA-MM-JJ affichée sans décalage de fuseau (date civile). */
 const civilDate = (value: string) => new Date(`${value}T12:00:00Z`);
 
-export function PriceLibrariesView({ orgSlug, canManage, libraries }: Props) {
+export function PriceLibrariesView({ orgSlug, canManage, libraries, defaultCurrency }: Props) {
   const t = useTranslations('prices');
   const locale = useLocale();
   const format = useFormatter();
   const router = useRouter();
   const [name, setName] = useState('');
-  const [currency, setCurrency] = useState<string>('XOF');
+  const [currency, setCurrency] = useState<string>(defaultCurrency);
   const [validFrom, setValidFrom] = useState('');
   const [nameError, setNameError] = useState<string | null>(null);
 

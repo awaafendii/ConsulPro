@@ -28,7 +28,12 @@ const privatePages = () => {
     datasetId,
     boqId,
     priceLibraryId,
+    elecProjectId,
+    elecDatasetId,
+    elecCalculationId,
   } = fixture();
+  const elec = `/${orgSlug}/projets/${elecProjectId}`;
+  const elecHeading = /^EL-.* — Clinique de Kaloum$/;
   const project = `/${orgSlug}/projets/${projectId}`;
   const projectHeading = `${projectCode} — Immeuble R+3 Plateau`;
   return [
@@ -48,6 +53,17 @@ const privatePages = () => {
     { name: 'quantitatifs', path: `${project}/quantitatifs`, heading: projectHeading },
     { name: 'quantitatif', path: `${project}/quantitatifs/${boqId}`, heading: projectHeading },
     { name: 'tableau de bord BTP', path: `/${orgSlug}/btp`, heading: 'BTP / Génie civil' },
+    {
+      name: 'tableau de bord Électricité',
+      path: `/${orgSlug}/electricite`,
+      heading: 'Électricité',
+    },
+    {
+      name: 'bilan de puissance',
+      path: `${elec}/calculs/${elecCalculationId}`,
+      heading: elecHeading,
+    },
+    { name: 'tableaux et départs', path: `${elec}/donnees/${elecDatasetId}`, heading: elecHeading },
     {
       name: 'prix unitaires',
       path: `/${orgSlug}/bibliotheque/prix`,
@@ -75,6 +91,11 @@ const privatePages = () => {
     },
     { name: 'tableau de bord', path: `/${orgSlug}/tableau-de-bord`, heading: 'Tableau de bord' },
     { name: 'membres', path: `/${orgSlug}/organisation/membres`, heading: 'Membres' },
+    {
+      name: 'paramètres de l’organisation',
+      path: `/${orgSlug}/organisation/parametres`,
+      heading: 'Paramètres de l’organisation',
+    },
     {
       name: 'journal d’audit',
       path: `/${orgSlug}/organisation/journal-audit`,

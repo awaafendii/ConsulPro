@@ -122,6 +122,24 @@ export interface DependencyRecord extends DependencyEntry {
   readonly sourceCurrentRevisionId: string | null;
 }
 
+/** Entrée d'une révision lue dans la révision d'un jeu de données du projet. */
+export interface DatasetLinkEntry {
+  readonly organizationId: string;
+  readonly projectId: string;
+  readonly revisionId: string;
+  readonly input: string;
+  readonly datasetId: string;
+  readonly datasetRevisionId: string;
+}
+
+export interface DatasetLinkRecord extends DatasetLinkEntry {
+  readonly datasetTitle: string;
+  readonly datasetRevisionNumber: number;
+  readonly rowCount: number;
+  /** Révision courante du jeu : différente de celle lue, le calcul est à refaire. */
+  readonly datasetCurrentRevisionId: string | null;
+}
+
 export interface DatasetRecord {
   readonly id: string;
   readonly organizationId: string;
@@ -223,7 +241,10 @@ export interface CalculationRepositories {
       revisionId: string,
       expectedVersion: number,
     ): Promise<boolean>;
-    /** Calculs dont la révision courante reprend une révision remplacée. */
+    /**
+     * Calculs dont la révision courante reprend une révision remplacée (d'un autre calcul ou
+     * d'un jeu de données).
+     */
     obsolete(organizationId: string, calculationIds: readonly string[]): Promise<Set<string>>;
   };
   readonly revisions: {
@@ -247,6 +268,11 @@ export interface CalculationRepositories {
   readonly dependencies: {
     create(entries: readonly DependencyEntry[]): Promise<void>;
     listForRevision(organizationId: string, revisionId: string): Promise<DependencyRecord[]>;
+  };
+  /** Jeux de données lus par les révisions (insertion seule). */
+  readonly datasetLinks: {
+    create(entries: readonly DatasetLinkEntry[]): Promise<void>;
+    listForRevision(organizationId: string, revisionId: string): Promise<DatasetLinkRecord[]>;
   };
   readonly datasets: {
     list(organizationId: string, projectId: string): Promise<DatasetListItem[]>;

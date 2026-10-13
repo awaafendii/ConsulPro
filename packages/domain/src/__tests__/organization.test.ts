@@ -7,7 +7,12 @@ import {
   checkRoleChange,
   type MemberChange,
 } from '../organization/membership-policy';
-import { validateNewOrganization } from '../organization/organization';
+import { COUNTRIES, COUNTRY_CODES } from '../organization/countries';
+import {
+  validateNewOrganization,
+  validateOrganizationSettings,
+} from '../organization/organization';
+import { isCurrency } from '../quantities/currency';
 
 describe('validateNewOrganization', () => {
   it('accepte et nettoie un nom et un identifiant valides', () => {
@@ -79,5 +84,35 @@ describe('invitation', () => {
       expect(codeOf(checkInvitation(role, 'TECHNICIAN')), role).toBe(expected);
     }
     expect(codeOf(checkInvitation('OWNER', 'OWNER'))).toBe('ROLE_NOT_ASSIGNABLE');
+  });
+});
+
+describe('paramètres d’organisation', () => {
+  it('la Guinée (GNF) est proposée ; chaque pays a une devise proposée', () => {
+    expect(COUNTRIES.GN.currency).toBe('GNF');
+    for (const code of COUNTRY_CODES) {
+      expect(code).toMatch(/^[A-Z]{2}$/);
+      expect(isCurrency(COUNTRIES[code].currency)).toBe(true);
+    }
+  });
+
+  it('nom nettoyé, pays facultatif, devise contrôlée', () => {
+    expect(
+      validateOrganizationSettings({ name: '  BET Conakry ', country: 'GN', currency: 'GNF' }),
+    ).toEqual({ ok: true, value: { name: 'BET Conakry', country: 'GN', currency: 'GNF' } });
+    expect(validateOrganizationSettings({ name: 'BET', country: null, currency: 'XOF' }).ok).toBe(
+      true,
+    );
+    const code = (input: { name: string; country: string | null; currency: string }) => {
+      const result = validateOrganizationSettings(input);
+      return result.ok ? null : result.error.code;
+    };
+    expect(code({ name: 'B', country: null, currency: 'XOF' })).toBe('ORGANIZATION_NAME_INVALID');
+    expect(code({ name: 'BET', country: 'gn', currency: 'GNF' })).toBe(
+      'ORGANIZATION_COUNTRY_INVALID',
+    );
+    expect(code({ name: 'BET', country: 'GN', currency: 'FCFA' })).toBe(
+      'ORGANIZATION_CURRENCY_INVALID',
+    );
   });
 });

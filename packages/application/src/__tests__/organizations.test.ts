@@ -92,6 +92,61 @@ describe('organisations', () => {
   });
 });
 
+describe('paramètres de l’organisation (décision Q3)', () => {
+  const guinea = { name: 'BET Conakry', country: 'GN', currency: 'GNF' };
+
+  it('nom, pays et devise modifiés par le propriétaire ; audit des seules différences', async () => {
+    const { ownerCtx } = await orgWithOwner();
+    const before = await app.organizations.current(ownerCtx);
+    expect(before).toMatchObject({
+      ok: true,
+      value: { currency: 'XOF', country: null, version: 1 },
+    });
+    const updated = await app.organizations.update(ownerCtx, guinea, 1);
+    expect(updated).toMatchObject({ ok: true, value: { ...guinea, version: 2 } });
+    const entry = store.state.audit.at(-1);
+    expect(entry?.action).toBe('organization.updated');
+    expect(entry?.metadata).toEqual({
+      name: { from: 'BET Sahel', to: 'BET Conakry' },
+      country: { from: null, to: 'GN' },
+      currency: { from: 'XOF', to: 'GNF' },
+    });
+    // Mêmes valeurs : aucune écriture, version inchangée.
+    const same = await app.organizations.update(ownerCtx, { ...guinea, name: ' BET Conakry ' }, 2);
+    expect(same).toMatchObject({ ok: true, value: { version: 2 } });
+    expect(store.state.audit.filter((a) => a.action === 'organization.updated')).toHaveLength(1);
+    // Les nouveaux quantitatifs reprennent la devise de l'organisation (boq-service).
+    expect(store.state.organizations[0]?.currency).toBe('GNF');
+  });
+
+  it('refus : version périmée, pays ou devise non proposés, nom invalide, permission', async () => {
+    const { ownerCtx } = await orgWithOwner();
+    expect(await app.organizations.update(ownerCtx, guinea, 7)).toMatchObject({
+      ok: false,
+      error: { kind: 'PRECONDITION_FAILED' },
+    });
+    expect(await app.organizations.update(ownerCtx, { ...guinea, country: 'ZZ' }, 1)).toMatchObject(
+      { ok: false, error: { reason: 'ORGANIZATION_COUNTRY_INVALID' } },
+    );
+    expect(
+      await app.organizations.update(ownerCtx, { ...guinea, currency: 'ABC' }, 1),
+    ).toMatchObject({ ok: false, error: { reason: 'ORGANIZATION_CURRENCY_INVALID' } });
+    expect(await app.organizations.update(ownerCtx, { ...guinea, name: 'X' }, 1)).toMatchObject({
+      ok: false,
+      error: { reason: 'ORGANIZATION_NAME_INVALID' },
+    });
+    const admin = await addMember(ownerCtx, 'admin@x.test', 'ADMIN');
+    const eng = await addMember(ownerCtx, 'eng@x.test', 'ENGINEER');
+    expect(await app.organizations.update(eng.ctx, guinea, 1)).toMatchObject({
+      ok: false,
+      error: { kind: 'FORBIDDEN' },
+    });
+    expect((await app.organizations.current(eng.ctx)).ok).toBe(true);
+    expect(await app.organizations.update(admin.ctx, guinea, 1)).toMatchObject({ ok: true });
+    expect(store.state.organizations[0]?.version).toBe(2);
+  });
+});
+
 describe('membres', () => {
   it('tout membre liste les membres', async () => {
     const { ownerCtx } = await orgWithOwner();

@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import {
   activityPageSchema,
   auditLogPageSchema,
+  elecDashboardSchema,
   invitationSchema,
   memberListSchema,
   meSchema,
@@ -262,6 +263,66 @@ describe('verrouillage optimiste (ETag / If-Match)', () => {
         })
       ).status,
     ).toBe(204);
+  });
+});
+
+describe('paramètres d’organisation et Électricité via l’API (Phase 5)', () => {
+  it('lecture avec ETag ; modification sous If-Match ; pays refusé ; réservée aux gestionnaires', async () => {
+    const slug = await h.createOrganization(owner);
+    const params = { orgSlug: slug };
+    const read = await h.call('organization.get', { actor: owner, params });
+    expect(read.status).toBe(200);
+    expect(read.headers.get('etag')).toBe('"1"');
+    expect(organizationSchema.parse(await read.json())).toMatchObject({
+      country: null,
+      currency: 'XOF',
+      version: 1,
+    });
+    const body = { name: 'BET Conakry', country: 'GN', currency: 'GNF' };
+    await expectProblem(
+      await h.call('organization.update', { actor: owner, params, body }),
+      428,
+      'PRECONDITION_REQUIRED',
+    );
+    await expectProblem(
+      await h.call('organization.update', {
+        actor: owner,
+        params,
+        body: { ...body, country: 'ZZ' },
+        headers: { 'if-match': '"1"' },
+      }),
+      400,
+      'ORGANIZATION_COUNTRY_INVALID',
+    );
+    const viewer = await h.addMember(slug, owner, 'VIEWER');
+    expect(
+      (
+        await h.call('organization.update', {
+          actor: viewer,
+          params,
+          body,
+          headers: { 'if-match': '"1"' },
+        })
+      ).status,
+    ).toBe(403);
+    const updated = await h.call('organization.update', {
+      actor: owner,
+      params,
+      body,
+      headers: { 'if-match': '"1"' },
+    });
+    expect(updated.status).toBe(200);
+    expect(updated.headers.get('etag')).toBe('"2"');
+    expect(organizationSchema.parse(await updated.json())).toMatchObject({ ...body, version: 2 });
+  });
+
+  it('tableau de bord Électricité : contrat respecté, moteurs non contre-vérifiés signalés', async () => {
+    const response = await h.call('elec.dashboard', { actor: owner, params: { orgSlug } });
+    expect(response.status).toBe(200);
+    const dashboard = elecDashboardSchema.parse(await response.json());
+    expect(dashboard.projects).toEqual([]);
+    expect(dashboard.engines.total).toBeGreaterThan(0);
+    expect(dashboard.engines.checkedCases).toBeLessThan(dashboard.engines.cases);
   });
 });
 

@@ -120,6 +120,7 @@ Append-only (trigger interdisant UPDATE et DELETE), écrit **dans la même trans
 que la mutation. Événements audités (au minimum) :
 
 - authentification : connexion réussie ou échouée, 2FA, réinitialisation de mot de passe ;
+- organisation : création, modification des paramètres (nom, pays, devise) ;
 - membres : invitation, changement de rôle, retrait, transfert de propriété ;
 - projets : création, modification, archivage, membres ;
 - calculs : nouvelle révision, validation, vérification, rejet ;

@@ -23,11 +23,20 @@ export const organizationSchema = z.object({
   country: z.string().nullable(),
   currency: z.string(),
   role: orgRoleSchema,
+  version: z.number().int().positive(),
   createdAt: z.iso.datetime(),
 });
 export type OrganizationDto = z.infer<typeof organizationSchema>;
 
 export const organizationListSchema = z.object({ items: z.array(organizationSchema) });
+
+/** Paramètres modifiables (If-Match obligatoire) ; pays et devise sont contrôlés par le domaine. */
+export const updateOrganizationBodySchema = z.object({
+  name: z.string().trim().min(2).max(120),
+  country: z.string().length(2).nullable(),
+  currency: z.string().length(3),
+});
+export type UpdateOrganizationBody = z.infer<typeof updateOrganizationBodySchema>;
 
 export const memberSchema = z.object({
   id: z.uuid(),

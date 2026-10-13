@@ -1,0 +1,665 @@
+{
+  "engine": "elec.circuit",
+  "parameterSet": {
+    "standard": "NFC15-100+UTE-C15-105",
+    "version": "2002+2003"
+  },
+  "cases": [
+    {
+      "id": "elec.circuit/mono-sockets-3.5kW-25m",
+      "engine": "elec.circuit",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "I_B = 16,908213 A ; I_n = 20 A ; k2 = 1,45 ; f_T = 0,94 ; f_G = 1 ; f = 0,94 ; I_z,tab requis = k2 I_n / (1,45 f) = 1,45 × 20 / (1,45 × 0,94) = 21,276596 A ; plus petite section du tableau 52H : 2,5 mm² (I_z,tab = 24 A) ; I_z corrigé = 24 × 0,94 = 22,56 A ; chute de tension (cuivre, L = 25 m, limite 5 %, amont 0 %) : S = 2,5 mm² : ΔU% = 2,990133 % ; section retenue 2,5 mm², I_z corrigé = 24 × 0,94 = 22,56 A ; b = 2 ; ρ1 = 0,0225 Ω·mm²/m ; λ = 0,08 mΩ/m ; sin φ = 0,43589 ; ΔU = 2 × (0,0225 × 25 / 2,5 × 0,9 + 0,00008 × 25 × 0,43589) × 16,908213 = 6,877307 V ; U0 = 230 V ; ΔU% = 100 ΔU / U0 = 2,990133 % → conforme.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "power": {
+          "value": 3.5,
+          "unit": "kW"
+        },
+        "system": "MONO",
+        "voltage": {
+          "value": 230,
+          "unit": "V"
+        },
+        "cosPhi": {
+          "value": 0.9,
+          "unit": "1"
+        },
+        "length": {
+          "value": 25,
+          "unit": "m"
+        },
+        "device": "BREAKER",
+        "method": "B",
+        "insulation": "PVC",
+        "ambient": {
+          "value": 35,
+          "unit": "degC"
+        },
+        "usage": "OTHER",
+        "supply": "PUBLIC_LV"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "current": {
+            "value": 16.90821256,
+            "tolerance": 0.000001
+          },
+          "rating": {
+            "value": 20,
+            "tolerance": 0.000001
+          },
+          "conventionalCurrent": {
+            "value": 29,
+            "tolerance": 0.000001
+          },
+          "thermalSection": {
+            "value": 2.5,
+            "tolerance": 0.000001
+          },
+          "section": {
+            "value": 2.5,
+            "tolerance": 0.000001
+          },
+          "izCorrected": {
+            "value": 22.56,
+            "tolerance": 0.000001
+          },
+          "voltageDropPercent": {
+            "value": 2.990133288,
+            "tolerance": 0.000001
+          },
+          "cumulativePercent": {
+            "value": 2.990133288,
+            "tolerance": 0.000001
+          },
+          "limitPercent": {
+            "value": 5,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "elec.protection.ib-le-in",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.protection.overload",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.voltage-drop.limit",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": [
+          "DEFAULT.circuits",
+          "DEFAULT.rating",
+          "DEFAULT.upstream",
+          "ELEC.COPPER",
+          "ELEC.LOADED_CONDUCTORS",
+          "ELEC.STEADY_STATE"
+        ]
+      }
+    },
+    {
+      "id": "elec.circuit/tri-15kW-150m-upsized-for-drop",
+      "engine": "elec.circuit",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "I_B = 25,471335 A ; I_n = 32 A ; k2 = 1,45 ; f_T = 0,91 ; f_G = 0,85 ; f = 0,7735 ; I_z,tab requis = k2 I_n / (1,45 f) = 1,45 × 32 / (1,45 × 0,7735) = 41,370394 A ; plus petite section du tableau 52H : 6 mm² (I_z,tab = 52 A) ; I_z corrigé = 52 × 0,7735 = 40,222 A ; chute de tension (cuivre, L = 150 m, limite 5 %, amont 2 %) : S = 6 mm² : ΔU% = 5,343159 % ; S = 10 mm² : ΔU% = 3,233784 % ; S = 16 mm² : ΔU% = 2,04726 % ; section retenue 16 mm², I_z corrigé = 96 × 0,7735 = 74,256 A ; b = 1 ; ρ1 = 0,0225 Ω·mm²/m ; λ = 0,08 mΩ/m ; sin φ = 0,526783 ; ΔU = 1 × (0,0225 × 150 / 16 × 0,85 + 0,00008 × 150 × 0,526783) × 25,471335 = 4,727945 V ; U0 = 230,940108 V ; ΔU% = 100 ΔU / U0 = 2,04726 % → conforme.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "power": {
+          "value": 15,
+          "unit": "kW"
+        },
+        "system": "TRI",
+        "voltage": {
+          "value": 400,
+          "unit": "V"
+        },
+        "cosPhi": {
+          "value": 0.85,
+          "unit": "1"
+        },
+        "length": {
+          "value": 150,
+          "unit": "m"
+        },
+        "device": "BREAKER",
+        "method": "C",
+        "insulation": "PR",
+        "ambient": {
+          "value": 40,
+          "unit": "degC"
+        },
+        "circuits": 2,
+        "arrangement": "SINGLE_LAYER",
+        "usage": "OTHER",
+        "supply": "PUBLIC_LV",
+        "upstream": {
+          "value": 2,
+          "unit": "%"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "current": {
+            "value": 25.471335405,
+            "tolerance": 0.000001
+          },
+          "rating": {
+            "value": 32,
+            "tolerance": 0.000001
+          },
+          "conventionalCurrent": {
+            "value": 46.4,
+            "tolerance": 0.000001
+          },
+          "thermalSection": {
+            "value": 6,
+            "tolerance": 0.000001
+          },
+          "section": {
+            "value": 16,
+            "tolerance": 0.000001
+          },
+          "izCorrected": {
+            "value": 74.256,
+            "tolerance": 0.000001
+          },
+          "voltageDropPercent": {
+            "value": 2.047260301,
+            "tolerance": 0.000001
+          },
+          "cumulativePercent": {
+            "value": 4.047260301,
+            "tolerance": 0.000001
+          },
+          "limitPercent": {
+            "value": 5,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "elec.protection.ib-le-in",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.protection.overload",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.voltage-drop.limit",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": [
+          "DEFAULT.rating",
+          "ELEC.COPPER",
+          "ELEC.LOADED_CONDUCTORS",
+          "ELEC.STEADY_STATE"
+        ]
+      }
+    },
+    {
+      "id": "elec.circuit/tri-lighting-fuse",
+      "engine": "elec.circuit",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "I_B = 5,773503 A ; I_n = 6 A ; k2 = 1,9 ; f_T = 1 ; f_G = 1 ; f = 1 ; I_z,tab requis = k2 I_n / (1,45 f) = 1,9 × 6 / (1,45 × 1) = 7,862069 A ; plus petite section du tableau 52H : 1,5 mm² (I_z,tab = 18,5 A) ; I_z corrigé = 18,5 × 1 = 18,5 A ; chute de tension (cuivre, L = 50 m, limite 3 %, amont 0,5 %) : S = 1,5 mm² : ΔU% = 1,875 % ; section retenue 1,5 mm², I_z corrigé = 18,5 × 1 = 18,5 A ; b = 1 ; ρ1 = 0,0225 Ω·mm²/m ; λ = 0,08 mΩ/m ; sin φ = 0 ; ΔU = 1 × (0,0225 × 50 / 1,5 × 1 + 0,00008 × 50 × 0) × 5,773503 = 4,330127 V ; U0 = 230,940108 V ; ΔU% = 100 ΔU / U0 = 1,875 % → conforme.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "power": {
+          "value": 4,
+          "unit": "kW"
+        },
+        "system": "TRI",
+        "voltage": {
+          "value": 400,
+          "unit": "V"
+        },
+        "cosPhi": {
+          "value": 1,
+          "unit": "1"
+        },
+        "length": {
+          "value": 50,
+          "unit": "m"
+        },
+        "device": "FUSE_GG",
+        "method": "E",
+        "insulation": "PVC",
+        "ambient": {
+          "value": 30,
+          "unit": "degC"
+        },
+        "circuits": 1,
+        "usage": "LIGHTING",
+        "supply": "PUBLIC_LV",
+        "upstream": {
+          "value": 0.5,
+          "unit": "%"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "current": {
+            "value": 5.773502692,
+            "tolerance": 0.000001
+          },
+          "rating": {
+            "value": 6,
+            "tolerance": 0.000001
+          },
+          "conventionalCurrent": {
+            "value": 11.4,
+            "tolerance": 0.000001
+          },
+          "thermalSection": {
+            "value": 1.5,
+            "tolerance": 0.000001
+          },
+          "section": {
+            "value": 1.5,
+            "tolerance": 0.000001
+          },
+          "izCorrected": {
+            "value": 18.5,
+            "tolerance": 0.000001
+          },
+          "voltageDropPercent": {
+            "value": 1.875,
+            "tolerance": 0.000001
+          },
+          "cumulativePercent": {
+            "value": 2.375,
+            "tolerance": 0.000001
+          },
+          "limitPercent": {
+            "value": 3,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "elec.protection.ib-le-in",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.protection.overload",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.voltage-drop.limit",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": [
+          "DEFAULT.rating",
+          "ELEC.COPPER",
+          "ELEC.LOADED_CONDUCTORS",
+          "ELEC.STEADY_STATE"
+        ]
+      }
+    },
+    {
+      "id": "elec.circuit/drop-unsolvable-2000m",
+      "engine": "elec.circuit",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "I_B = 17,391304 A ; I_n = 20 A ; k2 = 1,45 ; f_T = 1 ; f_G = 1 ; f = 1 ; I_z,tab requis = k2 I_n / (1,45 f) = 1,45 × 20 / (1,45 × 1) = 20 A ; plus petite section du tableau 52H : 2,5 mm² (I_z,tab = 24 A) ; I_z corrigé = 24 × 1 = 24 A ; chute de tension (cuivre, L = 2000 m, limite 3 %, amont 0 %) : S = 2,5 mm² : ΔU% = 272,21172 % ; S = 4 mm² : ΔU% = 170,132325 % ; S = 6 mm² : ΔU% = 113,42155 % ; S = 10 mm² : ΔU% = 68,05293 % ; S = 16 mm² : ΔU% = 42,533081 % ; S = 25 mm² : ΔU% = 27,221172 % ; S = 35 mm² : ΔU% = 19,443694 % ; S = 50 mm² : ΔU% = 13,610586 % ; S = 70 mm² : ΔU% = 9,721847 % ; S = 95 mm² : ΔU% = 7,163466 % ; S = 120 mm² : ΔU% = 5,671078 % ; section retenue 120 mm², I_z corrigé = 269 × 1 = 269 A ; b = 2 ; ρ1 = 0,0225 Ω·mm²/m ; λ = 0,08 mΩ/m ; sin φ = 0 ; ΔU = 2 × (0,0225 × 2000 / 120 × 1 + 0,00008 × 2000 × 0) × 17,391304 = 13,043478 V ; U0 = 230 V ; ΔU% = 100 ΔU / U0 = 5,671078 % → NON conforme.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "power": {
+          "value": 4,
+          "unit": "kW"
+        },
+        "system": "MONO",
+        "voltage": {
+          "value": 230,
+          "unit": "V"
+        },
+        "cosPhi": {
+          "value": 1,
+          "unit": "1"
+        },
+        "length": {
+          "value": 2000,
+          "unit": "m"
+        },
+        "device": "BREAKER",
+        "method": "B",
+        "insulation": "PVC",
+        "ambient": {
+          "value": 30,
+          "unit": "degC"
+        },
+        "circuits": 1,
+        "usage": "LIGHTING",
+        "supply": "PUBLIC_LV",
+        "upstream": {
+          "value": 0,
+          "unit": "%"
+        }
+      },
+      "expected": {
+        "resultStatus": "NON_COMPLIANT",
+        "outputs": {
+          "current": {
+            "value": 17.391304348,
+            "tolerance": 0.000001
+          },
+          "rating": {
+            "value": 20,
+            "tolerance": 0.000001
+          },
+          "conventionalCurrent": {
+            "value": 29,
+            "tolerance": 0.000001
+          },
+          "thermalSection": {
+            "value": 2.5,
+            "tolerance": 0.000001
+          },
+          "section": {
+            "value": 120,
+            "tolerance": 0.000001
+          },
+          "izCorrected": {
+            "value": 269,
+            "tolerance": 0.000001
+          },
+          "voltageDropPercent": {
+            "value": 5.671077505,
+            "tolerance": 0.000001
+          },
+          "cumulativePercent": {
+            "value": 5.671077505,
+            "tolerance": 0.000001
+          },
+          "limitPercent": {
+            "value": 3,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "elec.protection.ib-le-in",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.protection.overload",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.voltage-drop.limit",
+            "status": "FAIL"
+          }
+        ],
+        "hypotheses": [
+          "DEFAULT.rating",
+          "ELEC.COPPER",
+          "ELEC.LOADED_CONDUCTORS",
+          "ELEC.STEADY_STATE"
+        ]
+      }
+    },
+    {
+      "id": "elec.circuit/ib-equals-in-16A",
+      "engine": "elec.circuit",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "I_B = 16 A ; I_n = 16 A ; k2 = 1,45 ; f_T = 1 ; f_G = 1 ; f = 1 ; I_z,tab requis = k2 I_n / (1,45 f) = 1,45 × 16 / (1,45 × 1) = 16 A ; plus petite section du tableau 52H : 1,5 mm² (I_z,tab = 19,5 A) ; I_z corrigé = 19,5 × 1 = 19,5 A ; chute de tension (cuivre, L = 10 m, limite 5 %, amont 0 %) : S = 1,5 mm² : ΔU% = 2,086957 % ; section retenue 1,5 mm², I_z corrigé = 19,5 × 1 = 19,5 A ; b = 2 ; ρ1 = 0,0225 Ω·mm²/m ; λ = 0,08 mΩ/m ; sin φ = 0 ; ΔU = 2 × (0,0225 × 10 / 1,5 × 1 + 0,00008 × 10 × 0) × 16 = 4,8 V ; U0 = 230 V ; ΔU% = 100 ΔU / U0 = 2,086957 % → conforme.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "power": {
+          "value": 3.68,
+          "unit": "kW"
+        },
+        "system": "MONO",
+        "voltage": {
+          "value": 230,
+          "unit": "V"
+        },
+        "cosPhi": {
+          "value": 1,
+          "unit": "1"
+        },
+        "length": {
+          "value": 10,
+          "unit": "m"
+        },
+        "device": "BREAKER",
+        "method": "C",
+        "insulation": "PVC",
+        "ambient": {
+          "value": 30,
+          "unit": "degC"
+        },
+        "circuits": 1,
+        "usage": "OTHER",
+        "supply": "PUBLIC_LV",
+        "upstream": {
+          "value": 0,
+          "unit": "%"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "current": {
+            "value": 16,
+            "tolerance": 0.000001
+          },
+          "rating": {
+            "value": 16,
+            "tolerance": 0.000001
+          },
+          "conventionalCurrent": {
+            "value": 23.2,
+            "tolerance": 0.000001
+          },
+          "thermalSection": {
+            "value": 1.5,
+            "tolerance": 0.000001
+          },
+          "section": {
+            "value": 1.5,
+            "tolerance": 0.000001
+          },
+          "izCorrected": {
+            "value": 19.5,
+            "tolerance": 0.000001
+          },
+          "voltageDropPercent": {
+            "value": 2.086956522,
+            "tolerance": 0.000001
+          },
+          "cumulativePercent": {
+            "value": 2.086956522,
+            "tolerance": 0.000001
+          },
+          "limitPercent": {
+            "value": 5,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "elec.protection.ib-le-in",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.protection.overload",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.voltage-drop.limit",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": [
+          "DEFAULT.rating",
+          "ELEC.COPPER",
+          "ELEC.LOADED_CONDUCTORS",
+          "ELEC.STEADY_STATE"
+        ]
+      }
+    },
+    {
+      "id": "elec.circuit/grouped-without-arrangement",
+      "engine": "elec.circuit",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Deux circuits jointifs sans disposition précisée : entrée refusée.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "power": {
+          "value": 3,
+          "unit": "kW"
+        },
+        "system": "MONO",
+        "voltage": {
+          "value": 230,
+          "unit": "V"
+        },
+        "cosPhi": {
+          "value": 0.9,
+          "unit": "1"
+        },
+        "length": {
+          "value": 20,
+          "unit": "m"
+        },
+        "device": "BREAKER",
+        "method": "B",
+        "insulation": "PVC",
+        "ambient": {
+          "value": 30,
+          "unit": "degC"
+        },
+        "circuits": 2,
+        "usage": "OTHER",
+        "supply": "PUBLIC_LV"
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "arrangement",
+            "code": "ARRANGEMENT_REQUIRED"
+          }
+        ]
+      }
+    },
+    {
+      "id": "elec.circuit/missing-drop-limits",
+      "engine": "elec.circuit",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Limites de chute de tension absentes du référentiel : calcul refusé.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "omitParameters": ["elec.voltage_drop.limit"],
+      "inputs": {
+        "power": {
+          "value": 3,
+          "unit": "kW"
+        },
+        "system": "MONO",
+        "voltage": {
+          "value": 230,
+          "unit": "V"
+        },
+        "cosPhi": {
+          "value": 0.9,
+          "unit": "1"
+        },
+        "length": {
+          "value": 20,
+          "unit": "m"
+        },
+        "device": "BREAKER",
+        "method": "B",
+        "insulation": "PVC",
+        "ambient": {
+          "value": 30,
+          "unit": "degC"
+        },
+        "usage": "OTHER",
+        "supply": "PUBLIC_LV"
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.elec.voltage_drop.limit",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

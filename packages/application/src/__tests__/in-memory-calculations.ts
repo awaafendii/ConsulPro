@@ -7,6 +7,7 @@ import { err, ok } from '@consulpro/calc-core';
 import type {
   CalculationRecord,
   CalculationRepositories,
+  DatasetLinkEntry,
   DatasetRecord,
   DatasetRevisionRecord,
   DependencyEntry,
@@ -28,6 +29,7 @@ export interface CalculationState {
   revisions: Omit<RevisionRecord, 'authorName'>[];
   reviews: (Omit<ReviewRecord, 'reviewerName'> & { organizationId: string; projectId: string })[];
   dependencies: DependencyEntry[];
+  datasetLinks: DatasetLinkEntry[];
   datasets: DatasetRecord[];
   datasetRevisions: Omit<DatasetRevisionRecord, 'authorName'>[];
   notifications: (Omit<NotificationEntry, 'body' | 'link'> & NotificationRecord)[];
@@ -138,13 +140,20 @@ export function calculationRepositories(
         new Set(
           s.calculations
             .filter((c) => ids.includes(c.id))
-            .filter((c) =>
-              s.dependencies.some(
-                (d) =>
-                  d.revisionId === c.currentRevisionId &&
-                  s.calculations.find((x) => x.id === d.sourceCalculationId)?.currentRevisionId !==
-                    d.sourceRevisionId,
-              ),
+            .filter(
+              (c) =>
+                s.dependencies.some(
+                  (d) =>
+                    d.revisionId === c.currentRevisionId &&
+                    s.calculations.find((x) => x.id === d.sourceCalculationId)
+                      ?.currentRevisionId !== d.sourceRevisionId,
+                ) ||
+                s.datasetLinks.some(
+                  (l) =>
+                    l.revisionId === c.currentRevisionId &&
+                    s.datasets.find((x) => x.id === l.datasetId)?.currentRevisionId !==
+                      l.datasetRevisionId,
+                ),
             )
             .map((c) => c.id),
         ),
@@ -212,6 +221,25 @@ export function calculationRepositories(
               sourceRevisionNumber:
                 s.revisions.find((r) => r.id === d.sourceRevisionId)?.number ?? 0,
               sourceCurrentRevisionId: source?.currentRevisionId ?? null,
+            };
+          }),
+    },
+    datasetLinks: {
+      create: async (entries) => {
+        s.datasetLinks.push(...entries);
+      },
+      listForRevision: async (organizationId, revisionId) =>
+        s.datasetLinks
+          .filter((l) => l.organizationId === organizationId && l.revisionId === revisionId)
+          .map((l) => {
+            const dataset = s.datasets.find((d) => d.id === l.datasetId);
+            const revision = s.datasetRevisions.find((r) => r.id === l.datasetRevisionId);
+            return {
+              ...l,
+              datasetTitle: dataset?.title ?? '',
+              datasetRevisionNumber: revision?.number ?? 0,
+              rowCount: revision?.rowCount ?? 0,
+              datasetCurrentRevisionId: dataset?.currentRevisionId ?? null,
             };
           }),
     },

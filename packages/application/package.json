@@ -20,6 +20,7 @@
   "devDependencies": {
     "@consulpro/calc-btp": "workspace:*",
     "@consulpro/calc-demo": "workspace:*",
+    "@consulpro/calc-elec": "workspace:*",
     "@consulpro/config-eslint": "workspace:*",
     "@consulpro/config-typescript": "workspace:*",
     "@vitest/coverage-v8": "5.0.3",

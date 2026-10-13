@@ -51,8 +51,13 @@ function toRows(kind: DatasetKindDto, revision: DatasetRevisionDto | null): Row[
     cells: Object.fromEntries(
       kind.columns.map((c) => {
         const value = raw[c.key];
-        if (c.type === 'text')
+        if (c.type === 'text' || c.type === 'choice')
           return [c.key, { text: typeof value === 'string' ? value : '', unit: '' }];
+        if (c.type === 'number')
+          return [
+            c.key,
+            { text: typeof value === 'number' ? String(value).replace('.', ',') : '', unit: '' },
+          ];
         const q = value && typeof value === 'object' ? value : null;
         return [
           c.key,
@@ -113,14 +118,14 @@ export function DatasetEditor({
                   const cell = r.cells[c.key] ?? { text: '', unit: '' };
                   const text = cell.text.trim();
                   if (text === '') return [c.key, null];
+                  const number = Number(text.replace(/\s/g, '').replace(',', '.'));
                   return [
                     c.key,
-                    c.type === 'text'
+                    c.type === 'text' || c.type === 'choice'
                       ? text
-                      : {
-                          value: Number(text.replace(/\s/g, '').replace(',', '.')),
-                          unit: cell.unit,
-                        },
+                      : c.type === 'number'
+                        ? number
+                        : { value: number, unit: cell.unit },
                   ];
                 }),
               ),
@@ -200,10 +205,43 @@ export function DatasetEditor({
                           ? '—'
                           : c.type === 'text'
                             ? cell.text
-                            : withUnit(
-                                formatAuto(Number(cell.text.replace(',', '.'))),
-                                c.units.find((u) => u.symbol === cell.unit)?.display ?? cell.unit,
-                              )}
+                            : c.type === 'choice'
+                              ? (c.options.find((o) => o.value === cell.text)?.label ?? cell.text)
+                              : c.type === 'number'
+                                ? cell.text
+                                : withUnit(
+                                    formatAuto(Number(cell.text.replace(',', '.'))),
+                                    c.units.find((u) => u.symbol === cell.unit)?.display ??
+                                      cell.unit,
+                                  )}
+                      </TableCell>
+                    );
+                  }
+                  if (c.type === 'choice') {
+                    return (
+                      <TableCell key={c.key} className="min-w-40">
+                        <Select
+                          value={cell.text}
+                          onValueChange={(value) => {
+                            // Radix peut émettre '' quand la liste change : ignoré.
+                            if (value) setCell(row.id, c.key, { ...cell, text: value });
+                          }}
+                        >
+                          <SelectTrigger
+                            className="w-full"
+                            aria-label={name}
+                            aria-invalid={invalid(index, c.key) || undefined}
+                          >
+                            <SelectValue placeholder={t('choose')} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {c.options.map((o) => (
+                              <SelectItem key={o.value} value={o.value}>
+                                {o.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </TableCell>
                     );
                   }
@@ -212,7 +250,7 @@ export function DatasetEditor({
                       <div className="flex gap-1">
                         <Input
                           aria-label={name}
-                          inputMode={c.type === 'quantity' ? 'decimal' : 'text'}
+                          inputMode={c.type === 'text' ? 'text' : 'decimal'}
                           value={cell.text}
                           aria-invalid={invalid(index, c.key) || undefined}
                           onChange={(e) => {

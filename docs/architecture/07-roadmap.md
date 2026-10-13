@@ -162,7 +162,7 @@ flowchart LR
 
 ---
 
-## Phase 4 — BTP *(terminée le 2026-10-12, en revue)*
+## Phase 4 — BTP *(validée le 2026-10-13)*
 
 **Livrables** : moteurs `btp.*` ([03 §3.1](03-modules.md)), avant-métré, quantitatifs,
 décomposition en matériaux, bibliothèque de prix unitaires facultatifs, référentiel
@@ -216,15 +216,56 @@ accessibilité des six nouvelles pages en clair et en sombre, de 360 à 1920 px)
 
 ---
 
-## Phase 5 — Électricité
+## Phase 5 — Électricité *(validée le 2026-10-13)*
 
 **Livrables** : moteurs `elec.*`, arborescence tableaux / départs / équipements,
-référentiel NF C 15-100 + guide UTE C 15-105 (version tranchée par Q4), tableau de bord.
+référentiel NF C 15-100 + guide UTE C 15-105 (édition 2002 et amendements, Q4 tranchée le
+2026-10-13), tableau de bord. Q3 tranchée le 2026-10-13 : la Guinée (GNF) en priorité.
+
+- 6 moteurs : bilan de puissance (`elec.power-balance`), courant d'emploi, circuit complet
+  (I_B → I_n → section → chute de tension, section augmentée tant que la chute cumulée dépasse la
+  limite), section des câbles, chute de tension (cumul amont), protection (I_B ≤ I_n,
+  I2 ≤ 1,45 I_z, pouvoir de coupure si I_cc fourni, différentiel ≤ 30 mA sur les prises).
+- Jeu de données `ELEC_BOARD_TREE` (TGBT → tableaux → départs ; colonnes à choix et nombres)
+  contrôlé à l'enregistrement (repères uniques, une seule origine, amont tableau, boucles).
+- Entrée « jeu de données » d'un moteur : le serveur lit la révision courante du jeu choisi et
+  la trace (`calculation_dataset_links`, ajout seul) ; une nouvelle révision du jeu rend le
+  calcul obsolète, comme une dépendance entre calculs.
+- Référentiels `NFC15-100` (2002) et `UTE-C15-105` (2003) : courants admissibles (cuivre,
+  méthodes B, C, E), facteurs de température et de groupement, limites de chute de tension,
+  rapport I2 / I_z, k2 par dispositif et calibre, ks de distribution, ρ et λ. Toutes les valeurs
+  sont saisies par ConsulPro en citant leur tableau et restent « à vérifier » (Q4).
+- Tableau de bord Électricité de l'organisation ; module actif dans la navigation.
+- Paramètres de l'organisation (Q3) : nom, pays, devise proposée aux nouveaux quantitatifs et
+  bibliothèques de prix (Guinée → GNF préremplie), sous If-Match, audités.
 
 **Critères de sortie**
-- [ ] Seuils de tests atteints ; propriétés (monotonies, conditions I_B ≤ I_n ≤ I_z) vérifiées.
-- [ ] Mutation ≥ 80 % sur `elec.voltage-drop`, `elec.cable-sizing`, `elec.protection`.
-- [ ] Cas de référence contre-vérifiés par un ingénieur électricien (Q6).
+- [x] Seuils de tests atteints : 7 cas de référence par moteur (3 nominaux, 2 limites,
+  2 refus) ; couverture de `calc-elec` 100 % des lignes, 97 % des branches ; propriétés
+  (fast-check) : proportionnalités, monotonies de la chute et de la section, I_B ≤ I_n et
+  I2 ≤ 1,45 I_z dès qu'un calibre est retenu, P absorbée ≤ P installée.
+- [x] Mutation ≥ 80 % : 99,9 % sur `circuits.ts` (`elec.cable-sizing`, `elec.voltage-drop`,
+  `elec.protection`, `elec.circuit`) et `formulas.ts` (Stryker, `pnpm --filter
+  @consulpro/calc-elec test:mutation`). Les mutants équivalents sont annotés dans le code.
+- [x] Q3 et Q4 tranchées le 2026-10-13.
+- Reste la contre-vérification des cas par un ingénieur électricien (`checkedBy`, Q6) et le
+  contrôle des valeurs normatives sur un exemplaire des textes : moteurs affichés « non
+  contre-vérifiés », paramètres « à vérifier » dans chaque résultat et dans la bibliothèque.
+
+**Écarts et décisions**
+- Courants admissibles : âme cuivre, méthodes de référence B, C et E seulement (ni aluminium
+  pour I_z, ni méthodes D et F) ; la chute de tension accepte cuivre et aluminium.
+- Pas de courbes de déclenchement B / C / D : la protection contre les surcharges est vérifiée
+  par I2 = k2 · I_n ; les courts-circuits (I_cc, contraintes thermiques) ne sont pas calculés,
+  I_cc est une entrée facultative fournie par le distributeur ou une étude.
+- Le bilan de puissance lit l'arbre complet d'un jeu ; ks par tableau saisi ou, à défaut, lu
+  dans le référentiel selon le nombre de départs (hypothèse visible).
+- Un calcul ne lit qu'une révision de jeu de données par entrée ; aucune ligne n'est saisie
+  dans le formulaire de calcul (refus `INPUT_DATASET_INVALID`).
+- Le pays de l'organisation ne choisit aucun référentiel : la NF C 15-100 reste la référence
+  en Guinée tant qu'aucune norme nationale dérivée n'est retenue.
+- Stryker s'exécute avec le lanceur `command` (Vitest 5 n'active pas les mutants avec le
+  lanceur Vitest de Stryker 10 : résultats faussement « survivants »).
 
 ---
 

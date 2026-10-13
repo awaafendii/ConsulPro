@@ -78,6 +78,18 @@ export type InputPresentation =
       readonly maxItems: number;
       readonly optional?: boolean;
       readonly help?: string;
+    }
+  | {
+      /**
+       * Jeu de données du projet (ex. `ELEC_BOARD_TREE`) : l'application remplace la référence
+       * par les lignes de sa révision courante et trace la révision lue dans le calcul.
+       */
+      readonly key: string;
+      readonly label: string;
+      readonly kind: 'dataset';
+      readonly datasetKind: string;
+      readonly optional?: boolean;
+      readonly help?: string;
     };
 
 /**

@@ -1,0 +1,412 @@
+{
+  "engine": "elec.protection",
+  "parameterSet": {
+    "standard": "NFC15-100+UTE-C15-105",
+    "version": "2002+2003"
+  },
+  "cases": [
+    {
+      "id": "elec.protection/breaker-lighting",
+      "engine": "elec.protection",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "I_n = 20 A (plus petit calibre normalisé ≥ I_B) ; k2 = 1,45 ; I2 = 29 A ; 1,45 I_z = 1,45 × 22,56 = 32,712 A ; I_B ≤ I_n : 18 ≤ 20 ; I2 ≤ 1,45 I_z : 29 ≤ 32,712 → conforme.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "current": {
+          "value": 18,
+          "unit": "A"
+        },
+        "iz": {
+          "value": 22.56,
+          "unit": "A"
+        },
+        "device": "BREAKER",
+        "circuitType": "LIGHTING"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "rating": {
+            "value": 20,
+            "tolerance": 0.000001
+          },
+          "conventionalCurrent": {
+            "value": 29,
+            "tolerance": 0.000001
+          },
+          "overloadLimit": {
+            "value": 32.712,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "elec.protection.ib-le-in",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.protection.overload",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["DEFAULT.rating", "DEFAULT.shortCircuit", "ELEC.STEADY_STATE"]
+      }
+    },
+    {
+      "id": "elec.protection/sockets-rcd-30mA-icc",
+      "engine": "elec.protection",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "I_n = 16 A (saisi) ; k2 = 1,45 ; I2 = 23,2 A ; 1,45 I_z = 1,45 × 24 = 34,8 A ; I_B ≤ I_n : 14 ≤ 16 ; I2 ≤ 1,45 I_z : 23,2 ≤ 34,8 ; pouvoir de coupure 10 kA ≥ I_cc 6 kA ; différentiel 30 mA ≤ 30 mA → conforme.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "current": {
+          "value": 14,
+          "unit": "A"
+        },
+        "iz": {
+          "value": 24,
+          "unit": "A"
+        },
+        "device": "BREAKER",
+        "rating": {
+          "value": 16,
+          "unit": "A"
+        },
+        "circuitType": "SOCKETS",
+        "rcdSensitivity": {
+          "value": 30,
+          "unit": "mA"
+        },
+        "shortCircuit": {
+          "value": 6,
+          "unit": "kA"
+        },
+        "breakingCapacity": {
+          "value": 10,
+          "unit": "kA"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "rating": {
+            "value": 16,
+            "tolerance": 0.000001
+          },
+          "conventionalCurrent": {
+            "value": 23.2,
+            "tolerance": 0.000001
+          },
+          "overloadLimit": {
+            "value": 34.8,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "elec.protection.ib-le-in",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.protection.overload",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.protection.breaking-capacity",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.protection.rcd-sockets",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["ELEC.STEADY_STATE"]
+      }
+    },
+    {
+      "id": "elec.protection/fuse-overload-not-protected",
+      "engine": "elec.protection",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "I_n = 20 A (plus petit calibre normalisé ≥ I_B) ; k2 = 1,6 ; I2 = 32 A ; 1,45 I_z = 1,45 × 21 = 30,45 A ; I_B ≤ I_n : 20 ≤ 20 ; I2 ≤ 1,45 I_z : 32 ≤ 30,45 → NON conforme.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "current": {
+          "value": 20,
+          "unit": "A"
+        },
+        "iz": {
+          "value": 21,
+          "unit": "A"
+        },
+        "device": "FUSE_GG",
+        "circuitType": "OTHER"
+      },
+      "expected": {
+        "resultStatus": "NON_COMPLIANT",
+        "outputs": {
+          "rating": {
+            "value": 20,
+            "tolerance": 0.000001
+          },
+          "conventionalCurrent": {
+            "value": 32,
+            "tolerance": 0.000001
+          },
+          "overloadLimit": {
+            "value": 30.45,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "elec.protection.ib-le-in",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.protection.overload",
+            "status": "FAIL"
+          }
+        ],
+        "hypotheses": ["DEFAULT.rating", "DEFAULT.shortCircuit", "ELEC.STEADY_STATE"]
+      }
+    },
+    {
+      "id": "elec.protection/breaking-capacity-equal",
+      "engine": "elec.protection",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "I_n = 10 A (saisi) ; k2 = 1,45 ; I2 = 14,5 A ; 1,45 I_z = 1,45 × 13,5 = 19,575 A ; I_B ≤ I_n : 10 ≤ 10 ; I2 ≤ 1,45 I_z : 14,5 ≤ 19,575 ; pouvoir de coupure 6 kA ≥ I_cc 6 kA → conforme.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "current": {
+          "value": 10,
+          "unit": "A"
+        },
+        "iz": {
+          "value": 13.5,
+          "unit": "A"
+        },
+        "device": "BREAKER",
+        "rating": {
+          "value": 10,
+          "unit": "A"
+        },
+        "circuitType": "OTHER",
+        "shortCircuit": {
+          "value": 6,
+          "unit": "kA"
+        },
+        "breakingCapacity": {
+          "value": 6,
+          "unit": "kA"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "rating": {
+            "value": 10,
+            "tolerance": 0.000001
+          },
+          "conventionalCurrent": {
+            "value": 14.5,
+            "tolerance": 0.000001
+          },
+          "overloadLimit": {
+            "value": 19.575,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "elec.protection.ib-le-in",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.protection.overload",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.protection.breaking-capacity",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["ELEC.STEADY_STATE"]
+      }
+    },
+    {
+      "id": "elec.protection/ib-equals-in-sockets-without-rcd",
+      "engine": "elec.protection",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "I_n = 10 A (plus petit calibre normalisé ≥ I_B) ; k2 = 1,45 ; I2 = 14,5 A ; 1,45 I_z = 1,45 × 24 = 34,8 A ; I_B ≤ I_n : 10 ≤ 10 ; I2 ≤ 1,45 I_z : 14,5 ≤ 34,8 ; prises sans différentiel : NON conforme → NON conforme.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "current": {
+          "value": 10,
+          "unit": "A"
+        },
+        "iz": {
+          "value": 24,
+          "unit": "A"
+        },
+        "device": "BREAKER",
+        "circuitType": "SOCKETS"
+      },
+      "expected": {
+        "resultStatus": "NON_COMPLIANT",
+        "outputs": {
+          "rating": {
+            "value": 10,
+            "tolerance": 0.000001
+          },
+          "conventionalCurrent": {
+            "value": 14.5,
+            "tolerance": 0.000001
+          },
+          "overloadLimit": {
+            "value": 34.8,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "elec.protection.ib-le-in",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.protection.overload",
+            "status": "PASS"
+          },
+          {
+            "rule": "elec.protection.rcd-sockets",
+            "status": "FAIL"
+          }
+        ],
+        "hypotheses": ["DEFAULT.rating", "DEFAULT.shortCircuit", "ELEC.STEADY_STATE"]
+      }
+    },
+    {
+      "id": "elec.protection/short-circuit-without-capacity",
+      "engine": "elec.protection",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Courant de court-circuit fourni sans pouvoir de coupure : la comparaison est impossible, entrée refusée.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "inputs": {
+        "current": {
+          "value": 10,
+          "unit": "A"
+        },
+        "iz": {
+          "value": 24,
+          "unit": "A"
+        },
+        "device": "BREAKER",
+        "circuitType": "OTHER",
+        "shortCircuit": {
+          "value": 6,
+          "unit": "kA"
+        }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "breakingCapacity",
+            "code": "SHORT_CIRCUIT_PAIR"
+          }
+        ]
+      }
+    },
+    {
+      "id": "elec.protection/missing-k2-table",
+      "engine": "elec.protection",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Table des courants conventionnels des dispositifs absente du référentiel : calcul refusé.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NFC15-100+UTE-C15-105",
+        "version": "2002+2003"
+      },
+      "omitParameters": ["elec.protection.k2"],
+      "inputs": {
+        "current": {
+          "value": 10,
+          "unit": "A"
+        },
+        "iz": {
+          "value": 24,
+          "unit": "A"
+        },
+        "device": "BREAKER",
+        "circuitType": "OTHER"
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.elec.protection.k2",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

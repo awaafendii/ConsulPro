@@ -21,6 +21,7 @@ interface OrganizationRow {
   slug: string;
   country: string | null;
   currency: string;
+  version: number;
   createdAt: Date;
 }
 
@@ -30,6 +31,7 @@ const toOrganization = (o: OrganizationRow): OrganizationRecord => ({
   slug: o.slug,
   country: o.country,
   currency: o.currency,
+  version: o.version,
   createdAt: o.createdAt,
 });
 
@@ -87,6 +89,13 @@ export function createRepositories(tx: Tx): Repositories {
       async findById(id) {
         const o = await tx.organization.findUnique({ where: { id } });
         return o ? toOrganization(o) : null;
+      },
+      async update(id, { name, country, currency }, version) {
+        const { count } = await tx.organization.updateMany({
+          where: { id, version },
+          data: { name, country, currency, version: { increment: 1 } },
+        });
+        return count === 1;
       },
     },
 

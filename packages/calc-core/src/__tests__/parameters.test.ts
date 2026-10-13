@@ -166,6 +166,15 @@ describe('ParameterReader', () => {
     expect(() => r.scalar('opt', 'm')).toThrow(/absent/);
   });
 
+  it('lit les valeurs d’un axe numérique dans l’unité demandée', () => {
+    const r = reader();
+    expect(r.axisValues('tab', 'x', 'cm')).toEqual([0, 100]);
+    expect(r.usedKeys()).toEqual(['tab']);
+    expect(() => r.axisValues('tab', 'y', 'm')).toThrow(/axe numérique/);
+    expect(() => r.axisValues('tab', 'x', 'kg')).toThrow(/ne peut pas être lu/);
+    expect(() => r.axisValues('len', 'x', 'm')).toThrow(/n'est pas une table/);
+  });
+
   it('has() ne voit que les paramètres déclarés et présents', () => {
     const r = reader();
     expect(r.has('len')).toBe(true);

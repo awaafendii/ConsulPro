@@ -3,6 +3,7 @@ import type {
   AuditRecord,
   CalculationSummary,
   DatasetListItem,
+  ElecDashboard,
   LinkableOutput,
   DatasetRevisionRecord,
   NotificationRecord,
@@ -34,6 +35,7 @@ import type {
   DatasetDto,
   DatasetKindDto,
   DatasetRevisionDto,
+  ElecDashboardDto,
   EngineDto,
   NotificationDto,
   RevisionDto,
@@ -62,6 +64,7 @@ export const organizationDto = (o: MyOrganization): OrganizationDto => ({
   country: o.country,
   currency: o.currency,
   role: o.role,
+  version: o.version,
   createdAt: o.createdAt.toISOString(),
 });
 
@@ -309,6 +312,8 @@ export const engineDto = (e: AnyEngine): EngineDto => ({
               : { kind: 'integer' as const, key: f.key, label: f.label, min: f.min },
           ),
         };
+      case 'dataset':
+        return { ...common, kind: 'dataset', datasetKind: i.datasetKind };
     }
   }),
   outputs: e.presentation.outputs.map((o) => ({
@@ -369,6 +374,14 @@ export const revisionDto = (v: RevisionView): RevisionDto => ({
     input: d.input,
     obsolete: d.obsolete,
   })),
+  datasets: v.datasets.map((d) => ({
+    input: d.input,
+    datasetId: d.datasetId,
+    datasetTitle: d.datasetTitle,
+    datasetRevisionNumber: d.datasetRevisionNumber,
+    rowCount: d.rowCount,
+    obsolete: d.obsolete,
+  })),
   can: { ...v.can },
 });
 
@@ -377,11 +390,16 @@ export const datasetKindDto = (k: DatasetKind): DatasetKindDto => ({
   discipline: k.discipline,
   label: k.label,
   maxRows: k.maxRows,
-  columns: k.columns.map((c) =>
-    c.type === 'text'
-      ? { ...c }
-      : { ...c, units: c.units.map((symbol) => ({ symbol, display: display(symbol) })) },
-  ),
+  columns: k.columns.map((c) => {
+    switch (c.type) {
+      case 'quantity':
+        return { ...c, units: c.units.map((symbol) => ({ symbol, display: display(symbol) })) };
+      case 'choice':
+        return { ...c, options: c.options.map((o) => ({ ...o })) };
+      default:
+        return { ...c };
+    }
+  }),
 });
 
 export const datasetDto = (d: DatasetListItem): DatasetDto => ({
@@ -430,4 +448,15 @@ export const linkableOutputDto = (o: LinkableOutput) => ({
   value: o.value,
   unit: o.unit,
   unitKind: findUnit(o.unit)?.kind ?? 'dimensionless',
+});
+
+export const elecDashboardDto = (d: ElecDashboard): ElecDashboardDto => ({
+  projects: d.projects.map((p) => ({
+    project: { ...p.project },
+    calculations: { ...p.calculations },
+    powerBalances: p.powerBalances.map((b) => ({ ...b })),
+    nonCompliant: p.nonCompliant.map((c) => ({ ...c })),
+  })),
+  truncated: d.truncated,
+  engines: { ...d.engines },
 });

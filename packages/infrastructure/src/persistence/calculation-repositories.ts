@@ -191,11 +191,25 @@ export function createCalculationRepositories(tx: Tx): CalculationRepositories {
             revision: { select: { calculationId: true } },
           },
         });
-        return new Set(
-          rows
+        const datasetLinks = await tx.calculationDatasetLink.findMany({
+          where: {
+            organizationId,
+            revision: { currentOf: { id: { in: [...calculationIds] } } },
+          },
+          select: {
+            datasetRevisionId: true,
+            dataset: { select: { currentRevisionId: true } },
+            revision: { select: { calculationId: true } },
+          },
+        });
+        return new Set([
+          ...rows
             .filter((d) => d.sourceCalculation.currentRevisionId !== d.sourceRevisionId)
             .map((d) => d.revision.calculationId),
-        );
+          ...datasetLinks
+            .filter((l) => l.dataset.currentRevisionId !== l.datasetRevisionId)
+            .map((l) => l.revision.calculationId),
+        ]);
       },
     },
 
@@ -329,6 +343,34 @@ export function createCalculationRepositories(tx: Tx): CalculationRepositories {
           sourceCalculationTitle: d.sourceCalculation.title,
           sourceRevisionNumber: d.sourceRevision.number,
           sourceCurrentRevisionId: d.sourceCalculation.currentRevisionId,
+        }));
+      },
+    },
+
+    datasetLinks: {
+      async create(entries) {
+        if (entries.length > 0) await tx.calculationDatasetLink.createMany({ data: [...entries] });
+      },
+      async listForRevision(organizationId, revisionId) {
+        const rows = await tx.calculationDatasetLink.findMany({
+          where: { organizationId, revisionId },
+          include: {
+            dataset: { select: { title: true, currentRevisionId: true } },
+            datasetRevision: { select: { number: true, rowCount: true } },
+          },
+          orderBy: { input: 'asc' },
+        });
+        return rows.map((l) => ({
+          organizationId: l.organizationId,
+          projectId: l.projectId,
+          revisionId: l.revisionId,
+          input: l.input,
+          datasetId: l.datasetId,
+          datasetRevisionId: l.datasetRevisionId,
+          datasetTitle: l.dataset.title,
+          datasetRevisionNumber: l.datasetRevision.number,
+          rowCount: l.datasetRevision.rowCount,
+          datasetCurrentRevisionId: l.dataset.currentRevisionId,
         }));
       },
     },

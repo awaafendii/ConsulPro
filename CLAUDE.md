@@ -55,12 +55,15 @@ If-Match obligatoire sur PATCH et DELETE).
 - Radix Select peut émettre une valeur vide quand sa liste d'options change : ignorer `''` dans `onValueChange`.
 - Une route de projet (`projectRoute`) déclare sa permission pour la matrice ; l'accès au projet et le
   rôle effectif sont contrôlés par `inProject` (application), puis par la RLS.
-- Révisions, avis, dépendances et révisions de données : insertion seule (pas d'UPDATE pour le rôle
-  applicatif) ; ne jamais « corriger » une révision, en calculer une nouvelle.
+- Révisions, avis, dépendances, liens vers les jeux de données et révisions de données : insertion
+  seule (pas d'UPDATE pour le rôle applicatif) ; ne jamais « corriger » une révision, en calculer une nouvelle.
 - Moteurs de démonstration : `CONSULPRO_DEMO_ENGINES=true` (dev/test) ; refusés si l'environnement
   (`APP_ENV`, sinon `NODE_ENV`) est la production. Ils n'ont aucune valeur technique.
 - Sous Git Bash, les longs heredocs contenant des apostrophes échouent parfois : écrire le script
   dans un fichier puis l'exécuter.
+- Mutation (Stryker) : lanceur `command` obligatoire ; avec Vitest 5, le lanceur Vitest de Stryker
+  n'active aucun mutant (tous « survivent »). Annoter un mutant équivalent par
+  `// Stryker disable next-line <Mutateur>: raison`, jamais sans raison.
 
 ## État des phases
 
@@ -70,7 +73,8 @@ If-Match obligatoire sur PATCH et DELETE).
 | 1 — Foundation   | Validée (2026-10-08) |
 | 2 — Design System | Validée (2026-10-09) |
 | 3 — Projets, calcul, référentiels | Validée (2026-10-11) |
-| 4 — BTP (quantités) | Terminée, en revue (2026-10-12) |
-| 5 à 10           | À faire |
+| 4 — BTP (quantités) | Validée (2026-10-13) |
+| 5 — Électricité | Validée (2026-10-13) |
+| 6 à 10           | À faire |
 
 Critères de sortie de chaque phase : `docs/architecture/07-roadmap.md`.

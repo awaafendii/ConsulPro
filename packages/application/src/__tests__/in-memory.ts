@@ -54,6 +54,7 @@ const emptyState = (): State => ({
   revisions: [],
   reviews: [],
   dependencies: [],
+  datasetLinks: [],
   datasets: [],
   datasetRevisions: [],
   notifications: [],
@@ -106,11 +107,26 @@ export class InMemoryStore {
       organizations: {
         create: async ({ id, name, slug }) => {
           if (s.organizations.some((o) => o.slug === slug)) return err('SLUG_TAKEN');
-          const record = { id, name, slug, country: null, currency: 'XOF', createdAt: now() };
+          const record = {
+            id,
+            name,
+            slug,
+            country: null,
+            currency: 'XOF',
+            version: 1,
+            createdAt: now(),
+          };
           s.organizations.push(record);
           return ok(record);
         },
         findById: async (id) => s.organizations.find((o) => o.id === id) ?? null,
+        update: async (id, values, version) => {
+          const index = s.organizations.findIndex((o) => o.id === id && o.version === version);
+          const current = s.organizations[index];
+          if (!current) return false;
+          s.organizations[index] = { ...current, ...values, version: version + 1 };
+          return true;
+        },
       },
       memberships: {
         listOrganizationsOfUser: async (userId) =>

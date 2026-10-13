@@ -34,6 +34,15 @@ export interface LinkableOutputView {
   readonly unitKind: string;
 }
 
+/** Jeu de données du projet proposé pour une entrée de type « jeu de données ». */
+export interface DatasetOption {
+  readonly id: string;
+  readonly kind: string;
+  readonly title: string;
+  readonly revisionNumber: number | null;
+  readonly rowCount: number;
+}
+
 type Input = EngineDto['inputs'][number];
 interface Cell {
   readonly text: string;
@@ -46,7 +55,8 @@ interface Row {
 type Field =
   | { readonly mode: 'manual'; readonly value: string; readonly unit: string }
   | { readonly mode: 'link'; readonly link: string }
-  | { readonly mode: 'list'; readonly rows: readonly Row[] };
+  | { readonly mode: 'list'; readonly rows: readonly Row[] }
+  | { readonly mode: 'dataset'; readonly datasetId: string };
 
 interface Props {
   readonly orgSlug: string;
@@ -55,6 +65,7 @@ interface Props {
   readonly engine: EngineDto;
   readonly initialInputs: Readonly<Record<string, unknown>>;
   readonly linkable: readonly LinkableOutputView[];
+  readonly datasets: readonly DatasetOption[];
 }
 
 let nextRowId = 0;
@@ -92,7 +103,16 @@ function initialField(input: Input, raw: unknown): Field {
       link: linkKey({ calculationId: link.fromCalculation, output: link.output }),
     };
   }
+  if (typeof raw === 'object' && raw !== null && 'fromDataset' in raw) {
+    const link = raw;
+    return {
+      mode: 'dataset',
+      datasetId: typeof link.fromDataset === 'string' ? link.fromDataset : '',
+    };
+  }
   switch (input.kind) {
+    case 'dataset':
+      return { mode: 'dataset', datasetId: '' };
     case 'enum':
       return { mode: 'manual', value: typeof raw === 'string' ? raw : '', unit: '' };
     case 'integer':
@@ -121,6 +141,9 @@ function payload(input: Input, field: Field): unknown {
   if (field.mode === 'link') {
     const [fromCalculation, output] = field.link.split(':');
     return fromCalculation && output ? { fromCalculation, output } : undefined;
+  }
+  if (field.mode === 'dataset') {
+    return field.datasetId ? { fromDataset: field.datasetId } : undefined;
   }
   if (field.mode === 'list') {
     if (input.kind !== 'list') return undefined;
@@ -153,6 +176,7 @@ export function CalculationForm({
   engine,
   initialInputs,
   linkable,
+  datasets,
 }: Props) {
   const t = useTranslations('calculations');
   const router = useRouter();
@@ -226,7 +250,7 @@ export function CalculationForm({
           return (
             <fieldset
               key={input.key}
-              className={`min-w-0 space-y-2 rounded-lg border p-3 ${input.kind === 'list' ? 'lg:col-span-2' : ''}`}
+              className={`min-w-0 space-y-2 rounded-lg border p-3 ${input.kind === 'list' || input.kind === 'dataset' ? 'lg:col-span-2' : ''}`}
             >
               <legend className="px-1 text-sm font-medium">{input.label}</legend>
               {compatible.length > 0 && (
@@ -274,6 +298,18 @@ export function CalculationForm({
                     ))}
                   </SelectContent>
                 </Select>
+              ) : field.mode === 'dataset' && input.kind === 'dataset' ? (
+                <DatasetPicker
+                  id={id}
+                  label={input.label}
+                  value={field.datasetId}
+                  options={datasets.filter((d) => d.kind === input.datasetKind)}
+                  invalid={fieldErrors.length > 0}
+                  describedBy={described}
+                  onChange={(datasetId) => {
+                    set(input.key, { mode: 'dataset', datasetId });
+                  }}
+                />
               ) : field.mode === 'list' && input.kind === 'list' ? (
                 <ListEditor
                   inputKey={input.key}
@@ -365,6 +401,58 @@ export function CalculationForm({
         {run.isPending ? t('running') : t('run')}
       </Button>
     </form>
+  );
+}
+
+/** Choix d'un jeu de données du projet : sa révision courante est lue par le serveur. */
+function DatasetPicker({
+  id,
+  label,
+  value,
+  options,
+  invalid,
+  describedBy,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  value: string;
+  options: readonly DatasetOption[];
+  invalid: boolean;
+  describedBy: string | undefined;
+  onChange: (datasetId: string) => void;
+}) {
+  const t = useTranslations('calculations');
+  if (options.length === 0) {
+    return <p className="text-sm text-muted-foreground">{t('datasetNone')}</p>;
+  }
+  return (
+    <Select
+      value={value}
+      onValueChange={(next) => {
+        // Radix peut émettre '' quand la liste change : ignoré.
+        if (next) onChange(next);
+      }}
+    >
+      <SelectTrigger
+        id={id}
+        className="w-full"
+        aria-label={t('datasetOf', { label })}
+        aria-invalid={invalid || undefined}
+        aria-describedby={describedBy}
+      >
+        <SelectValue placeholder={t('datasetPlaceholder')} />
+      </SelectTrigger>
+      <SelectContent>
+        {options.map((d) => (
+          <SelectItem key={d.id} value={d.id} disabled={d.revisionNumber === null}>
+            {d.revisionNumber === null
+              ? t('datasetEmptyOption', { title: d.title })
+              : t('datasetOption', { title: d.title, number: d.revisionNumber, rows: d.rowCount })}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }
 

@@ -5,6 +5,7 @@ import {
   createInvitationBodySchema,
   createOrganizationBodySchema,
   updateMemberRoleBodySchema,
+  updateOrganizationBodySchema,
 } from '@consulpro/contracts';
 import { z } from 'zod';
 
@@ -68,6 +69,48 @@ export function createRoutes(deps: ServerDeps): RouteDefinition[] {
       async run({ ctx, body }) {
         const result = await app.organizations.create(ctx, body);
         return result.ok ? ok({ status: 201, body: organizationDto(result.value) }) : result;
+      },
+    }),
+
+    orgRoute(deps, 'org.read', {
+      id: 'organization.get',
+      method: 'GET',
+      path: ORG,
+      async run({ ctx }) {
+        const result = await app.organizations.current(ctx);
+        return result.ok
+          ? ok({
+              status: 200,
+              body: organizationDto({
+                ...result.value,
+                role: ctx.role,
+                membershipId: ctx.membershipId,
+              }),
+              etag: result.value.version,
+            })
+          : result;
+      },
+    }),
+
+    orgRoute(deps, 'org.update', {
+      id: 'organization.update',
+      method: 'PATCH',
+      path: ORG,
+      body: updateOrganizationBodySchema,
+      ifMatch: true,
+      async run({ ctx, body, version }) {
+        const result = await app.organizations.update(ctx, body, version);
+        return result.ok
+          ? ok({
+              status: 200,
+              body: organizationDto({
+                ...result.value,
+                role: ctx.role,
+                membershipId: ctx.membershipId,
+              }),
+              etag: result.value.version,
+            })
+          : result;
       },
     }),
 
