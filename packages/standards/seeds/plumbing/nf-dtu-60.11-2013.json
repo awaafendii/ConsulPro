@@ -1,0 +1,341 @@
+{
+  "standard": {
+    "code": "NF-DTU-60.11",
+    "title": "NF DTU 60.11 — Règles de calcul des installations de plomberie sanitaire et des installations d’évacuation des eaux pluviales",
+    "publisher": "AFNOR",
+    "discipline": "PLUMBING",
+    "nature": "NORM"
+  },
+  "version": {
+    "label": "2013",
+    "sourceNotes": "Partie 1-1 (alimentation en eau froide et chaude) et partie 2 (évacuation des eaux usées et vannes, méthode de la NF EN 12056-2, système I). Valeurs saisies par ConsulPro, toutes à vérifier (Q7)."
+  },
+  "parameters": [
+    {
+      "key": "plumbing.fixture.base_flow",
+      "label": "Débit de base des appareils sanitaires",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "fixture",
+            "kind": "CATEGORY",
+            "values": [
+              "SINK",
+              "WASHBASIN",
+              "HAND_BASIN",
+              "BIDET",
+              "BATHTUB",
+              "SHOWER",
+              "WC_CISTERN",
+              "WC_FLUSH_VALVE",
+              "URINAL",
+              "LAUNDRY_TUB",
+              "WASHING_MACHINE",
+              "DISHWASHER",
+              "TAP_15",
+              "TAP_20"
+            ]
+          }
+        ],
+        "unit": "L/s",
+        "cells": [0.2, 0.2, 0.1, 0.2, 0.33, 0.2, 0.12, 1.5, 0.15, 0.33, 0.2, 0.1, 0.33, 0.42]
+      },
+      "source": {
+        "document": "NF DTU 60.11 (août 2013)",
+        "clause": "P1-1",
+        "table": "Débits de base des appareils",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire du texte avant tout usage (décisions Q7 et Q8 du 2026-10-13)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.supply.min_inner_diameter",
+      "label": "Diamètre intérieur minimal de l’alimentation d’un appareil",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "fixture",
+            "kind": "CATEGORY",
+            "values": [
+              "SINK",
+              "WASHBASIN",
+              "HAND_BASIN",
+              "BIDET",
+              "BATHTUB",
+              "SHOWER",
+              "WC_CISTERN",
+              "WC_FLUSH_VALVE",
+              "URINAL",
+              "LAUNDRY_TUB",
+              "WASHING_MACHINE",
+              "DISHWASHER",
+              "TAP_15",
+              "TAP_20"
+            ]
+          }
+        ],
+        "unit": "mm",
+        "cells": [12, 10, 10, 10, 13, 12, 10, 20, 10, 13, 10, 10, 12, 16]
+      },
+      "source": {
+        "document": "NF DTU 60.11 (août 2013)",
+        "clause": "P1-1",
+        "table": "Diamètres minimaux des alimentations",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire du texte avant tout usage (décisions Q7 et Q8 du 2026-10-13)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.simultaneity.coefficient",
+      "label": "Coefficient a du coefficient de simultanéité y = a / √(x − 1)",
+      "kind": "SCALAR",
+      "value": 0.8,
+      "unit": "1",
+      "source": {
+        "document": "NF DTU 60.11 (août 2013)",
+        "clause": "P1-1",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire du texte avant tout usage (décisions Q7 et Q8 du 2026-10-13). Applicable à partir de deux appareils."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.supply.max_velocity",
+      "label": "Vitesse maximale de l’eau dans les canalisations",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "location",
+            "kind": "CATEGORY",
+            "values": ["FLOOR", "BASEMENT"]
+          }
+        ],
+        "unit": "m/s",
+        "cells": [1.5, 2]
+      },
+      "source": {
+        "document": "NF DTU 60.11 (août 2013)",
+        "clause": "P1-1",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire du texte avant tout usage (décisions Q7 et Q8 du 2026-10-13). En étage ; en sous-sol ou vide sanitaire."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.supply.max_pressure",
+      "label": "Pression statique maximale aux points de puisage",
+      "kind": "SCALAR",
+      "value": 300,
+      "unit": "kPa",
+      "source": {
+        "document": "NF DTU 60.11 (août 2013)",
+        "clause": "P1-1",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire du texte avant tout usage (décisions Q7 et Q8 du 2026-10-13). Au-delà : réducteur de pression."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.drainage.discharge_unit",
+      "label": "Débit unitaire d’évacuation des appareils (DU)",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "fixture",
+            "kind": "CATEGORY",
+            "values": [
+              "SINK",
+              "WASHBASIN",
+              "HAND_BASIN",
+              "BIDET",
+              "BATHTUB",
+              "SHOWER",
+              "WC_CISTERN",
+              "WC_FLUSH_VALVE",
+              "URINAL",
+              "LAUNDRY_TUB",
+              "WASHING_MACHINE",
+              "DISHWASHER",
+              "TAP_15",
+              "TAP_20"
+            ]
+          }
+        ],
+        "unit": "L/s",
+        "cells": [0.8, 0.5, 0.5, 0.5, 0.8, 0.6, 2.5, 2.5, 0.8, 0.8, 0.8, 0.8, 0.8, 1.5]
+      },
+      "source": {
+        "document": "NF DTU 60.11 (août 2013)",
+        "clause": "P2",
+        "table": "Débits unitaires (NF EN 12056-2, tableau 2, système I)",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire du texte avant tout usage (décisions Q7 et Q8 du 2026-10-13). WC : réservoir de 9 L ; postes d’eau : siphons de sol DN 50 et DN 70."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.drainage.frequency_factor",
+      "label": "Coefficient de fréquence d’utilisation K",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "usage",
+            "kind": "CATEGORY",
+            "values": ["DWELLING", "PUBLIC", "INTENSIVE", "SPECIAL"]
+          }
+        ],
+        "unit": "1",
+        "cells": [0.5, 0.7, 1, 1.2]
+      },
+      "source": {
+        "document": "NF DTU 60.11 (août 2013)",
+        "clause": "P2",
+        "table": "Coefficients K (NF EN 12056-2, tableau 3)",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire du texte avant tout usage (décisions Q7 et Q8 du 2026-10-13). Logements et bureaux ; hôpitaux, écoles, restaurants, hôtels ; toilettes et douches publiques ; laboratoires."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.drainage.min_inner_diameter",
+      "label": "Diamètre intérieur minimal de l’évacuation d’un appareil",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "fixture",
+            "kind": "CATEGORY",
+            "values": [
+              "SINK",
+              "WASHBASIN",
+              "HAND_BASIN",
+              "BIDET",
+              "BATHTUB",
+              "SHOWER",
+              "WC_CISTERN",
+              "WC_FLUSH_VALVE",
+              "URINAL",
+              "LAUNDRY_TUB",
+              "WASHING_MACHINE",
+              "DISHWASHER",
+              "TAP_15",
+              "TAP_20"
+            ]
+          }
+        ],
+        "unit": "mm",
+        "cells": [30, 30, 30, 30, 33, 30, 80, 80, 30, 33, 30, 30, 40, 60]
+      },
+      "source": {
+        "document": "NF DTU 60.11 (août 2013)",
+        "clause": "P2",
+        "table": "Diamètres minimaux des vidanges",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire du texte avant tout usage (décisions Q7 et Q8 du 2026-10-13)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.drainage.stack_capacity",
+      "label": "Débit admissible d’une chute à ventilation primaire",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "size",
+            "kind": "NUMERIC",
+            "unit": "mm",
+            "values": [75, 90, 110, 125, 160, 200],
+            "lookup": "EXACT"
+          }
+        ],
+        "unit": "L/s",
+        "cells": [1.5, 2.7, 4, 5.8, 9.5, 16]
+      },
+      "source": {
+        "document": "NF DTU 60.11 (août 2013)",
+        "clause": "P2",
+        "table": "Chutes à ventilation primaire (NF EN 12056-2, tableau 11)",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire du texte avant tout usage (décisions Q7 et Q8 du 2026-10-13). Diamètres extérieurs des tubes PVC assimilés aux DN 70, 90, 100, 125, 150 et 200 ; raccordements à angle vif."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.drainage.fill_ratio",
+      "label": "Taux de remplissage maximal des canalisations horizontales",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "role",
+            "kind": "CATEGORY",
+            "values": ["BRANCH", "COLLECTOR"]
+          }
+        ],
+        "unit": "1",
+        "cells": [0.5, 0.7]
+      },
+      "source": {
+        "document": "NF DTU 60.11 (août 2013)",
+        "clause": "P2",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire du texte avant tout usage (décisions Q7 et Q8 du 2026-10-13). Branchements ; collecteurs (NF EN 12056-2)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.drainage.min_slope",
+      "label": "Pente minimale des canalisations horizontales d’évacuation",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "role",
+            "kind": "CATEGORY",
+            "values": ["BRANCH", "COLLECTOR"]
+          }
+        ],
+        "unit": "%",
+        "cells": [1, 1]
+      },
+      "source": {
+        "document": "NF DTU 60.11 (août 2013)",
+        "clause": "P2",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire du texte avant tout usage (décisions Q7 et Q8 du 2026-10-13)."
+      },
+      "verification": "TO_VERIFY"
+    }
+  ],
+  "rules": [
+    {
+      "code": "plumbing.supply.velocity",
+      "description": "La vitesse de l’eau ne dépasse pas la vitesse maximale de l’emplacement.",
+      "severity": "BLOCKING",
+      "clause": "P1-1",
+      "parameterKeys": ["plumbing.supply.max_velocity"],
+      "implementation": "plumbing.pipe-sizing/velocity"
+    },
+    {
+      "code": "plumbing.supply.max-pressure",
+      "description": "La pression aux points de puisage ne dépasse pas la pression maximale.",
+      "severity": "WARNING",
+      "clause": "P1-1",
+      "parameterKeys": ["plumbing.supply.max_pressure"],
+      "implementation": "plumbing.pressure-check/max-pressure"
+    },
+    {
+      "code": "plumbing.drainage.capacity",
+      "description": "Le débit d’eaux usées n’excède pas le débit admissible de la canalisation.",
+      "severity": "BLOCKING",
+      "clause": "P2",
+      "parameterKeys": ["plumbing.drainage.stack_capacity", "plumbing.drainage.fill_ratio"],
+      "implementation": "plumbing.drainage/capacity"
+    },
+    {
+      "code": "plumbing.drainage.min-slope",
+      "description": "La pente d’une canalisation horizontale atteint la pente minimale.",
+      "severity": "BLOCKING",
+      "clause": "P2",
+      "parameterKeys": ["plumbing.drainage.min_slope"],
+      "implementation": "plumbing.drainage/min-slope"
+    }
+  ]
+}

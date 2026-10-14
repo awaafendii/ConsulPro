@@ -1,0 +1,64 @@
+{
+  "standard": {
+    "code": "NF-DTU-64.1",
+    "title": "NF DTU 64.1 — Dispositifs d’assainissement non collectif",
+    "publisher": "AFNOR",
+    "discipline": "PLUMBING",
+    "nature": "NORM"
+  },
+  "version": {
+    "label": "2013",
+    "sourceNotes": "Fosse toutes eaux d’une maison d’habitation (volume utile selon le nombre de pièces principales). Valeurs saisies par ConsulPro, toutes à vérifier (Q7)."
+  },
+  "parameters": [
+    {
+      "key": "plumbing.septic.base_volume",
+      "label": "Volume utile minimal d’une fosse toutes eaux",
+      "kind": "SCALAR",
+      "value": 3,
+      "unit": "m3",
+      "source": {
+        "document": "NF DTU 64.1 (mars 2013) et amendements",
+        "clause": "P1-1",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire du texte avant tout usage (décisions Q7 et Q8 du 2026-10-13). Jusqu’au nombre de pièces principales de référence."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.septic.base_rooms",
+      "label": "Nombre de pièces principales couvert par le volume minimal",
+      "kind": "SCALAR",
+      "value": 5,
+      "unit": "1",
+      "source": {
+        "document": "NF DTU 64.1 (mars 2013) et amendements",
+        "clause": "P1-1",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire du texte avant tout usage (décisions Q7 et Q8 du 2026-10-13)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.septic.volume_per_extra_room",
+      "label": "Volume supplémentaire par pièce principale au-delà de la référence",
+      "kind": "SCALAR",
+      "value": 1,
+      "unit": "m3",
+      "source": {
+        "document": "NF DTU 64.1 (mars 2013) et amendements",
+        "clause": "P1-1",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire du texte avant tout usage (décisions Q7 et Q8 du 2026-10-13)."
+      },
+      "verification": "TO_VERIFY"
+    }
+  ],
+  "rules": [
+    {
+      "code": "plumbing.septic.min-volume",
+      "description": "Le volume de la fosse atteint le volume utile minimal.",
+      "severity": "BLOCKING",
+      "clause": "P1-1",
+      "parameterKeys": ["plumbing.septic.base_volume"],
+      "implementation": "plumbing.septic-tank/min-volume"
+    }
+  ]
+}

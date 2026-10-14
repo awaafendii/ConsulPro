@@ -766,6 +766,12 @@ enum BoqItemOrigin {
   MANUAL
 }
 
+/// Présentation du DQE (décision Q9) : entrées ventilées détaillées ou agrégées par groupe.
+enum BoqPresentation {
+  DETAILED
+  AGGREGATED
+}
+
 /// Nœud de l'avant-métré : lot (racine), niveau ou ouvrage.
 model TakeoffNode {
   id             String          @id @db.Uuid
@@ -811,16 +817,17 @@ model TakeoffAssignment {
 
 /// Quantitatif (DQE) d'un projet ; sa structure est celle de l'avant-métré.
 model BillOfQuantities {
-  id             String    @id @db.Uuid
-  organizationId String    @map("organization_id") @db.Uuid
-  projectId      String    @map("project_id") @db.Uuid
+  id             String          @id @db.Uuid
+  organizationId String          @map("organization_id") @db.Uuid
+  projectId      String          @map("project_id") @db.Uuid
   title          String
-  currency       String    @db.Char(3)
-  version        Int       @default(1)
-  createdById    String    @map("created_by_id") @db.Uuid
-  syncedAt       DateTime? @map("synced_at") @db.Timestamptz(3)
-  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
-  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+  currency       String          @db.Char(3)
+  presentation   BoqPresentation @default(DETAILED)
+  version        Int             @default(1)
+  createdById    String          @map("created_by_id") @db.Uuid
+  syncedAt       DateTime?       @map("synced_at") @db.Timestamptz(3)
+  createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime        @updatedAt @map("updated_at") @db.Timestamptz(3)
 
   project   Project   @relation(fields: [projectId, organizationId], references: [id, organizationId], onDelete: Cascade)
   createdBy User      @relation("BoqCreator", fields: [createdById], references: [id])
@@ -841,6 +848,10 @@ model BoqItem {
   origin                BoqItemOrigin
   calculationId         String?       @map("calculation_id") @db.Uuid
   outputKey             String?       @map("output_key")
+  /// Entrée d'une sortie ventilée (ex. `PVC_PN16-32`) ; vide pour une sortie simple.
+  outputPart            String        @default("") @map("output_part")
+  /// Désignation du groupe de l'entrée (présentation agrégée).
+  groupDesignation      String?       @map("group_designation")
   sourceRevisionId      String?       @map("source_revision_id") @db.Uuid
   /// Ouvrage `<moteur>.<sortie>` : correspondance avec les bibliothèques de prix.
   workKey               String?       @map("work_key")
@@ -862,7 +873,7 @@ model BoqItem {
   sourceRevision CalculationRevision? @relation(fields: [sourceRevisionId, calculationId], references: [id, calculationId], onDelete: NoAction)
   priceItem      PriceItem?           @relation(fields: [priceItemId], references: [id], onDelete: SetNull)
 
-  @@unique([boqId, calculationId, outputKey])
+  @@unique([boqId, calculationId, outputKey, outputPart])
   @@index([boqId])
   @@index([nodeId])
   @@map("boq_items")

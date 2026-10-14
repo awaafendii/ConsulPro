@@ -1,0 +1,352 @@
+{
+  "engine": "plumbing.storage-tank",
+  "parameterSet": {
+    "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+    "version": "2013+2013+1+1"
+  },
+  "cases": [
+    {
+      "id": "plumbing.storage-tank/maison-10-habitants-cylindrique",
+      "engine": "plumbing.storage-tank",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V_j = 1,2 m³ ; V = V_j × 2 j × (1 + 0,1) = 2,64 m³ ; S = V / 2 m = 1,32 m² ; D = √(4S/π) = 1,296409 m.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "persons": 10,
+        "usage": "DWELLING",
+        "shape": "CYLINDRICAL",
+        "height": {
+          "value": 2,
+          "unit": "m"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "dailyVolume": {
+            "value": 1.2,
+            "tolerance": 0.000001
+          },
+          "volume": {
+            "value": 2.64,
+            "tolerance": 0.000001
+          },
+          "area": {
+            "value": 1.32,
+            "tolerance": 0.000001
+          },
+          "diameter": {
+            "value": 1.29640896289,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["DEFAULT.autonomy", "DEFAULT.reserve", "PLUMBING.STORAGE_USEFUL"]
+      }
+    },
+    {
+      "id": "plumbing.storage-tank/ecole-400-eleves-rectangulaire",
+      "engine": "plumbing.storage-tank",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V_j = 8 m³ ; V = V_j × 3 j × (1 + 0,15) = 27,6 m³ ; S = V / 2.5 m = 11,04 m² ; l = 4 m, L = S/l.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "persons": 400,
+        "usage": "SCHOOL",
+        "autonomy": {
+          "value": 3,
+          "unit": "d"
+        },
+        "reserve": {
+          "value": 15,
+          "unit": "%"
+        },
+        "shape": "RECTANGULAR",
+        "height": {
+          "value": 2.5,
+          "unit": "m"
+        },
+        "width": {
+          "value": 4,
+          "unit": "m"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "dailyVolume": {
+            "value": 8,
+            "tolerance": 0.000001
+          },
+          "volume": {
+            "value": 27.6,
+            "tolerance": 0.000001
+          },
+          "area": {
+            "value": 11.04,
+            "tolerance": 0.000001
+          },
+          "width": {
+            "value": 4,
+            "tolerance": 0.000001
+          },
+          "length": {
+            "value": 2.76,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["PLUMBING.STORAGE_USEFUL"]
+      }
+    },
+    {
+      "id": "plumbing.storage-tank/debit-journalier-saisi",
+      "engine": "plumbing.storage-tank",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V_j = 6,5 m³ ; V = V_j × 2 j × (1 + 0,1) = 14,3 m³ ; S = V / 1.8 m = 7,944444 m² ; l = 2,818589 m, L = S/l.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "dailyVolume": {
+          "value": 6500,
+          "unit": "L"
+        },
+        "shape": "RECTANGULAR",
+        "height": {
+          "value": 1.8,
+          "unit": "m"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "dailyVolume": {
+            "value": 6.5,
+            "tolerance": 0.000001
+          },
+          "volume": {
+            "value": 14.3,
+            "tolerance": 0.000001
+          },
+          "area": {
+            "value": 7.94444444444,
+            "tolerance": 0.000001
+          },
+          "width": {
+            "value": 2.81858908755,
+            "tolerance": 0.000001
+          },
+          "length": {
+            "value": 2.81858908755,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["DEFAULT.autonomy", "DEFAULT.reserve", "PLUMBING.STORAGE_USEFUL"]
+      }
+    },
+    {
+      "id": "plumbing.storage-tank/autonomie-courte-sans-reserve",
+      "engine": "plumbing.storage-tank",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V_j = 2,4 m³ ; V = V_j × 0,5 j × (1 + 0) = 1,2 m³ ; S = V / 1 m = 1,2 m² ; D = √(4S/π) = 1,236077 m.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "dailyVolume": {
+          "value": 2.4,
+          "unit": "m3"
+        },
+        "autonomy": {
+          "value": 12,
+          "unit": "h"
+        },
+        "reserve": {
+          "value": 0,
+          "unit": "%"
+        },
+        "shape": "CYLINDRICAL",
+        "height": {
+          "value": 1,
+          "unit": "m"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK",
+        "outputs": {
+          "dailyVolume": {
+            "value": 2.4,
+            "tolerance": 0.000001
+          },
+          "volume": {
+            "value": 1.2,
+            "tolerance": 0.000001
+          },
+          "area": {
+            "value": 1.2,
+            "tolerance": 0.000001
+          },
+          "diameter": {
+            "value": 1.23607744647,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["PLUMBING.STORAGE_USEFUL"]
+      }
+    },
+    {
+      "id": "plumbing.storage-tank/centre-de-sante-40-lits",
+      "engine": "plumbing.storage-tank",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V_j = 16 m³ ; V = V_j × 2 j × (1 + 0,1) = 35,2 m³ ; S = V / 3 m = 11,733333 m² ; l = 3,425395 m, L = S/l.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "persons": 40,
+        "usage": "HEALTH",
+        "shape": "RECTANGULAR",
+        "height": {
+          "value": 3,
+          "unit": "m"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "dailyVolume": {
+            "value": 16,
+            "tolerance": 0.000001
+          },
+          "volume": {
+            "value": 35.2,
+            "tolerance": 0.000001
+          },
+          "area": {
+            "value": 11.7333333333,
+            "tolerance": 0.000001
+          },
+          "width": {
+            "value": 3.42539535431,
+            "tolerance": 0.000001
+          },
+          "length": {
+            "value": 3.42539535431,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["DEFAULT.autonomy", "DEFAULT.reserve", "PLUMBING.STORAGE_USEFUL"]
+      }
+    },
+    {
+      "id": "plumbing.storage-tank/besoin-manquant",
+      "engine": "plumbing.storage-tank",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Ni consommation journalière, ni usagers : entrée refusée.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "shape": "RECTANGULAR",
+        "height": {
+          "value": 2,
+          "unit": "m"
+        }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "persons",
+            "code": "DEMAND_REQUIRED"
+          }
+        ]
+      }
+    },
+    {
+      "id": "plumbing.storage-tank/sans-consommations",
+      "engine": "plumbing.storage-tank",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Référentiel sans consommations journalières : calcul refusé.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "omitParameters": ["plumbing.consumption.daily"],
+      "inputs": {
+        "persons": 10,
+        "usage": "DWELLING",
+        "shape": "CYLINDRICAL",
+        "height": {
+          "value": 2,
+          "unit": "m"
+        }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.plumbing.consumption.daily",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

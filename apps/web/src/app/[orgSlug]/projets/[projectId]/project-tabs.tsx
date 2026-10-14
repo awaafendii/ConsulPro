@@ -15,15 +15,15 @@ const TABS = [
   { id: 'studies', path: '/etudes' },
   { id: 'data', path: '/donnees' },
   // Onglets du métier BTP (Phase 4), présents si le métier est activé.
-  { id: 'takeoff', path: '/avant-metre', btp: true },
-  { id: 'quantities', path: '/quantitatifs', btp: true },
+  { id: 'takeoff', path: '/avant-metre', quantities: true },
+  { id: 'quantities', path: '/quantitatifs', quantities: true },
   { id: 'members', path: '/membres' },
   { id: 'standards', path: '/referentiels' },
   { id: 'activity', path: '/activite' },
   { id: 'settings', path: '/parametres' },
 ] as const;
 
-export function ProjectTabs({ base, btp }: { base: string; btp: boolean }) {
+export function ProjectTabs({ base, quantities }: { base: string; quantities: boolean }) {
   const t = useTranslations('project.tabs');
   const tCommon = useTranslations('common');
   const pathname = usePathname();
@@ -31,7 +31,7 @@ export function ProjectTabs({ base, btp }: { base: string; btp: boolean }) {
   return (
     <nav aria-label={t('label')} className="mb-6 overflow-x-auto border-b">
       <ul className="flex min-w-max gap-1">
-        {TABS.filter((tab) => btp || !('btp' in tab)).map((tab) => {
+        {TABS.filter((tab) => quantities || !('quantities' in tab)).map((tab) => {
           const href = `${base}${tab.path}`;
           // Les pages de calcul relèvent de l'onglet Études.
           const active =

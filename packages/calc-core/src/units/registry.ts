@@ -33,7 +33,15 @@ export type UnitKind =
   /** Masse surfacique (consommation de colle : kg/m²). */
   | 'surfaceDensity'
   /** Masse linéique (aciers : kg/m). */
-  | 'linearDensity';
+  | 'linearDensity'
+  /** Viscosité cinématique (eau : m²/s). */
+  | 'kinematicViscosity'
+  /** Capacité thermique massique (eau : J/(kg·K)). */
+  | 'specificHeat'
+  /** Perte de charge linéique (Pa/m). */
+  | 'pressureGradient'
+  /** Coefficient de Strickler (m^(1/3)/s). */
+  | 'strickler';
 
 export interface UnitDefinition {
   /** Identifiant ASCII stable, utilisé dans les données (ex. `mm2`). */
@@ -79,6 +87,8 @@ export const UNITS = {
   min: unit('min', 'min', 'time', 60),
   h: unit('h', 'h', 'time', 3600),
   d: unit('d', 'j', 'time', 86400),
+  // Année conventionnelle de 365 jours.
+  a: unit('a', 'an', 'time', 365 * 86400),
 
   A: unit('A', 'A', 'current', 1),
   mA: unit('mA', 'mA', 'current', 1e-3),
@@ -114,9 +124,13 @@ export const UNITS = {
   'L/s': unit('L/s', 'L/s', 'flowRate', 1e-3),
   'L/min': unit('L/min', 'L/min', 'flowRate', 1e-3 / 60),
   'L/h': unit('L/h', 'L/h', 'flowRate', 1e-3 / 3600),
+  'L/d': unit('L/d', 'L/j', 'flowRate', 1e-3 / 86400),
+  'm3/d': unit('m3/d', 'm³/j', 'flowRate', 1 / 86400),
+  'L/a': unit('L/a', 'L/an', 'flowRate', 1e-3 / (365 * 86400)),
 
   'm/s': unit('m/s', 'm/s', 'velocity', 1),
   'km/h': unit('km/h', 'km/h', 'velocity', 1 / 3.6),
+  'mm/h': unit('mm/h', 'mm/h', 'velocity', 1e-3 / 3600),
 
   rad: unit('rad', 'rad', 'angle', 1),
   deg: unit('deg', '°', 'angle', Math.PI / 180),
@@ -147,6 +161,17 @@ export const UNITS = {
   'kg/m2': unit('kg/m2', 'kg/m²', 'surfaceDensity', 1),
 
   'kg/m': unit('kg/m', 'kg/m', 'linearDensity', 1),
+
+  'm2/s': unit('m2/s', 'm²/s', 'kinematicViscosity', 1),
+  'mm2/s': unit('mm2/s', 'mm²/s', 'kinematicViscosity', 1e-6),
+
+  'J/kgK': unit('J/kgK', 'J/(kg·K)', 'specificHeat', 1),
+  'kJ/kgK': unit('kJ/kgK', 'kJ/(kg·K)', 'specificHeat', 1e3),
+
+  'Pa/m': unit('Pa/m', 'Pa/m', 'pressureGradient', 1),
+  'kPa/m': unit('kPa/m', 'kPa/m', 'pressureGradient', 1e3),
+
+  'm1/3/s': unit('m1/3/s', 'm^(1/3)/s', 'strickler', 1),
 } as const satisfies Record<string, UnitDefinition>;
 
 export type UnitSymbol = keyof typeof UNITS;

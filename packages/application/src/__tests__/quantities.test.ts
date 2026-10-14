@@ -222,7 +222,7 @@ describe('avant-métré', () => {
         code: '1',
         title: 'Lot',
       }),
-    ).toMatchObject({ ok: false, error: { reason: 'BTP_DISCIPLINE_INACTIVE' } });
+    ).toMatchObject({ ok: false, error: { reason: 'TAKEOFF_DISCIPLINE_INACTIVE' } });
   });
 
   it('rattachement des calculs BTP : rattacher, déplacer, détacher', async () => {
@@ -267,7 +267,7 @@ describe('avant-métré', () => {
     store.state.calculations.push(elecCalc);
     expect(await assign(lot.id, elecCalc.id)).toMatchObject({
       ok: false,
-      error: { reason: 'TAKEOFF_CALCULATION_NOT_BTP' },
+      error: { reason: 'TAKEOFF_CALCULATION_NOT_QUANTIFIABLE' },
     });
     expect(
       await app.takeoff.assign(w.collaborator.ctx, w.project.id, footing.id, lot.id),

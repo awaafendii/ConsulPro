@@ -23,11 +23,12 @@ describe('registre des modules', () => {
       'library',
       'btp',
       'electricity',
+      'plumbing',
       'members',
       'audit',
       'settings',
     ]);
     expect(isModuleAvailable({ id: 'x', section: 'workspace', path: 'x', phase: 3 }, 3)).toBe(true);
-    expect(LATEST_DELIVERED_PHASE).toBe(5);
+    expect(LATEST_DELIVERED_PHASE).toBe(6);
   });
 });

@@ -115,6 +115,13 @@ Point d'attention : la distribution par **réservoir surélevé + surpresseur** 
 **fosses septiques avec puisard** sont courantes. Les moteurs les traitent comme des
 cas de première classe, pas comme des exceptions.
 
+Mise en œuvre (Phase 6) : référentiels NF DTU 60.11 et 64.1 (2013, Q7), dimensions et rugosités
+des tubes PVC, PPR, PEHD, cuivre et acier galvanisé (Q8), usages courants. Le réseau
+d'alimentation lit le jeu `PLUMBING_NETWORK` (un tronçon par ligne) ; les débits peuvent lire
+l'inventaire `SANITARY_FIXTURES`. Les linéaires de tubes, les appareils et les chauffe-eau sont
+des sorties ventilées : une ligne de DQE par diamètre ou par modèle, présentation agrégée au choix
+(Q9, ADR-0011). L'avant-métré et les quantitatifs servent le BTP et la plomberie.
+
 ### 3.4 Topographie — Phase 7
 
 Conventions métier francophones retenues par défaut (paramétrables) : angles en

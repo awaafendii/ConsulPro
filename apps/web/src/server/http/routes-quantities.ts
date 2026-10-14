@@ -345,7 +345,7 @@ export function createQuantityRoutes(deps: ServerDeps): RouteDefinition[] {
         return result.ok
           ? ok({
               status: 200,
-              body: priceLibraryDetailDto(result.value, app.prices.works()),
+              body: priceLibraryDetailDto(result.value, result.value.works),
               etag: result.value.library.version,
             })
           : result;

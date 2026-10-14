@@ -1,0 +1,407 @@
+{
+  "engine": "plumbing.drainage",
+  "parameterSet": {
+    "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+    "version": "2013+2013+1+1"
+  },
+  "cases": [
+    {
+      "id": "plumbing.drainage/salle-de-bain-branchement",
+      "engine": "plumbing.drainage",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "ΣDU = 1 × 0,5 + 1 × 0,6 + 1 × 0,5 = 1,6 L/s ; K = 0.5 ; Q_ww = max(K√ΣDU = 0,632456 ; DU_max = 0.6) = 0,632456 L/s ; D_int ≥ 30 mm ; Manning-Strickler (K_s = 100, h/D = 0.5, I = 1.5 %) : PVC Ø63 (D_int 57 mm) évacue 0,91847 L/s ≥ Q_ww.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "washbasin": 1,
+        "shower": 1,
+        "bidet": 1,
+        "usage": "DWELLING",
+        "role": "BRANCH",
+        "slope": {
+          "value": 1.5,
+          "unit": "%"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "dischargeUnits": {
+            "value": 1.6,
+            "tolerance": 0.000001
+          },
+          "wastewaterFlow": {
+            "value": 0.632455532034,
+            "tolerance": 0.000001
+          },
+          "size": {
+            "value": 63,
+            "tolerance": 0.000001
+          },
+          "innerDiameter": {
+            "value": 57,
+            "tolerance": 0.000001
+          },
+          "capacity": {
+            "value": 0.918470339714,
+            "tolerance": 0.000001
+          },
+          "minSlope": {
+            "value": 1,
+            "tolerance": 0.000001
+          },
+          "fillRatio": {
+            "value": 0.5,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "plumbing.drainage.capacity",
+            "status": "PASS"
+          },
+          {
+            "rule": "plumbing.drainage.min-slope",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["PLUMBING.PVC_DRAIN"]
+      }
+    },
+    {
+      "id": "plumbing.drainage/collecteur-immeuble",
+      "engine": "plumbing.drainage",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "ΣDU = 12 × 0,5 + 12 × 2,5 + 12 × 0,6 + 12 × 0,8 = 52,8 L/s ; K = 0.5 ; Q_ww = max(K√ΣDU = 3,63318 ; DU_max = 2.5) = 3,63318 L/s ; D_int ≥ 80 mm ; Manning-Strickler (K_s = 100, h/D = 0.7, I = 2 %) : PVC Ø90 (D_int 84 mm) évacue 4,994497 L/s ≥ Q_ww.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "washbasin": 12,
+        "wcCistern": 12,
+        "shower": 12,
+        "sink": 12,
+        "usage": "DWELLING",
+        "role": "COLLECTOR",
+        "slope": {
+          "value": 2,
+          "unit": "%"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "dischargeUnits": {
+            "value": 52.8,
+            "tolerance": 0.000001
+          },
+          "wastewaterFlow": {
+            "value": 3.63318042492,
+            "tolerance": 0.000001
+          },
+          "size": {
+            "value": 90,
+            "tolerance": 0.000001
+          },
+          "innerDiameter": {
+            "value": 84,
+            "tolerance": 0.000001
+          },
+          "capacity": {
+            "value": 4.99449675881,
+            "tolerance": 0.000001
+          },
+          "minSlope": {
+            "value": 1,
+            "tolerance": 0.000001
+          },
+          "fillRatio": {
+            "value": 0.7,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "plumbing.drainage.capacity",
+            "status": "PASS"
+          },
+          {
+            "rule": "plumbing.drainage.min-slope",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["PLUMBING.PVC_DRAIN"]
+      }
+    },
+    {
+      "id": "plumbing.drainage/chute-ecole",
+      "engine": "plumbing.drainage",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "ΣDU = 8 × 2,5 + 6 × 0,8 + 8 × 0,5 = 28,8 L/s ; K = 0.7 ; Q_ww = max(K√ΣDU = 3,756594 ; DU_max = 2.5) = 3,756594 L/s ; D_int ≥ 80 mm ; chute PVC Ø110 : débit admissible 4 L/s ≥ Q_ww.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "wcCistern": 8,
+        "urinal": 6,
+        "washbasin": 8,
+        "usage": "PUBLIC",
+        "role": "STACK"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "dischargeUnits": {
+            "value": 28.8,
+            "tolerance": 0.000001
+          },
+          "wastewaterFlow": {
+            "value": 3.7565942022,
+            "tolerance": 0.000001
+          },
+          "size": {
+            "value": 110,
+            "tolerance": 0.000001
+          },
+          "innerDiameter": {
+            "value": 103.6,
+            "tolerance": 0.000001
+          },
+          "capacity": {
+            "value": 4,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "plumbing.drainage.capacity",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["PLUMBING.PVC_DRAIN"]
+      }
+    },
+    {
+      "id": "plumbing.drainage/pente-insuffisante",
+      "engine": "plumbing.drainage",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "ΣDU = 1 × 0,8 + 1 × 0,8 = 1,6 L/s ; K = 0.5 ; Q_ww = max(K√ΣDU = 0,632456 ; DU_max = 0.8) = 0,8 L/s ; D_int ≥ 30 mm ; Manning-Strickler (K_s = 100, h/D = 0.5, I = 0.5 %) : PVC Ø75 (D_int 69 mm) évacue 0,882611 L/s ≥ Q_ww.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "sink": 1,
+        "dishwasher": 1,
+        "usage": "DWELLING",
+        "role": "BRANCH",
+        "slope": {
+          "value": 0.5,
+          "unit": "%"
+        }
+      },
+      "expected": {
+        "resultStatus": "NON_COMPLIANT",
+        "outputs": {
+          "dischargeUnits": {
+            "value": 1.6,
+            "tolerance": 0.000001
+          },
+          "wastewaterFlow": {
+            "value": 0.8,
+            "tolerance": 0.000001
+          },
+          "size": {
+            "value": 75,
+            "tolerance": 0.000001
+          },
+          "innerDiameter": {
+            "value": 69,
+            "tolerance": 0.000001
+          },
+          "capacity": {
+            "value": 0.88261059324,
+            "tolerance": 0.000001
+          },
+          "minSlope": {
+            "value": 1,
+            "tolerance": 0.000001
+          },
+          "fillRatio": {
+            "value": 0.5,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "plumbing.drainage.capacity",
+            "status": "PASS"
+          },
+          {
+            "rule": "plumbing.drainage.min-slope",
+            "status": "FAIL"
+          }
+        ],
+        "hypotheses": ["PLUMBING.PVC_DRAIN"]
+      }
+    },
+    {
+      "id": "plumbing.drainage/wc-seul-debit-minimal",
+      "engine": "plumbing.drainage",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "ΣDU = 1 × 2,5 = 2,5 L/s ; K = 0.5 ; Q_ww = max(K√ΣDU = 0,790569 ; DU_max = 2.5) = 2,5 L/s ; D_int ≥ 80 mm ; Manning-Strickler (K_s = 100, h/D = 0.7, I = 1 %) : PVC Ø90 (D_int 84 mm) évacue 3,531643 L/s ≥ Q_ww.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "wcCistern": 1,
+        "usage": "DWELLING",
+        "role": "COLLECTOR",
+        "slope": {
+          "value": 1,
+          "unit": "%"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "dischargeUnits": {
+            "value": 2.5,
+            "tolerance": 0.000001
+          },
+          "wastewaterFlow": {
+            "value": 2.5,
+            "tolerance": 0.000001
+          },
+          "size": {
+            "value": 90,
+            "tolerance": 0.000001
+          },
+          "innerDiameter": {
+            "value": 84,
+            "tolerance": 0.000001
+          },
+          "capacity": {
+            "value": 3.53164252677,
+            "tolerance": 0.000001
+          },
+          "minSlope": {
+            "value": 1,
+            "tolerance": 0.000001
+          },
+          "fillRatio": {
+            "value": 0.7,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "plumbing.drainage.capacity",
+            "status": "PASS"
+          },
+          {
+            "rule": "plumbing.drainage.min-slope",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["PLUMBING.PVC_DRAIN"]
+      }
+    },
+    {
+      "id": "plumbing.drainage/pente-manquante",
+      "engine": "plumbing.drainage",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Branchement horizontal sans pente : entrée refusée.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "washbasin": 1,
+        "usage": "DWELLING",
+        "role": "BRANCH"
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "slope",
+            "code": "SLOPE_REQUIRED"
+          }
+        ]
+      }
+    },
+    {
+      "id": "plumbing.drainage/sans-debits-unitaires",
+      "engine": "plumbing.drainage",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Référentiel sans débits unitaires : calcul refusé.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "omitParameters": ["plumbing.drainage.discharge_unit"],
+      "inputs": {
+        "washbasin": 1,
+        "usage": "DWELLING",
+        "role": "STACK"
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.plumbing.drainage.discharge_unit",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

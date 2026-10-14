@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "packageManager": "pnpm",
+  "testRunner": "command",
+  "commandRunner": { "command": "node node_modules/vitest/vitest.mjs run --bail=1 --reporter=dot" },
+  "mutate": ["src/common/hydraulics.ts", "src/engines/supply.ts"],
+  "coverageAnalysis": "off",
+  "thresholds": { "high": 90, "low": 80, "break": 80 },
+  "reporters": ["clear-text", "progress", "json"],
+  "jsonReporter": { "fileName": "reports/mutation/mutation.json" },
+  "tempDirName": ".stryker-tmp",
+  "timeoutMS": 30000
+}

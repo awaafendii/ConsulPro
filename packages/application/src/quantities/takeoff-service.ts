@@ -1,6 +1,7 @@
 import { err, ok, type Result } from '@consulpro/calc-core';
 import {
   checkNesting,
+  isQuantityDiscipline,
   orderTree,
   TAKEOFF_MAX_NODES,
   validateNodeCode,
@@ -50,20 +51,20 @@ const codeTaken = () =>
     'Ce code est déjà utilisé à ce niveau de l’avant-métré.',
   );
 
-/** L'avant-métré est propre au BTP : le métier doit être activé sur le projet. */
-async function requireBtp(repos: Repositories, projectId: string): Promise<AppError | null> {
-  return (await projectDisciplines(repos, projectId)).includes('BTP')
+/** L'avant-métré sert les métiers à quantités : BTP ou Plomberie doit être activé. */
+async function requireQuantities(repos: Repositories, projectId: string): Promise<AppError | null> {
+  return (await projectDisciplines(repos, projectId)).some(isQuantityDiscipline)
     ? null
     : appError(
         'POLICY_VIOLATION',
-        'BTP_DISCIPLINE_INACTIVE',
-        'Le métier BTP n’est pas activé sur ce projet.',
+        'TAKEOFF_DISCIPLINE_INACTIVE',
+        'Ni le BTP ni la plomberie ne sont activés sur ce projet.',
       );
 }
 
 export function createTakeoffService({ uow, ids }: Pick<ApplicationDeps, 'uow' | 'ids'>) {
   return {
-    /** Structure de l'avant-métré et calculs BTP du projet (rattachés ou non). */
+    /** Structure de l'avant-métré et calculs à quantités du projet (rattachés ou non). */
     async get(ctx: OrgContext, projectId: string): Promise<Result<TakeoffView, AppError>> {
       return inProject(uow, ctx, projectId, READ, async (_pctx, repos) => {
         const orgId = ctx.organization.id;
@@ -73,7 +74,7 @@ export function createTakeoffService({ uow, ids }: Pick<ApplicationDeps, 'uow' |
         const studies = await repos.studies.list(orgId, projectId);
         const calculations = await repos.calculations.listByProject(orgId, projectId);
         const btpStudies = new Map(
-          studies.filter((s) => s.discipline === 'BTP').map((s) => [s.id, s.title]),
+          studies.filter((s) => isQuantityDiscipline(s.discipline)).map((s) => [s.id, s.title]),
         );
         const nodeOf = new Map(assignments.map((a) => [a.calculationId, a.nodeId]));
         const btp = calculations.filter((c) => btpStudies.has(c.studyId));
@@ -104,7 +105,7 @@ export function createTakeoffService({ uow, ids }: Pick<ApplicationDeps, 'uow' |
     ): Promise<Result<TakeoffNodeRecord, AppError>> {
       return inProject(uow, ctx, projectId, MANAGE, async (pctx, repos) => {
         const orgId = ctx.organization.id;
-        const inactive = await requireBtp(repos, projectId);
+        const inactive = await requireQuantities(repos, projectId);
         if (inactive) return err(inactive);
         const nodes = await repos.takeoff.listNodes(orgId, projectId);
         if (nodes.length >= TAKEOFF_MAX_NODES) {
@@ -232,12 +233,12 @@ export function createTakeoffService({ uow, ids }: Pick<ApplicationDeps, 'uow' |
         const calculation = await repos.calculations.findById(orgId, projectId, calculationId);
         if (!calculation) return err(notFound('Calcul'));
         const study = await repos.studies.findById(orgId, projectId, calculation.studyId);
-        if (study?.discipline !== 'BTP') {
+        if (!study || !isQuantityDiscipline(study.discipline)) {
           return err(
             appError(
               'VALIDATION',
-              'TAKEOFF_CALCULATION_NOT_BTP',
-              'Seuls les calculs d’une étude BTP se rattachent à l’avant-métré.',
+              'TAKEOFF_CALCULATION_NOT_QUANTIFIABLE',
+              'Seuls les calculs d’une étude BTP ou plomberie se rattachent à l’avant-métré.',
             ),
           );
         }

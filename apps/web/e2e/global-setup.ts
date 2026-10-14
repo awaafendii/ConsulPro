@@ -42,7 +42,8 @@ const cli = (...args: string[]) =>
 /**
  * Référentiels publiés, comme en exploitation : un administrateur de la plateforme (rôle
  * attribué par la CLI) publie les fichiers validés (idempotent) — démonstration, usages
- * du métré BTP (Phase 4), NF C 15-100 et guide UTE C 15-105 (Phase 5).
+ * du métré BTP (Phase 4), NF C 15-100 et guide UTE C 15-105 (Phase 5), NF DTU 60.11 et 64.1,
+ * dimensions des tubes et usages de plomberie (Phase 6).
  */
 async function publishStandards(): Promise<string> {
   const email = 'plateforme.e2e@consulpro.test';
@@ -57,6 +58,10 @@ async function publishStandards(): Promise<string> {
     'btp/usages-metre-1.json',
     'elec/nfc15-100-2002.json',
     'elec/ute-c15-105-2003.json',
+    'plumbing/nf-dtu-60.11-2013.json',
+    'plumbing/nf-dtu-64.1-2013.json',
+    'plumbing/tubes-en-1.json',
+    'plumbing/usages-plomberie-1.json',
   ]) {
     const file = fileURLToPath(
       new URL(`../../../packages/standards/seeds/${seed}`, import.meta.url),
@@ -267,6 +272,102 @@ export default async function globalSetup(): Promise<void> {
     },
   });
 
+  // Plomberie (Phase 6) : réseau d'alimentation calculé, rattaché au lot « Plomberie »,
+  // quantitatif ventilé par diamètre.
+  const plumbingProject = await api.post(`/api/v1/organizations/${base.orgSlug}/projects`, {
+    data: {
+      code: `PLB-${stamp.toUpperCase()}`,
+      name: 'Centre de santé de Matoto',
+      location: 'Conakry',
+      disciplines: ['PLUMBING'],
+    },
+  });
+  if (plumbingProject.status() !== 201)
+    throw new Error(`Projet de plomberie : ${String(plumbingProject.status())}`);
+  const { id: plumbingProjectId } = (await plumbingProject.json()) as { id: string };
+  const plumbingApi = `/api/v1/organizations/${base.orgSlug}/projects/${plumbingProjectId}`;
+  const plumbingCreated = async (
+    path: string,
+    data: unknown,
+    headers: Record<string, string> = {},
+  ) => {
+    const response = await api.post(`${plumbingApi}${path}`, { data, headers });
+    if (response.status() !== 201)
+      throw new Error(`${path} : ${String(response.status())} ${await response.text()}`);
+    return ((await response.json()) as { id: string }).id;
+  };
+  const plumbingStudyId = await plumbingCreated('/studies', {
+    discipline: 'PLUMBING',
+    title: 'Alimentation en eau froide',
+  });
+  const networkId = await plumbingCreated('/datasets', {
+    kind: 'PLUMBING_NETWORK',
+    title: 'Réseau eau froide',
+  });
+  const metres = (value: number) => ({ value, unit: 'm' });
+  await plumbingCreated(
+    `/datasets/${networkId}/revisions`,
+    {
+      rows: [
+        { code: 'A', length: metres(12), elevation: metres(0), location: 'BASEMENT' },
+        {
+          code: 'B',
+          parent: 'A',
+          length: metres(4),
+          elevation: metres(0.5),
+          location: 'FLOOR',
+          fixture: 'SINK',
+          count: 1,
+        },
+        { code: 'C', parent: 'A', length: metres(6), elevation: metres(3), location: 'FLOOR' },
+        {
+          code: 'D',
+          parent: 'C',
+          length: metres(3),
+          elevation: metres(3.5),
+          location: 'FLOOR',
+          fixture: 'SHOWER',
+          count: 2,
+        },
+        {
+          code: 'E',
+          parent: 'C',
+          length: metres(4),
+          elevation: metres(3.5),
+          location: 'FLOOR',
+          fixture: 'WASHBASIN',
+          count: 2,
+        },
+      ],
+    },
+    { 'if-match': '"1"' },
+  );
+  const plumbingCalculationId = await plumbingCreated(`/studies/${plumbingStudyId}/calculations`, {
+    title: 'Réseau eau froide',
+    engineId: 'plumbing.supply-network',
+  });
+  await plumbingCreated(`/calculations/${plumbingCalculationId}/runs`, {
+    inputs: {
+      network: { fromDataset: networkId },
+      material: 'PPR_PN20',
+      upstreamPressure: { value: 250, unit: 'kPa' },
+      temperature: { value: 25, unit: 'degC' },
+    },
+  });
+  const plumbingLotId = await plumbingCreated('/takeoff/nodes', {
+    parentId: null,
+    kind: 'LOT',
+    code: '5',
+    title: 'Plomberie',
+  });
+  const plumbingAssigned = await api.put(
+    `${plumbingApi}/takeoff/assignments/${plumbingCalculationId}`,
+    { data: { nodeId: plumbingLotId } },
+  );
+  if (plumbingAssigned.status() !== 204)
+    throw new Error(`Rattachement plomberie : ${String(plumbingAssigned.status())}`);
+  const plumbingBoqId = await plumbingCreated('/boqs', { title: 'DQE plomberie' });
+
   const fixture: Fixture = {
     ...base,
     projectId,
@@ -280,6 +381,9 @@ export default async function globalSetup(): Promise<void> {
     elecProjectId,
     elecDatasetId,
     elecCalculationId,
+    plumbingProjectId,
+    plumbingCalculationId,
+    plumbingBoqId,
   };
 
   mkdirSync('e2e/.auth', { recursive: true });

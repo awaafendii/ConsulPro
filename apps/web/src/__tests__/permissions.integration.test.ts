@@ -107,6 +107,7 @@ const SUCCESS: Readonly<Record<string, number>> = {
   'priceItems.remove': 204,
   'btp.dashboard': 200,
   'elec.dashboard': 200,
+  'plumbing.dashboard': 200,
 };
 
 const slab = {
@@ -356,6 +357,7 @@ const orgRequests: Readonly<Record<string, () => Promise<Request>>> = {
   },
   'btp.dashboard': () => Promise.resolve({}),
   'elec.dashboard': () => Promise.resolve({}),
+  'plumbing.dashboard': () => Promise.resolve({}),
   'organization.transfer': async () => {
     const target = await h.addMember(orgSlug, owner, 'VIEWER');
     return {

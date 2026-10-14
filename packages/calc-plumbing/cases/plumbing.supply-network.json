@@ -1,0 +1,916 @@
+{
+  "engine": "plumbing.supply-network",
+  "parameterSet": {
+    "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+    "version": "2013+2013+1+1"
+  },
+  "cases": [
+    {
+      "id": "plumbing.supply-network/maison-r+1-ppr",
+      "engine": "plumbing.supply-network",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Tronçons dans l’ordre du réseau (simultanéité DTU 60.11, Colebrook-White résolu par Newton, pertes singulières 15 %) — A : x = 6, Q_b = 1,04 L/s, y = 0,3578, Q_p = 0,3721 L/s, Ø25 (D 16,6 mm), v = 1,7192 m/s, λ = 0,024277, ΔP = 29,8269 kPa, Δz = 0 m, P = 220,1731 kPa ; B : x = 1, Q_b = 0,2 L/s, y = 1, Q_p = 0,2 L/s, Ø20 (D 13,2 mm), v = 1,4615 m/s, λ = 0,026569, ΔP = 9,8883 kPa, Δz = 0,5 m, P = 205,3815 kPa ; C : x = 5, Q_b = 0,84 L/s, y = 0,4, Q_p = 0,336 L/s, Ø32 (D 21,2 mm), v = 0,9519 m/s, λ = 0,02588, ΔP = 3,8159 kPa, Δz = 3 m, P = 186,9372 kPa ; D : x = 1, Q_b = 0,2 L/s, y = 1, Q_p = 0,2 L/s, Ø20 (D 13,2 mm), v = 1,4615 m/s, λ = 0,026569, ΔP = 7,4162 kPa, Δz = 0,5 m, P = 174,6177 kPa ; E : x = 2, Q_b = 0,4 L/s, y = 0,8, Q_p = 0,32 L/s, Ø25 (D 16,6 mm), v = 1,4786 m/s, λ = 0,02503, ΔP = 7,5816 kPa, Δz = 0,5 m, P = 174,4522 kPa ; F : x = 2, Q_b = 0,24 L/s, y = 0,8, Q_p = 0,192 L/s, Ø20 (D 13,2 mm), v = 1,403 m/s, λ = 0,0268, ΔP = 11,4902 kPa, Δz = 0,5 m, P = 170,5437 kPa. Point le plus défavorisé : E (174,4522 kPa pour 100 kPa requis).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "network": [
+          {
+            "code": "A",
+            "parent": null,
+            "length": {
+              "value": 12,
+              "unit": "m"
+            },
+            "elevation": {
+              "value": 0,
+              "unit": "m"
+            },
+            "location": "BASEMENT",
+            "fixture": null,
+            "count": null
+          },
+          {
+            "code": "B",
+            "parent": "A",
+            "length": {
+              "value": 4,
+              "unit": "m"
+            },
+            "elevation": {
+              "value": 0.5,
+              "unit": "m"
+            },
+            "location": "FLOOR",
+            "fixture": "SINK",
+            "count": 1
+          },
+          {
+            "code": "C",
+            "parent": "A",
+            "length": {
+              "value": 6,
+              "unit": "m"
+            },
+            "elevation": {
+              "value": 3,
+              "unit": "m"
+            },
+            "location": "FLOOR",
+            "fixture": null,
+            "count": null
+          },
+          {
+            "code": "D",
+            "parent": "C",
+            "length": {
+              "value": 3,
+              "unit": "m"
+            },
+            "elevation": {
+              "value": 3.5,
+              "unit": "m"
+            },
+            "location": "FLOOR",
+            "fixture": "SHOWER",
+            "count": 1
+          },
+          {
+            "code": "E",
+            "parent": "C",
+            "length": {
+              "value": 4,
+              "unit": "m"
+            },
+            "elevation": {
+              "value": 3.5,
+              "unit": "m"
+            },
+            "location": "FLOOR",
+            "fixture": "WASHBASIN",
+            "count": 2
+          },
+          {
+            "code": "F",
+            "parent": "C",
+            "length": {
+              "value": 5,
+              "unit": "m"
+            },
+            "elevation": {
+              "value": 3.5,
+              "unit": "m"
+            },
+            "location": "FLOOR",
+            "fixture": "WC_CISTERN",
+            "count": 2
+          }
+        ],
+        "material": "PPR_PN20",
+        "upstreamPressure": {
+          "value": 250,
+          "unit": "kPa"
+        },
+        "temperature": {
+          "value": 25,
+          "unit": "degC"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "fixtureCount": {
+            "value": 6,
+            "tolerance": 0.000001
+          },
+          "baseFlow": {
+            "value": 1.04,
+            "tolerance": 0.000001
+          },
+          "probableFlow": {
+            "value": 0.372081711456,
+            "tolerance": 0.000001
+          },
+          "totalLength": {
+            "value": 34,
+            "tolerance": 0.000001
+          },
+          "minPressure": {
+            "value": 174.452248329,
+            "tolerance": 0.00001
+          },
+          "requiredPressure": {
+            "value": 100,
+            "tolerance": 0.000001
+          },
+          "maxVelocity": {
+            "value": 1.47857691361,
+            "tolerance": 0.000001
+          },
+          "velocityLimit": {
+            "value": 1.5,
+            "tolerance": 0.000001
+          },
+          "maxStaticPressure": {
+            "value": 250,
+            "tolerance": 0.000001
+          },
+          "maxPressure": {
+            "value": 300,
+            "tolerance": 0.000001
+          },
+          "pipes": [
+            {
+              "key": "PPR_PN20-20",
+              "value": 12,
+              "tolerance": 1e-9
+            },
+            {
+              "key": "PPR_PN20-25",
+              "value": 16,
+              "tolerance": 1e-9
+            },
+            {
+              "key": "PPR_PN20-32",
+              "value": 6,
+              "tolerance": 1e-9
+            }
+          ]
+        },
+        "checks": [
+          {
+            "rule": "plumbing.supply.min-pressure",
+            "status": "PASS"
+          },
+          {
+            "rule": "plumbing.supply.max-pressure",
+            "status": "PASS"
+          },
+          {
+            "rule": "plumbing.supply.velocity",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": [
+          "PLUMBING.SIMULTANEITY_DTU",
+          "PLUMBING.SINGULAR_RATIO",
+          "PLUMBING.STEADY_FLOW",
+          "PLUMBING.TRUNK_DIAMETER"
+        ]
+      }
+    },
+    {
+      "id": "plumbing.supply-network/immeuble-pvc-trois-niveaux",
+      "engine": "plumbing.supply-network",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Tronçons dans l’ordre du réseau (simultanéité DTU 60.11, Colebrook-White résolu par Newton, pertes singulières 15 %) — COL : x = 12, Q_b = 2,08 L/s, y = 0,2412, Q_p = 0,5017 L/s, Ø25 (D 21,2 mm), v = 1,4213 m/s, λ = 0,023469, ΔP = 25,7189 kPa, Δz = 0 m, P = 274,2811 kPa ; N1 : x = 12, Q_b = 2,08 L/s, y = 0,2412, Q_p = 0,5017 L/s, Ø25 (D 21,2 mm), v = 1,4213 m/s, λ = 0,023469, ΔP = 3,8578 kPa, Δz = 3 m, P = 241,0033 kPa ; N2 : x = 8, Q_b = 1,28 L/s, y = 0,3024, Q_p = 0,387 L/s, Ø25 (D 21,2 mm), v = 1,0965 m/s, λ = 0,024758, ΔP = 2,4218 kPa, Δz = 3 m, P = 209,1615 kPa ; N3 : x = 4, Q_b = 0,48 L/s, y = 0,4619, Q_p = 0,2217 L/s, Ø20 (D 17 mm), v = 0,9767 m/s, λ = 0,026818, ΔP = 2,5961 kPa, Δz = 3 m, P = 177,1454 kPa. Point le plus défavorisé : N2 (209,1615 kPa pour 100 kPa requis).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "network": [
+          {
+            "code": "COL",
+            "parent": null,
+            "length": {
+              "value": 20,
+              "unit": "m"
+            },
+            "elevation": {
+              "value": 0,
+              "unit": "m"
+            },
+            "location": "BASEMENT",
+            "fixture": null,
+            "count": null
+          },
+          {
+            "code": "N1",
+            "parent": "COL",
+            "length": {
+              "value": 3,
+              "unit": "m"
+            },
+            "elevation": {
+              "value": 3,
+              "unit": "m"
+            },
+            "location": "FLOOR",
+            "fixture": "WASHBASIN",
+            "count": 4
+          },
+          {
+            "code": "N2",
+            "parent": "N1",
+            "length": {
+              "value": 3,
+              "unit": "m"
+            },
+            "elevation": {
+              "value": 6,
+              "unit": "m"
+            },
+            "location": "FLOOR",
+            "fixture": "WASHBASIN",
+            "count": 4
+          },
+          {
+            "code": "N3",
+            "parent": "N2",
+            "length": {
+              "value": 3,
+              "unit": "m"
+            },
+            "elevation": {
+              "value": 9,
+              "unit": "m"
+            },
+            "location": "FLOOR",
+            "fixture": "WC_CISTERN",
+            "count": 4
+          }
+        ],
+        "material": "PVC_PN16",
+        "upstreamPressure": {
+          "value": 300,
+          "unit": "kPa"
+        },
+        "temperature": {
+          "value": 28,
+          "unit": "degC"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "fixtureCount": {
+            "value": 12,
+            "tolerance": 0.000001
+          },
+          "baseFlow": {
+            "value": 2.08,
+            "tolerance": 0.000001
+          },
+          "probableFlow": {
+            "value": 0.501714877377,
+            "tolerance": 0.000001
+          },
+          "totalLength": {
+            "value": 29,
+            "tolerance": 0.000001
+          },
+          "minPressure": {
+            "value": 209.161505696,
+            "tolerance": 0.00001
+          },
+          "requiredPressure": {
+            "value": 100,
+            "tolerance": 0.000001
+          },
+          "maxVelocity": {
+            "value": 1.42133148376,
+            "tolerance": 0.000001
+          },
+          "velocityLimit": {
+            "value": 1.5,
+            "tolerance": 0.000001
+          },
+          "maxStaticPressure": {
+            "value": 300,
+            "tolerance": 0.000001
+          },
+          "maxPressure": {
+            "value": 300,
+            "tolerance": 0.000001
+          },
+          "pipes": [
+            {
+              "key": "PVC_PN16-20",
+              "value": 3,
+              "tolerance": 1e-9
+            },
+            {
+              "key": "PVC_PN16-25",
+              "value": 26,
+              "tolerance": 1e-9
+            }
+          ]
+        },
+        "checks": [
+          {
+            "rule": "plumbing.supply.min-pressure",
+            "status": "PASS"
+          },
+          {
+            "rule": "plumbing.supply.max-pressure",
+            "status": "PASS"
+          },
+          {
+            "rule": "plumbing.supply.velocity",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": [
+          "PLUMBING.SIMULTANEITY_DTU",
+          "PLUMBING.SINGULAR_RATIO",
+          "PLUMBING.STEADY_FLOW",
+          "PLUMBING.TRUNK_DIAMETER"
+        ]
+      }
+    },
+    {
+      "id": "plumbing.supply-network/acier-galva-robinets-de-chasse",
+      "engine": "plumbing.supply-network",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Tronçons dans l’ordre du réseau (simultanéité DTU 60.11, Colebrook-White résolu par Newton, pertes singulières 15 %) — A : x = 7, Q_b = 5,1 L/s, y = 0,3266, Q_p = 1,6657 L/s, DN32 (D 36 mm), v = 1,6364 m/s, λ = 0,030322, ΔP = 19,4531 kPa, Δz = 0 m, P = 330,5469 kPa ; B : x = 3, Q_b = 4,5 L/s, y = 0,5657, Q_p = 2,5456 L/s, DN50 (D 53,1 mm), v = 1,1495 m/s, λ = 0,027651, ΔP = 1,9782 kPa, Δz = 1 m, P = 318,762 kPa ; C : x = 4, Q_b = 0,6 L/s, y = 0,4619, Q_p = 0,2771 L/s, DN15 (D 16,1 mm), v = 1,3613 m/s, λ = 0,039427, ΔP = 20,8737 kPa, Δz = 1 m, P = 299,8665 kPa. Point le plus défavorisé : B (318,762 kPa pour 120 kPa requis).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "network": [
+          {
+            "code": "A",
+            "parent": null,
+            "length": {
+              "value": 15,
+              "unit": "m"
+            },
+            "elevation": {
+              "value": 0,
+              "unit": "m"
+            },
+            "location": "BASEMENT",
+            "fixture": null,
+            "count": null
+          },
+          {
+            "code": "B",
+            "parent": "A",
+            "length": {
+              "value": 5,
+              "unit": "m"
+            },
+            "elevation": {
+              "value": 1,
+              "unit": "m"
+            },
+            "location": "FLOOR",
+            "fixture": "WC_FLUSH_VALVE",
+            "count": 3
+          },
+          {
+            "code": "C",
+            "parent": "A",
+            "length": {
+              "value": 8,
+              "unit": "m"
+            },
+            "elevation": {
+              "value": 1,
+              "unit": "m"
+            },
+            "location": "FLOOR",
+            "fixture": "URINAL",
+            "count": 4
+          }
+        ],
+        "material": "STEEL_GALV",
+        "upstreamPressure": {
+          "value": 350,
+          "unit": "kPa"
+        },
+        "temperature": {
+          "value": 25,
+          "unit": "degC"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "fixtureCount": {
+            "value": 7,
+            "tolerance": 0.000001
+          },
+          "baseFlow": {
+            "value": 5.1,
+            "tolerance": 0.000001
+          },
+          "probableFlow": {
+            "value": 1.66565302509,
+            "tolerance": 0.000001
+          },
+          "totalLength": {
+            "value": 28,
+            "tolerance": 0.000001
+          },
+          "minPressure": {
+            "value": 318.762024408,
+            "tolerance": 0.00001
+          },
+          "requiredPressure": {
+            "value": 120,
+            "tolerance": 0.000001
+          },
+          "maxVelocity": {
+            "value": 1.36125339713,
+            "tolerance": 0.000001
+          },
+          "velocityLimit": {
+            "value": 1.5,
+            "tolerance": 0.000001
+          },
+          "maxStaticPressure": {
+            "value": 350,
+            "tolerance": 0.000001
+          },
+          "maxPressure": {
+            "value": 300,
+            "tolerance": 0.000001
+          },
+          "pipes": [
+            {
+              "key": "STEEL_GALV-15",
+              "value": 8,
+              "tolerance": 1e-9
+            },
+            {
+              "key": "STEEL_GALV-32",
+              "value": 15,
+              "tolerance": 1e-9
+            },
+            {
+              "key": "STEEL_GALV-50",
+              "value": 5,
+              "tolerance": 1e-9
+            }
+          ]
+        },
+        "checks": [
+          {
+            "rule": "plumbing.supply.min-pressure",
+            "status": "PASS"
+          },
+          {
+            "rule": "plumbing.supply.max-pressure",
+            "status": "FAIL"
+          },
+          {
+            "rule": "plumbing.supply.velocity",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": [
+          "PLUMBING.SIMULTANEITY_DTU",
+          "PLUMBING.SINGULAR_RATIO",
+          "PLUMBING.STEADY_FLOW",
+          "PLUMBING.TRUNK_DIAMETER"
+        ]
+      }
+    },
+    {
+      "id": "plumbing.supply-network/pression-insuffisante-au-dernier-etage",
+      "engine": "plumbing.supply-network",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Tronçons dans l’ordre du réseau (simultanéité DTU 60.11, Colebrook-White résolu par Newton, pertes singulières 15 %) — A : x = 3, Q_b = 0,73 L/s, y = 0,5657, Q_p = 0,413 L/s, Ø25 (D 20,4 mm), v = 1,2634 m/s, λ = 0,024585, ΔP = 33,184 kPa, Δz = 0 m, P = 186,816 kPa ; B : x = 3, Q_b = 0,73 L/s, y = 0,5657, Q_p = 0,413 L/s, Ø25 (D 20,4 mm), v = 1,2634 m/s, λ = 0,024585, ΔP = 4,4245 kPa, Δz = 12 m, P = 64,7117 kPa ; C : x = 1, Q_b = 0,33 L/s, y = 1, Q_p = 0,33 L/s, Ø25 (D 20,4 mm), v = 1,0096 m/s, λ = 0,025793, ΔP = 2,9643 kPa, Δz = 3 m, P = 32,3275 kPa. Point le plus défavorisé : C (32,3275 kPa pour 100 kPa requis).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "network": [
+          {
+            "code": "A",
+            "parent": null,
+            "length": {
+              "value": 30,
+              "unit": "m"
+            },
+            "elevation": {
+              "value": 0,
+              "unit": "m"
+            },
+            "location": "BASEMENT",
+            "fixture": null,
+            "count": null
+          },
+          {
+            "code": "B",
+            "parent": "A",
+            "length": {
+              "value": 4,
+              "unit": "m"
+            },
+            "elevation": {
+              "value": 12,
+              "unit": "m"
+            },
+            "location": "FLOOR",
+            "fixture": "SHOWER",
+            "count": 2
+          },
+          {
+            "code": "C",
+            "parent": "B",
+            "length": {
+              "value": 4,
+              "unit": "m"
+            },
+            "elevation": {
+              "value": 15,
+              "unit": "m"
+            },
+            "location": "FLOOR",
+            "fixture": "BATHTUB",
+            "count": 1
+          }
+        ],
+        "material": "PEHD_PN16",
+        "upstreamPressure": {
+          "value": 220,
+          "unit": "kPa"
+        },
+        "temperature": {
+          "value": 25,
+          "unit": "degC"
+        }
+      },
+      "expected": {
+        "resultStatus": "NON_COMPLIANT",
+        "outputs": {
+          "fixtureCount": {
+            "value": 3,
+            "tolerance": 0.000001
+          },
+          "baseFlow": {
+            "value": 0.73,
+            "tolerance": 0.000001
+          },
+          "probableFlow": {
+            "value": 0.412950360213,
+            "tolerance": 0.000001
+          },
+          "totalLength": {
+            "value": 38,
+            "tolerance": 0.000001
+          },
+          "minPressure": {
+            "value": 32.327462882,
+            "tolerance": 0.00001
+          },
+          "requiredPressure": {
+            "value": 100,
+            "tolerance": 0.000001
+          },
+          "maxVelocity": {
+            "value": 1.26341966704,
+            "tolerance": 0.000001
+          },
+          "velocityLimit": {
+            "value": 1.5,
+            "tolerance": 0.000001
+          },
+          "maxStaticPressure": {
+            "value": 220,
+            "tolerance": 0.000001
+          },
+          "maxPressure": {
+            "value": 300,
+            "tolerance": 0.000001
+          },
+          "pipes": [
+            {
+              "key": "PEHD_PN16-25",
+              "value": 38,
+              "tolerance": 1e-9
+            }
+          ]
+        },
+        "checks": [
+          {
+            "rule": "plumbing.supply.min-pressure",
+            "status": "FAIL"
+          },
+          {
+            "rule": "plumbing.supply.max-pressure",
+            "status": "PASS"
+          },
+          {
+            "rule": "plumbing.supply.velocity",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": [
+          "PLUMBING.SIMULTANEITY_DTU",
+          "PLUMBING.SINGULAR_RATIO",
+          "PLUMBING.STEADY_FLOW",
+          "PLUMBING.TRUNK_DIAMETER"
+        ]
+      }
+    },
+    {
+      "id": "plumbing.supply-network/cuivre-un-seul-appareil",
+      "engine": "plumbing.supply-network",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Tronçons dans l’ordre du réseau (simultanéité DTU 60.11, Colebrook-White résolu par Newton, pertes singulières 15 %) — A : x = 1, Q_b = 0,1 L/s, y = 1, Q_p = 0,1 L/s, Ø12 (D 10 mm), v = 1,2732 m/s, λ = 0,029284, ΔP = 21,8374 kPa, Δz = 1 m, P = 118,3559 kPa. Point le plus défavorisé : A (118,3559 kPa pour 100 kPa requis).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "network": [
+          {
+            "code": "A",
+            "parent": null,
+            "length": {
+              "value": 8,
+              "unit": "m"
+            },
+            "elevation": {
+              "value": 1,
+              "unit": "m"
+            },
+            "location": "FLOOR",
+            "fixture": "HAND_BASIN",
+            "count": 1
+          }
+        ],
+        "material": "CU",
+        "upstreamPressure": {
+          "value": 150,
+          "unit": "kPa"
+        },
+        "temperature": {
+          "value": 20,
+          "unit": "degC"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "fixtureCount": {
+            "value": 1,
+            "tolerance": 0.000001
+          },
+          "baseFlow": {
+            "value": 0.1,
+            "tolerance": 0.000001
+          },
+          "probableFlow": {
+            "value": 0.1,
+            "tolerance": 0.000001
+          },
+          "totalLength": {
+            "value": 8,
+            "tolerance": 0.000001
+          },
+          "minPressure": {
+            "value": 118.355921659,
+            "tolerance": 0.00001
+          },
+          "requiredPressure": {
+            "value": 100,
+            "tolerance": 0.000001
+          },
+          "maxVelocity": {
+            "value": 1.27323954474,
+            "tolerance": 0.000001
+          },
+          "velocityLimit": {
+            "value": 1.5,
+            "tolerance": 0.000001
+          },
+          "maxStaticPressure": {
+            "value": 140.19335,
+            "tolerance": 0.000001
+          },
+          "maxPressure": {
+            "value": 300,
+            "tolerance": 0.000001
+          },
+          "pipes": [
+            {
+              "key": "CU-12",
+              "value": 8,
+              "tolerance": 1e-9
+            }
+          ]
+        },
+        "checks": [
+          {
+            "rule": "plumbing.supply.min-pressure",
+            "status": "PASS"
+          },
+          {
+            "rule": "plumbing.supply.max-pressure",
+            "status": "PASS"
+          },
+          {
+            "rule": "plumbing.supply.velocity",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": [
+          "PLUMBING.SIMULTANEITY_DTU",
+          "PLUMBING.SINGULAR_RATIO",
+          "PLUMBING.STEADY_FLOW",
+          "PLUMBING.TRUNK_DIAMETER"
+        ]
+      }
+    },
+    {
+      "id": "plumbing.supply-network/deux-origines",
+      "engine": "plumbing.supply-network",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Deux tronçons sans amont : arborescence refusée.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "network": [
+          {
+            "code": "A",
+            "parent": null,
+            "length": {
+              "value": 5,
+              "unit": "m"
+            },
+            "elevation": {
+              "value": 0,
+              "unit": "m"
+            },
+            "location": "FLOOR",
+            "fixture": "SINK",
+            "count": 1
+          },
+          {
+            "code": "B",
+            "parent": null,
+            "length": {
+              "value": 5,
+              "unit": "m"
+            },
+            "elevation": {
+              "value": 0,
+              "unit": "m"
+            },
+            "location": "FLOOR",
+            "fixture": "WASHBASIN",
+            "count": 1
+          }
+        ],
+        "material": "PVC_PN16",
+        "upstreamPressure": {
+          "value": 250,
+          "unit": "kPa"
+        },
+        "temperature": {
+          "value": 25,
+          "unit": "degC"
+        }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "network.1.parent",
+            "code": "NETWORK_INVALID"
+          }
+        ]
+      }
+    },
+    {
+      "id": "plumbing.supply-network/sans-rugosites",
+      "engine": "plumbing.supply-network",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Référentiel sans rugosité des tubes : calcul refusé.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "omitParameters": ["plumbing.pipe.roughness"],
+      "inputs": {
+        "network": [
+          {
+            "code": "A",
+            "parent": null,
+            "length": {
+              "value": 5,
+              "unit": "m"
+            },
+            "elevation": {
+              "value": 0,
+              "unit": "m"
+            },
+            "location": "FLOOR",
+            "fixture": "SINK",
+            "count": 1
+          }
+        ],
+        "material": "PVC_PN16",
+        "upstreamPressure": {
+          "value": 250,
+          "unit": "kPa"
+        },
+        "temperature": {
+          "value": 25,
+          "unit": "degC"
+        }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.plumbing.pipe.roughness",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

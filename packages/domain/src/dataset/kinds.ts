@@ -8,6 +8,8 @@ import {
 } from '@consulpro/calc-core';
 
 import type { Discipline } from '../project/project';
+import { checkNetworkTree, FIXTURE_TYPES, PIPE_LOCATIONS } from './plumbing';
+import type { CellValue, DatasetRow, RowError } from './row';
 
 /*
  * Jeux de données typés (02-modele-de-donnees.md §3.3). Chaque type déclare ses colonnes ;
@@ -154,6 +156,86 @@ export const DATASET_KINDS = {
     ],
     check: (rows) => checkBoardTree(rows),
   },
+  SANITARY_FIXTURES: {
+    id: 'SANITARY_FIXTURES',
+    discipline: 'PLUMBING',
+    label: 'Appareils sanitaires',
+    maxRows: 5000,
+    columns: [
+      { key: 'level', label: 'Niveau', type: 'text', required: false, maxLength: 40 },
+      { key: 'room', label: 'Local', type: 'text', required: false, maxLength: 120 },
+      { key: 'fixture', label: 'Appareil', type: 'choice', required: true, options: FIXTURE_TYPES },
+      {
+        key: 'count',
+        label: 'Nombre',
+        type: 'number',
+        required: true,
+        integer: true,
+        min: 1,
+        exclusiveMin: false,
+        max: 1000,
+      },
+    ],
+  },
+  PLUMBING_NETWORK: {
+    id: 'PLUMBING_NETWORK',
+    discipline: 'PLUMBING',
+    label: 'Réseau d’alimentation (tronçons)',
+    maxRows: 1000,
+    columns: [
+      { key: 'code', label: 'Repère du tronçon', type: 'text', required: true, maxLength: 20 },
+      {
+        key: 'parent',
+        label: 'Tronçon amont (repère)',
+        type: 'text',
+        required: false,
+        maxLength: 20,
+      },
+      {
+        key: 'length',
+        label: 'Longueur',
+        type: 'quantity',
+        required: true,
+        unitKind: 'length',
+        units: ['m'],
+        positive: true,
+      },
+      {
+        key: 'elevation',
+        label: 'Altitude du point aval (par rapport à l’origine)',
+        type: 'quantity',
+        required: true,
+        unitKind: 'length',
+        units: ['m'],
+        positive: false,
+      },
+      {
+        key: 'location',
+        label: 'Emplacement',
+        type: 'choice',
+        required: true,
+        options: PIPE_LOCATIONS,
+      },
+      {
+        key: 'fixture',
+        label: 'Appareils desservis',
+        type: 'choice',
+        required: false,
+        options: FIXTURE_TYPES,
+      },
+      {
+        key: 'count',
+        label: 'Nombre d’appareils',
+        type: 'number',
+        required: false,
+        integer: true,
+        min: 1,
+        exclusiveMin: false,
+        max: 1000,
+      },
+    ],
+    check: (rows) => checkNetworkTree(rows),
+  },
 } as const satisfies Record<string, DatasetKind>;
 
 export type DatasetKindId = keyof typeof DATASET_KINDS;
@@ -162,14 +244,7 @@ export function isDatasetKind(value: string): value is DatasetKindId {
   return Object.hasOwn(DATASET_KINDS, value);
 }
 
-export type CellValue = string | number | { readonly value: number; readonly unit: string } | null;
-export type DatasetRow = Readonly<Record<string, CellValue>>;
-
-export interface RowError {
-  readonly row: number;
-  readonly column: string;
-  readonly message: string;
-}
+export type { CellValue, DatasetRow, RowError } from './row';
 
 /**
  * Valide et normalise les lignes d'un jeu de données (colonnes inconnues retirées, textes

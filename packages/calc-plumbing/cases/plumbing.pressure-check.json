@@ -1,0 +1,425 @@
+{
+  "engine": "plumbing.pressure-check",
+  "parameterSet": {
+    "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+    "version": "2013+2013+1+1"
+  },
+  "cases": [
+    {
+      "id": "plumbing.pressure-check/douche-r+2",
+      "engine": "plumbing.pressure-check",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "ρgΔz = 1000 × 9,80665 × 6 = 58,8399 kPa ; P_statique = 300 − 58,8399 = 241,1601 kPa ; P = 241,1601 − 40 = 201,1601 kPa ; minimum Douche 100 kPa ; maximum 300 kPa.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "upstreamPressure": {
+          "value": 300,
+          "unit": "kPa"
+        },
+        "heightDifference": {
+          "value": 6,
+          "unit": "m"
+        },
+        "losses": {
+          "value": 40,
+          "unit": "kPa"
+        },
+        "fixture": "SHOWER"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "hydrostatic": {
+            "value": 58.8399,
+            "tolerance": 0.000001
+          },
+          "staticPressure": {
+            "value": 241.1601,
+            "tolerance": 0.000001
+          },
+          "availablePressure": {
+            "value": 201.1601,
+            "tolerance": 0.000001
+          },
+          "minPressure": {
+            "value": 100,
+            "tolerance": 0.000001
+          },
+          "maxPressure": {
+            "value": 300,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "plumbing.supply.min-pressure",
+            "status": "PASS"
+          },
+          {
+            "rule": "plumbing.supply.max-pressure",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["PLUMBING.STEADY_FLOW"]
+      }
+    },
+    {
+      "id": "plumbing.pressure-check/robinet-de-chasse-insuffisant",
+      "engine": "plumbing.pressure-check",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "ρgΔz = 1000 × 9,80665 × 3 = 29,41995 kPa ; P_statique = 200 − 29,41995 = 170,58005 kPa ; P = 170,58005 − 60 = 110,58005 kPa ; minimum WC à robinet de chasse 120 kPa ; maximum 300 kPa.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "upstreamPressure": {
+          "value": 200,
+          "unit": "kPa"
+        },
+        "heightDifference": {
+          "value": 3,
+          "unit": "m"
+        },
+        "losses": {
+          "value": 60,
+          "unit": "kPa"
+        },
+        "fixture": "WC_FLUSH_VALVE"
+      },
+      "expected": {
+        "resultStatus": "NON_COMPLIANT",
+        "outputs": {
+          "hydrostatic": {
+            "value": 29.41995,
+            "tolerance": 0.000001
+          },
+          "staticPressure": {
+            "value": 170.58005,
+            "tolerance": 0.000001
+          },
+          "availablePressure": {
+            "value": 110.58005,
+            "tolerance": 0.000001
+          },
+          "minPressure": {
+            "value": 120,
+            "tolerance": 0.000001
+          },
+          "maxPressure": {
+            "value": 300,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "plumbing.supply.min-pressure",
+            "status": "FAIL"
+          },
+          {
+            "rule": "plumbing.supply.max-pressure",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["PLUMBING.STEADY_FLOW"]
+      }
+    },
+    {
+      "id": "plumbing.pressure-check/sous-sol-surpression",
+      "engine": "plumbing.pressure-check",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "ρgΔz = 1000 × 9,80665 × -4 = -39,2266 kPa ; P_statique = 350 − -39,2266 = 389,2266 kPa ; P = 389,2266 − 10 = 379,2266 kPa ; minimum Lavabo 100 kPa ; maximum 300 kPa.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "upstreamPressure": {
+          "value": 350,
+          "unit": "kPa"
+        },
+        "heightDifference": {
+          "value": -4,
+          "unit": "m"
+        },
+        "losses": {
+          "value": 10,
+          "unit": "kPa"
+        },
+        "fixture": "WASHBASIN"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "hydrostatic": {
+            "value": -39.2266,
+            "tolerance": 0.000001
+          },
+          "staticPressure": {
+            "value": 389.2266,
+            "tolerance": 0.000001
+          },
+          "availablePressure": {
+            "value": 379.2266,
+            "tolerance": 0.000001
+          },
+          "minPressure": {
+            "value": 100,
+            "tolerance": 0.000001
+          },
+          "maxPressure": {
+            "value": 300,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "plumbing.supply.min-pressure",
+            "status": "PASS"
+          },
+          {
+            "rule": "plumbing.supply.max-pressure",
+            "status": "FAIL"
+          }
+        ],
+        "hypotheses": ["PLUMBING.STEADY_FLOW"]
+      }
+    },
+    {
+      "id": "plumbing.pressure-check/pression-tout-juste-suffisante",
+      "engine": "plumbing.pressure-check",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "ρgΔz = 1000 × 9,80665 × 6 = 58,8399 kPa ; P_statique = 158.8399 − 58,8399 = 100 kPa ; P = 100 − 0 = 100 kPa ; minimum Évier 100 kPa ; maximum 300 kPa.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "upstreamPressure": {
+          "value": 158.8399,
+          "unit": "kPa"
+        },
+        "heightDifference": {
+          "value": 6,
+          "unit": "m"
+        },
+        "losses": {
+          "value": 0,
+          "unit": "kPa"
+        },
+        "fixture": "SINK"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "hydrostatic": {
+            "value": 58.8399,
+            "tolerance": 0.000001
+          },
+          "staticPressure": {
+            "value": 100,
+            "tolerance": 0.000001
+          },
+          "availablePressure": {
+            "value": 100,
+            "tolerance": 0.000001
+          },
+          "minPressure": {
+            "value": 100,
+            "tolerance": 0.000001
+          },
+          "maxPressure": {
+            "value": 300,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "plumbing.supply.min-pressure",
+            "status": "PASS"
+          },
+          {
+            "rule": "plumbing.supply.max-pressure",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["PLUMBING.STEADY_FLOW"]
+      }
+    },
+    {
+      "id": "plumbing.pressure-check/pression-statique-au-maximum",
+      "engine": "plumbing.pressure-check",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "ρgΔz = 1000 × 9,80665 × 0 = 0 kPa ; P_statique = 300 − 0 = 300 kPa ; P = 300 − 120 = 180 kPa ; minimum WC à réservoir de chasse 50 kPa ; maximum 300 kPa.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "upstreamPressure": {
+          "value": 300,
+          "unit": "kPa"
+        },
+        "heightDifference": {
+          "value": 0,
+          "unit": "m"
+        },
+        "losses": {
+          "value": 120,
+          "unit": "kPa"
+        },
+        "fixture": "WC_CISTERN"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "hydrostatic": {
+            "value": 0,
+            "tolerance": 0.000001
+          },
+          "staticPressure": {
+            "value": 300,
+            "tolerance": 0.000001
+          },
+          "availablePressure": {
+            "value": 180,
+            "tolerance": 0.000001
+          },
+          "minPressure": {
+            "value": 50,
+            "tolerance": 0.000001
+          },
+          "maxPressure": {
+            "value": 300,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "plumbing.supply.min-pressure",
+            "status": "PASS"
+          },
+          {
+            "rule": "plumbing.supply.max-pressure",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["PLUMBING.STEADY_FLOW"]
+      }
+    },
+    {
+      "id": "plumbing.pressure-check/appareil-inconnu",
+      "engine": "plumbing.pressure-check",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Appareil hors de la liste du DTU : entrée refusée.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "upstreamPressure": {
+          "value": 300,
+          "unit": "kPa"
+        },
+        "heightDifference": {
+          "value": 6,
+          "unit": "m"
+        },
+        "losses": {
+          "value": 40,
+          "unit": "kPa"
+        },
+        "fixture": "JACUZZI"
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "fixture",
+            "code": "invalid_value"
+          }
+        ]
+      }
+    },
+    {
+      "id": "plumbing.pressure-check/sans-pressions-minimales",
+      "engine": "plumbing.pressure-check",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Référentiel sans pressions minimales : calcul refusé.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "omitParameters": ["plumbing.supply.min_pressure"],
+      "inputs": {
+        "upstreamPressure": {
+          "value": 300,
+          "unit": "kPa"
+        },
+        "heightDifference": {
+          "value": 6,
+          "unit": "m"
+        },
+        "losses": {
+          "value": 40,
+          "unit": "kPa"
+        },
+        "fixture": "SHOWER"
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.plumbing.supply.min_pressure",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

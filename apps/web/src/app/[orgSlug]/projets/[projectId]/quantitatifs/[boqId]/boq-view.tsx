@@ -3,7 +3,9 @@
 import type {
   ApplyPricesResultDto,
   BoqDto,
+  BoqGroupDto,
   BoqItemDto,
+  BoqPresentationDto,
   BoqSyncResultDto,
   CurrencyDto,
   MaterialRowDto,
@@ -19,7 +21,13 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  Label,
   Section,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
   Table,
   TableBody,
   TableCaption,
@@ -150,6 +158,20 @@ export function BoqView({ orgSlug, projectId, canManage, boq, materials, librari
       : mutate(() => api(`${api_}/items`, { method: 'POST', json: values }), t('lineSaved'));
 
   const pending = boq.pending.add + boq.pending.update + boq.pending.remove;
+  const aggregated = boq.presentation === 'AGGREGATED';
+  const groupOf = new Map<string, BoqGroupDto>(
+    aggregated ? boq.groups.flatMap((g) => g.itemIds.map((id) => [id, g] as const)) : [],
+  );
+  const setPresentation = (presentation: BoqPresentationDto) =>
+    mutate(
+      () =>
+        api(api_, {
+          method: 'PATCH',
+          json: { presentation },
+          headers: { 'if-match': `"${String(boq.version)}"` },
+        }),
+      t('saved'),
+    );
   const unverified = boq.items.some((i) => i.source && !i.source.engineVerified);
   const allUnpriced = boq.items.length > 0 && boq.total.unpriced === boq.items.length;
   const currencyLocked = boq.items.some((i) => i.unitPrice !== null);
@@ -260,6 +282,28 @@ export function BoqView({ orgSlug, projectId, canManage, boq, materials, librari
           )}
         </div>
 
+        {boq.groups.length > 0 && (
+          <div className="mb-4 flex flex-wrap items-center gap-3">
+            <Label htmlFor="boq-presentation">{t('presentation')}</Label>
+            <Select
+              value={boq.presentation}
+              disabled={!canManage}
+              onValueChange={(value) => {
+                if (value === 'DETAILED' || value === 'AGGREGATED') void setPresentation(value);
+              }}
+            >
+              <SelectTrigger id="boq-presentation" className="w-full sm:w-80">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="DETAILED">{t('presentationDetailed')}</SelectItem>
+                <SelectItem value="AGGREGATED">{t('presentationAggregated')}</SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="w-full text-sm text-muted-foreground">{t('presentationHelp')}</p>
+          </div>
+        )}
+
         <Table>
           <TableCaption className="sr-only">{t('table')}</TableCaption>
           <TableHeader>
@@ -313,8 +357,37 @@ export function BoqView({ orgSlug, projectId, canManage, boq, materials, librari
                       </TableCell>
                       {canManage && <TableCell />}
                     </TableRow>
-                    {items.map((item, index) => {
+                    {rowsOf(items, groupOf).map((row, index) => {
                       const number = `${node.code}.${String(index + 1)}`;
+                      if (row.kind === 'group') {
+                        const group = row.group;
+                        return (
+                          <TableRow key={group.key}>
+                            <TableCell className="font-mono text-sm text-muted-foreground">
+                              {number}
+                            </TableCell>
+                            <TableCell className="min-w-56">
+                              <div className="font-medium">{group.designation}</div>
+                              <p className="mt-1 text-sm text-muted-foreground">
+                                {t('groupedLines', { count: group.lines })}
+                                {group.unpriced > 0 && group.unpriced < group.lines
+                                  ? ` · ${t('unpricedCount', { count: group.unpriced })}`
+                                  : ''}
+                              </p>
+                            </TableCell>
+                            <TableCell>{unit(group.unit)}</TableCell>
+                            <TableCell className="text-end tabular-nums">
+                              {formatQuantity(group.quantity, locale)}
+                            </TableCell>
+                            <TableCell className="text-end tabular-nums">—</TableCell>
+                            <TableCell className="text-end tabular-nums">
+                              {group.amount !== null ? money(group.amount) : '—'}
+                            </TableCell>
+                            {canManage && <TableCell />}
+                          </TableRow>
+                        );
+                      }
+                      const item = row.item;
                       return (
                         <TableRow key={item.id}>
                           <TableCell className="font-mono text-sm text-muted-foreground">
@@ -593,4 +666,23 @@ export function BoqView({ orgSlug, projectId, canManage, boq, materials, librari
       />
     </>
   );
+}
+
+type DisplayRow =
+  | { readonly kind: 'item'; readonly item: BoqItemDto }
+  | { readonly kind: 'group'; readonly group: BoqGroupDto };
+
+/** Lignes affichées d'un nœud : chaque groupe remplace ses entrées, à la place de la première. */
+function rowsOf(
+  items: readonly BoqItemDto[],
+  groupOf: ReadonlyMap<string, BoqGroupDto>,
+): DisplayRow[] {
+  const shown = new Set<string>();
+  return items.flatMap((item): DisplayRow[] => {
+    const group = groupOf.get(item.id);
+    if (!group) return [{ kind: 'item', item }];
+    if (shown.has(group.key)) return [];
+    shown.add(group.key);
+    return [{ kind: 'group', group }];
+  });
 }

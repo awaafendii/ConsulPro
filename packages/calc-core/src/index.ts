@@ -1,3 +1,9 @@
+export {
+  breakdownEntrySchema,
+  breakdownSchema,
+  isBreakdown,
+  type BreakdownEntry,
+} from './breakdown';
 export { canonicalJson } from './canonical';
 export {
   ENGINE_ID_PATTERN,

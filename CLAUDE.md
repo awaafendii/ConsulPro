@@ -63,7 +63,8 @@ If-Match obligatoire sur PATCH et DELETE).
   dans un fichier puis l'exécuter.
 - Mutation (Stryker) : lanceur `command` obligatoire ; avec Vitest 5, le lanceur Vitest de Stryker
   n'active aucun mutant (tous « survivent »). Annoter un mutant équivalent par
-  `// Stryker disable next-line <Mutateur>: raison`, jamais sans raison.
+  `// Stryker disable next-line <Mutateur>: raison`, jamais sans raison. Une seule campagne à la fois,
+  et aucun `pnpm install` pendant qu'elle tourne : sinon des mutants « survivent » à tort.
 
 ## État des phases
 
@@ -75,6 +76,7 @@ If-Match obligatoire sur PATCH et DELETE).
 | 3 — Projets, calcul, référentiels | Validée (2026-10-11) |
 | 4 — BTP (quantités) | Validée (2026-10-13) |
 | 5 — Électricité | Validée (2026-10-13) |
-| 6 à 10           | À faire |
+| 6 — Plomberie & Sanitaire | Validée (2026-10-14) |
+| 7 à 10           | À faire |
 
 Critères de sortie de chaque phase : `docs/architecture/07-roadmap.md`.

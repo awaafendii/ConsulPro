@@ -1,0 +1,334 @@
+{
+  "standard": {
+    "code": "PLUMBING-USAGES",
+    "title": "Usages courants — plomberie",
+    "publisher": "ConsulPro",
+    "discipline": "PLUMBING",
+    "nature": "PRACTICE"
+  },
+  "version": {
+    "label": "1",
+    "sourceNotes": "Valeurs indicatives couramment employées en Afrique francophone (Guinée en priorité, Q3). Aucune n’est vérifiée : chaque bureau d’études les confirme ou les surcharge (avec justification) avant usage."
+  },
+  "parameters": [
+    {
+      "key": "plumbing.supply.min_pressure",
+      "label": "Pression minimale de fonctionnement au point de puisage",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "fixture",
+            "kind": "CATEGORY",
+            "values": [
+              "SINK",
+              "WASHBASIN",
+              "HAND_BASIN",
+              "BIDET",
+              "BATHTUB",
+              "SHOWER",
+              "WC_CISTERN",
+              "WC_FLUSH_VALVE",
+              "URINAL",
+              "LAUNDRY_TUB",
+              "WASHING_MACHINE",
+              "DISHWASHER",
+              "TAP_15",
+              "TAP_20"
+            ]
+          }
+        ],
+        "unit": "kPa",
+        "cells": [100, 100, 100, 100, 100, 100, 50, 120, 100, 100, 100, 100, 100, 100]
+      },
+      "source": {
+        "document": "Usages courants de la plomberie — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d’études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.supply.singular_loss_ratio",
+      "label": "Pertes de charge singulières forfaitaires (part des pertes linéaires)",
+      "kind": "SCALAR",
+      "value": 15,
+      "unit": "%",
+      "source": {
+        "document": "Usages courants de la plomberie — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d’études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.water.kinematic_viscosity",
+      "label": "Viscosité cinématique de l’eau selon la température",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "temperature",
+            "kind": "NUMERIC",
+            "unit": "degC",
+            "values": [0, 5, 10, 15, 20, 25, 30, 35, 40, 50, 60, 70, 80],
+            "lookup": "LINEAR"
+          }
+        ],
+        "unit": "mm2/s",
+        "cells": [
+          1.787, 1.519, 1.307, 1.139, 1.004, 0.893, 0.801, 0.724, 0.658, 0.553, 0.474, 0.413, 0.365
+        ]
+      },
+      "source": {
+        "document": "Propriétés physiques de l’eau à pression atmosphérique (valeurs tabulées usuelles)",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire du texte avant tout usage (décisions Q7 et Q8 du 2026-10-13)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.water.density",
+      "label": "Masse volumique de l’eau (valeur arrondie)",
+      "kind": "SCALAR",
+      "value": 1000,
+      "unit": "kg/m3",
+      "source": {
+        "document": "Propriétés physiques de l’eau à pression atmosphérique (valeurs tabulées usuelles)",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire du texte avant tout usage (décisions Q7 et Q8 du 2026-10-13). Valeur arrondie, sans correction de température."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.water.specific_heat",
+      "label": "Capacité thermique massique de l’eau",
+      "kind": "SCALAR",
+      "value": 4.185,
+      "unit": "kJ/kgK",
+      "source": {
+        "document": "Propriétés physiques de l’eau à pression atmosphérique (valeurs tabulées usuelles)",
+        "note": "Saisie ConsulPro, à contrôler sur un exemplaire du texte avant tout usage (décisions Q7 et Q8 du 2026-10-13)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.consumption.daily",
+      "label": "Consommation journalière d’eau par usager",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "usage",
+            "kind": "CATEGORY",
+            "values": ["DWELLING", "OFFICE", "SCHOOL", "HEALTH", "HOTEL"]
+          }
+        ],
+        "unit": "L/d",
+        "cells": [120, 40, 20, 400, 200]
+      },
+      "source": {
+        "document": "Usages courants de la plomberie — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d’études (surcharge justifiée possible). Logement (par habitant), bureau et école (par usager), santé et hôtel (par lit)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.storage.autonomy",
+      "label": "Autonomie d’un réservoir de stockage",
+      "kind": "SCALAR",
+      "value": 2,
+      "unit": "d",
+      "source": {
+        "document": "Usages courants de la plomberie — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d’études (surcharge justifiée possible). Coupures du réseau public."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.storage.reserve_ratio",
+      "label": "Réserve d’un réservoir (part du volume utile)",
+      "kind": "SCALAR",
+      "value": 10,
+      "unit": "%",
+      "source": {
+        "document": "Usages courants de la plomberie — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d’études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.hot_water.daily",
+      "label": "Besoin journalier d’eau chaude à la température de stockage, par usager",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "usage",
+            "kind": "CATEGORY",
+            "values": ["DWELLING", "OFFICE", "SCHOOL", "HEALTH", "HOTEL"]
+          }
+        ],
+        "unit": "L/d",
+        "cells": [50, 5, 3, 100, 80]
+      },
+      "source": {
+        "document": "Usages courants de la plomberie — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d’études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.hot_water.storage_temperature",
+      "label": "Température de stockage de l’eau chaude",
+      "kind": "SCALAR",
+      "value": 60,
+      "unit": "degC",
+      "source": {
+        "document": "Usages courants de la plomberie — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d’études (surcharge justifiée possible). Prévention des légionelles."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.water_heater.capacity",
+      "label": "Capacités courantes des chauffe-eau à accumulation",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "capacity",
+            "kind": "NUMERIC",
+            "unit": "L",
+            "values": [30, 50, 75, 100, 150, 200, 250, 300, 500],
+            "lookup": "EXACT"
+          }
+        ],
+        "unit": "L",
+        "cells": [30, 50, 75, 100, 150, 200, 250, 300, 500]
+      },
+      "source": {
+        "document": "Usages courants de la plomberie — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d’études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.pump.motor_margin",
+      "label": "Marge de puissance du moteur d’une pompe",
+      "kind": "SCALAR",
+      "value": 20,
+      "unit": "%",
+      "source": {
+        "document": "Usages courants de la plomberie — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d’études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.septic.wastewater_per_user",
+      "label": "Rejet journalier d’eaux usées par usager",
+      "kind": "SCALAR",
+      "value": 100,
+      "unit": "L/d",
+      "source": {
+        "document": "Usages courants de la plomberie — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d’études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.septic.retention_time",
+      "label": "Temps de séjour des eaux dans la fosse",
+      "kind": "SCALAR",
+      "value": 3,
+      "unit": "d",
+      "source": {
+        "document": "Usages courants de la plomberie — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d’études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.septic.sludge_per_user",
+      "label": "Accumulation de boues par usager",
+      "kind": "SCALAR",
+      "value": 40,
+      "unit": "L/a",
+      "source": {
+        "document": "Usages courants de la plomberie — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d’études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.septic.desludging_interval",
+      "label": "Intervalle entre deux vidanges de la fosse",
+      "kind": "SCALAR",
+      "value": 2,
+      "unit": "a",
+      "source": {
+        "document": "Usages courants de la plomberie — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d’études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.soakaway.permeability_ratio",
+      "label": "Part de la perméabilité mesurée retenue pour le puisard (colmatage)",
+      "kind": "SCALAR",
+      "value": 50,
+      "unit": "%",
+      "source": {
+        "document": "Usages courants de la plomberie — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d’études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.manhole.max_spacing",
+      "label": "Espacement maximal entre deux regards",
+      "kind": "SCALAR",
+      "value": 30,
+      "unit": "m",
+      "source": {
+        "document": "Usages courants de la plomberie — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d’études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "plumbing.drainage.strickler",
+      "label": "Coefficient de Strickler des canalisations d’évacuation",
+      "kind": "TABLE",
+      "table": {
+        "axes": [
+          {
+            "name": "material",
+            "kind": "CATEGORY",
+            "values": ["PVC_DRAIN"]
+          }
+        ],
+        "unit": "m1/3/s",
+        "cells": [100]
+      },
+      "source": {
+        "document": "Usages courants de la plomberie — valeurs indicatives ConsulPro",
+        "note": "Valeur usuelle à confirmer par le bureau d’études (surcharge justifiée possible)."
+      },
+      "verification": "TO_VERIFY"
+    }
+  ],
+  "rules": [
+    {
+      "code": "plumbing.supply.min-pressure",
+      "description": "La pression disponible au point de puisage atteint la pression minimale de l’appareil.",
+      "severity": "BLOCKING",
+      "parameterKeys": ["plumbing.supply.min_pressure"],
+      "implementation": "plumbing.pressure-check/min-pressure"
+    },
+    {
+      "code": "plumbing.manhole.spacing",
+      "description": "Deux regards consécutifs ne sont pas plus éloignés que l’espacement maximal.",
+      "severity": "BLOCKING",
+      "parameterKeys": ["plumbing.manhole.max_spacing"],
+      "implementation": "plumbing.manholes/spacing"
+    }
+  ]
+}

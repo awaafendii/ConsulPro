@@ -82,6 +82,7 @@ const toBoq = (b: BoqRow): BoqRecord => ({
   projectId: b.projectId,
   title: b.title,
   currency: b.currency,
+  presentation: b.presentation,
   version: b.version,
   createdById: b.createdById,
   createdByName: b.createdBy.name,
@@ -99,6 +100,8 @@ const toItem = (i: ItemRow): BoqItemRecord => ({
   origin: i.origin,
   calculationId: i.calculationId,
   outputKey: i.outputKey,
+  outputPart: i.outputPart,
+  groupDesignation: i.groupDesignation,
   sourceRevisionId: i.sourceRevisionId,
   workKey: i.workKey,
   designation: i.designation,
@@ -337,6 +340,8 @@ export function createQuantityRepositories(tx: Tx): QuantityRepositories {
             origin: 'CALCULATION' as const,
             calculationId: item.calculationId,
             outputKey: item.outputKey,
+            outputPart: item.outputPart,
+            groupDesignation: item.groupDesignation,
             sourceRevisionId: item.sourceRevisionId,
             workKey: item.workKey,
             designation: item.designation,
@@ -354,6 +359,7 @@ export function createQuantityRepositories(tx: Tx): QuantityRepositories {
               sourceRevisionId: line.sourceRevisionId,
               workKey: line.workKey,
               designation: line.designation,
+              groupDesignation: line.groupDesignation,
               unit: line.unit,
               quantity: dbDecimal(line.quantity),
               version: { increment: 1 },
@@ -410,6 +416,17 @@ export function createQuantityRepositories(tx: Tx): QuantityRepositories {
           select: revisionSelect,
         });
         return rows.map(toRevisionOutputs);
+      },
+      async breakdownWorks(organizationId) {
+        const rows = await tx.boqItem.findMany({
+          where: { organizationId, origin: 'CALCULATION', outputPart: { not: '' } },
+          select: { workKey: true, unit: true, designation: true },
+          distinct: ['workKey'],
+          orderBy: [{ workKey: 'asc' }],
+        });
+        return rows.flatMap((r) =>
+          r.workKey ? [{ workKey: r.workKey, unit: r.unit, designation: r.designation }] : [],
+        );
       },
     },
 

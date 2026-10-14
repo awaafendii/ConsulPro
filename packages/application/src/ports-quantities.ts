@@ -1,5 +1,6 @@
 import type { OutputPresentation, Result } from '@consulpro/calc-core';
 import type {
+  BoqPresentation,
   BoqUnit,
   ComputedLine,
   Decimal,
@@ -62,6 +63,8 @@ export interface BoqRecord {
   readonly projectId: string;
   readonly title: string;
   readonly currency: string;
+  /** Présentation du DQE (décision Q9) : entrées ventilées détaillées ou agrégées. */
+  readonly presentation: BoqPresentation;
   readonly version: number;
   readonly createdById: string;
   readonly createdByName: string;
@@ -79,6 +82,10 @@ export interface BoqItemRecord {
   readonly origin: BoqItemOrigin;
   readonly calculationId: string | null;
   readonly outputKey: string | null;
+  /** Entrée d'une sortie ventilée (`''` sinon). */
+  readonly outputPart: string;
+  /** Désignation du groupe de l'entrée (présentation agrégée) ; null sinon. */
+  readonly groupDesignation: string | null;
   readonly sourceRevisionId: string | null;
   readonly workKey: string | null;
   readonly designation: string;
@@ -204,7 +211,7 @@ export interface QuantityRepositories {
       organizationId: string,
       projectId: string,
       id: string,
-      fields: { title: string; currency: string },
+      fields: { title: string; currency: string; presentation: BoqPresentation },
       expectedVersion: number,
     ): Promise<boolean>;
     /** Nouvelle version du contenu (synchronisation, prix) ; date de synchronisation éventuelle. */
@@ -247,6 +254,13 @@ export interface QuantityRepositories {
       organizationId: string,
       revisionIds: readonly string[],
     ): Promise<RevisionOutputs[]>;
+    /**
+     * Ouvrages d'entrées ventilées présents dans les quantitatifs de l'organisation (une
+     * désignation et une unité par ouvrage) : variantes proposées aux bibliothèques de prix.
+     */
+    breakdownWorks(
+      organizationId: string,
+    ): Promise<{ workKey: string; unit: string; designation: string }[]>;
   };
   readonly prices: {
     listLibraries(organizationId: string): Promise<PriceLibraryRecord[]>;

@@ -27,7 +27,7 @@ référentiels versionnés.
 | 3     | Projets               | Validée                     |
 | 4     | BTP                   | Validée                     |
 | 5     | Électricité           | Validée                     |
-| 6     | Plomberie / Sanitaire | À faire                     |
+| 6     | Plomberie / Sanitaire | Validée                     |
 | 7     | Topographie           | À faire                     |
 | 8     | Imports / Documents   | À faire                     |
 | 9     | Rapports              | À faire                     |
@@ -40,8 +40,10 @@ surcharges justifiées par organisation ou par projet), **études et calculs** e
 en révisions immuables (comparaison, dépendances et obsolescence), contrôle à deux niveaux (l'auteur
 valide, un autre ingénieur vérifie), données de projet versionnées, notifications et recherche.
 Métiers livrés : **BTP** (avant-métré, 13 moteurs de quantités, quantitatifs, bibliothèques de
-prix) et **Électricité** (arbre des tableaux et départs, bilan de puissance, courant d'emploi,
-circuits, sections, chutes de tension, protections, sur la NF C 15-100 et l'UTE C 15-105). Les
+prix), **Électricité** (arbre des tableaux et départs, bilan de puissance, courant d'emploi,
+circuits, sections, chutes de tension, protections, sur la NF C 15-100 et l'UTE C 15-105) et
+**Plomberie & Sanitaire** (débits, réseaux d'alimentation, pertes de charge, pressions,
+évacuation, fosses et puisards, regards, réservoirs, pompes, chauffe-eau ; DQE par diamètre). Les
 moteurs ne sont pas encore contre-vérifiés par un ingénieur du métier et les valeurs normatives
 livrées sont « à vérifier » : l'interface le signale dans chaque résultat.
 

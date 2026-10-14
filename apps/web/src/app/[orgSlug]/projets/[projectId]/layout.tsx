@@ -1,4 +1,4 @@
-import { DISCIPLINES } from '@consulpro/domain';
+import { DISCIPLINES, isQuantityDiscipline } from '@consulpro/domain';
 import { Badge, Callout, PageHeader } from '@consulpro/ui';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
@@ -47,7 +47,7 @@ export default async function ProjectLayout({
       )}
       <ProjectTabs
         base={`/${ctx.organization.slug}/projets/${project.id}`}
-        btp={project.disciplines.includes('BTP')}
+        quantities={project.disciplines.some(isQuantityDiscipline)}
       />
       {children}
     </>

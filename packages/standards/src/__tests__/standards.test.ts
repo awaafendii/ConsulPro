@@ -428,3 +428,24 @@ describe('référentiels Électricité (NF C 15-100 2002, UTE C 15-105)', () => 
     }
   });
 });
+
+describe('référentiels Plomberie (NF DTU 60.11 et 64.1 de 2013, tubes, usages)', () => {
+  const read = (file: string): unknown =>
+    JSON.parse(
+      readFileSync(fileURLToPath(new URL(`../../seeds/plumbing/${file}`, import.meta.url)), 'utf8'),
+    );
+
+  it.each([
+    ['nf-dtu-60.11-2013.json', 'NF-DTU-60.11', 'NORM'],
+    ['nf-dtu-64.1-2013.json', 'NF-DTU-64.1', 'NORM'],
+    ['tubes-en-1.json', 'TUBES-EN', 'NORM'],
+    ['usages-plomberie-1.json', 'PLUMBING-USAGES', 'PRACTICE'],
+  ])('%s est valide, sourcé et entièrement « à vérifier »', (file, code, nature) => {
+    const parsed = standardFileSchema.safeParse(read(file));
+    expect(parsed.success, JSON.stringify(parsed.error?.issues)).toBe(true);
+    if (!parsed.success) return;
+    expect(parsed.data.standard).toMatchObject({ code, discipline: 'PLUMBING', nature });
+    expect(parsed.data.parameters.every((p) => p.verification === 'TO_VERIFY')).toBe(true);
+    expect(parsed.data.parameters.every((p) => p.source.document.length > 0)).toBe(true);
+  });
+});

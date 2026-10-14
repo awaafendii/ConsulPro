@@ -1,4 +1,4 @@
-import { findUnit, type ParameterValue } from '@consulpro/calc-core';
+import { findUnit, isBreakdown, type ParameterValue } from '@consulpro/calc-core';
 import type { CalculationView } from '@consulpro/contracts';
 
 import type { RevisionRecord } from '../ports-calculations';
@@ -95,19 +95,20 @@ export function toCalculationView(revision: RevisionRecord): CalculationView {
     };
   });
 
+  // Une sortie ventilée s'affiche entrée par entrée (« Linéaire de tubes — PVC Ø32 »).
   const outputs = revision.outputs
     ? p.outputs.flatMap((o) => {
         const value = revision.outputs?.[o.key];
-        return typeof value === 'number'
-          ? [
-              {
-                key: o.key,
-                label: o.label,
-                value,
-                ...optional('unit', unit(o.unit)),
-                precision: o.precision,
-              },
-            ]
+        const row = (key: string, label: string, v: number) => ({
+          key,
+          label,
+          value: v,
+          ...optional('unit', unit(o.unit)),
+          precision: o.precision,
+        });
+        if (typeof value === 'number') return [row(o.key, o.label, value)];
+        return o.breakdown && isBreakdown(value)
+          ? value.map((e) => row(`${o.key}:${e.key}`, `${o.label} — ${e.label}`, e.value))
           : [];
       })
     : [];

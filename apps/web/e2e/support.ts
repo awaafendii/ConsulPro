@@ -28,6 +28,10 @@ export interface Fixture {
   readonly elecProjectId: string;
   readonly elecDatasetId: string;
   readonly elecCalculationId: string;
+  /** Projet de plomberie : réseau d'alimentation calculé, rattaché, quantitatif ventilé. */
+  readonly plumbingProjectId: string;
+  readonly plumbingCalculationId: string;
+  readonly plumbingBoqId: string;
 }
 
 /** Dernier lien reçu par une adresse dans Mailpit (vérification, invitation…). */

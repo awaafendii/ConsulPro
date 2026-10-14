@@ -77,6 +77,12 @@ projet (`kind: 'dataset'`, ex. `ELEC_BOARD_TREE`). La saisie est `{ fromDataset:
 le serveur lit la révision courante du jeu, la valide avec le schéma du moteur et trace la
 révision lue (`calculation_dataset_links`). Le moteur reste pur : il reçoit des lignes.
 
+Sorties ventilées (Phase 6, ADR-0011) : une sortie déclarée `breakdown` vaut une liste d'entrées
+`{ key, label, group, groupLabel, value }` (ex. linéaire de tubes par matériau et diamètre). La vue
+d'un calcul affiche une ligne par entrée ; le quantitatif en tire une ligne par entrée. Les
+méthodes itératives (Colebrook-White) tracent leur nombre d'itérations ; une non-convergence est
+une erreur, jamais une valeur approchée.
+
 ## 4. Étapes du pipeline
 
 | Étape            | Comportement                                                                                                                                                                                                                         | Échec ⇒                    |

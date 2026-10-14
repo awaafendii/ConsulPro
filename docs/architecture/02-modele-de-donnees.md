@@ -92,7 +92,7 @@ des **jeux de données** typés et versionnés.
 
 | Entité            | Rôle                                                    | Champs clés                                                                                        |
 | ----------------- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `DataSet`         | Jeu de données nommé                                    | discipline, `kind` (ex. `TOPO_POINTS`, `TOPO_OBSERVATIONS`, `ELEC_BOARD_TREE`, `SANITARY_FIXTURES`), révision courante |
+| `DataSet`         | Jeu de données nommé                                    | discipline, `kind` (ex. `TOPO_POINTS`, `TOPO_OBSERVATIONS`, `ELEC_BOARD_TREE`, `SANITARY_FIXTURES`, `PLUMBING_NETWORK`), révision courante |
 | `DataSetRevision` | Contenu immuable d'une version                          | numéro, `rows jsonb` (validé par le schéma du `kind`), `schema_version`, système de coordonnées et unités (si pertinent), origine (`MANUAL` \| `IMPORT`), `import_job_id`, auteur |
 
 Choix : stockage des lignes en `jsonb` validé par Zod plutôt qu'une table par type.
@@ -133,8 +133,8 @@ du calcul. Une exécution `INVALID` n'est pas enregistrée. Tables du lot D : `n
 | ------------------- | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | `TakeoffNode`       | Nœud de l'avant-métré : lot, niveau, ouvrage | `kind` (`LOT` à la racine, `LEVEL` dans un lot, `ELEMENT` dans un lot ou un niveau), code unique parmi les frères, intitulé, parent (même projet) |
 | `TakeoffAssignment` | Rattachement d'un calcul BTP à un nœud       | `calculation_id` (clé : un nœud au plus par calcul), `node_id`, auteur du rattachement                                         |
-| `BillOfQuantities`  | Quantitatif / DQE d'un projet                | titre, devise (ISO 4217), `synced_at`, `version` ; sa structure est celle de l'avant-métré (pas de table de sections distincte) |
-| `BoqItem`           | Ligne de quantitatif                         | nœud, origine (`CALCULATION` | `MANUAL`), calcul + sortie + `source_revision_id` (traçabilité), ouvrage (`work_key`), désignation, unité, quantité `NUMERIC(18,4)`, quantité retenue + justification, prix unitaire facultatif, article de prix d'origine |
+| `BillOfQuantities`  | Quantitatif / DQE d'un projet                | titre, devise (ISO 4217), présentation (`DETAILED` \| `AGGREGATED`, ADR-0011), `synced_at`, `version` ; sa structure est celle de l'avant-métré (pas de table de sections distincte) |
+| `BoqItem`           | Ligne de quantitatif                         | nœud, origine (`CALCULATION` | `MANUAL`), calcul + sortie + entrée ventilée (`output_part`, ex. un diamètre de tube, et désignation de son groupe) + `source_revision_id` (traçabilité), ouvrage (`work_key`), désignation, unité, quantité `NUMERIC(18,4)`, quantité retenue + justification, prix unitaire facultatif, article de prix d'origine |
 | `PriceLibrary`      | Bibliothèque de prix d'une organisation      | nom (unique), devise, date de validité                                                                                            |
 | `PriceItem`         | Prix unitaire                                | code, désignation, unité, prix `NUMERIC(18,4)`, ouvrage facultatif (un prix par ouvrage et par bibliothèque)                     |
 

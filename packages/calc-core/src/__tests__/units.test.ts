@@ -145,3 +145,17 @@ describe('unités du métré (Phase 4)', () => {
     expect(toSI(0.617, 'kg/m')).toBe(0.617);
   });
 });
+
+describe('unités de la plomberie (Phase 6)', () => {
+  it('débits journaliers, année, viscosité, chaleur massique, gradient, Strickler', () => {
+    expect(toSI(86_400, 'L/d')).toBeCloseTo(1e-3, 15);
+    expect(toSI(1, 'a')).toBe(365 * 86_400);
+    const daily = convert(365, 'L/a', 'L/d');
+    expect(daily.ok && daily.value).toBeCloseTo(1, 12);
+    expect(toSI(3.6, 'mm/h')).toBeCloseTo(1e-6, 18);
+    expect(toSI(1.004, 'mm2/s')).toBeCloseTo(1.004e-6, 18);
+    expect(toSI(4.18, 'kJ/kgK')).toBeCloseTo(4180, 9);
+    expect(toSI(0.2, 'kPa/m')).toBeCloseTo(200, 12);
+    expect(findUnit('m1/3/s')?.kind).toBe('strickler');
+  });
+});

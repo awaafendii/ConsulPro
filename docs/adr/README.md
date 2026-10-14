@@ -15,3 +15,4 @@ Statuts : `Proposé` → `Accepté` | `Rejeté` | `Remplacé par ADR-XXXX`.
 | [0008](0008-jobs-asynchrones-postgresql.md)           | Jobs asynchrones sur PostgreSQL (pg-boss)                  | Accepté |
 | [0009](0009-authentification.md)                      | Authentification (Better Auth)                             | Accepté |
 | [0010](0010-stockage-fichiers.md)                     | Stockage de fichiers compatible S3                         | Accepté |
+| [0011](0011-sorties-ventilees.md)                     | Sorties ventilées et présentation du quantitatif (Phase 6) | Accepté |

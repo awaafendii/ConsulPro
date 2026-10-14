@@ -1,0 +1,385 @@
+{
+  "engine": "plumbing.flow-rates",
+  "parameterSet": {
+    "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+    "version": "2013+2013+1+1"
+  },
+  "cases": [
+    {
+      "id": "plumbing.flow-rates/logement-5-appareils",
+      "engine": "plumbing.flow-rates",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Débits de base (DTU 60.11) : 1 × Évier 0,2 L/s + 1 × Lavabo 0,2 L/s + 1 × Douche 0,2 L/s + 1 × WC à réservoir de chasse 0,12 L/s + 1 × Lave-linge 0,2 L/s = 0,92 L/s ; x = 5 ; y = min(1 ; 0,8/√4) = 0,4 ; Q_p = y × Q_b = 0,368 L/s.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "sink": 1,
+        "washbasin": 1,
+        "shower": 1,
+        "wcCistern": 1,
+        "washingMachine": 1
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "fixtureCount": {
+            "value": 5,
+            "tolerance": 0.000001
+          },
+          "baseFlow": {
+            "value": 0.92,
+            "tolerance": 0.000001
+          },
+          "simultaneity": {
+            "value": 0.4,
+            "tolerance": 0.000001
+          },
+          "probableFlow": {
+            "value": 0.368,
+            "tolerance": 0.000001
+          },
+          "fixtures": [
+            {
+              "key": "SINK",
+              "value": 1,
+              "tolerance": 1e-9
+            },
+            {
+              "key": "WASHBASIN",
+              "value": 1,
+              "tolerance": 1e-9
+            },
+            {
+              "key": "SHOWER",
+              "value": 1,
+              "tolerance": 1e-9
+            },
+            {
+              "key": "WC_CISTERN",
+              "value": 1,
+              "tolerance": 1e-9
+            },
+            {
+              "key": "WASHING_MACHINE",
+              "value": 1,
+              "tolerance": 1e-9
+            }
+          ]
+        },
+        "checks": [],
+        "hypotheses": ["PLUMBING.SIMULTANEITY_DTU"]
+      }
+    },
+    {
+      "id": "plumbing.flow-rates/bloc-sanitaire-bureaux",
+      "engine": "plumbing.flow-rates",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Débits de base (DTU 60.11) : 4 × Lavabo 0,2 L/s + 4 × WC à réservoir de chasse 0,12 L/s + 2 × Urinoir 0,15 L/s = 1,58 L/s ; x = 10 ; y = min(1 ; 0,8/√9) = 0,266667 ; Q_p = y × Q_b = 0,421333 L/s.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "washbasin": 4,
+        "wcCistern": 4,
+        "urinal": 2
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "fixtureCount": {
+            "value": 10,
+            "tolerance": 0.000001
+          },
+          "baseFlow": {
+            "value": 1.58,
+            "tolerance": 0.000001
+          },
+          "simultaneity": {
+            "value": 0.266666666667,
+            "tolerance": 0.000001
+          },
+          "probableFlow": {
+            "value": 0.421333333333,
+            "tolerance": 0.000001
+          },
+          "fixtures": [
+            {
+              "key": "WASHBASIN",
+              "value": 4,
+              "tolerance": 1e-9
+            },
+            {
+              "key": "WC_CISTERN",
+              "value": 4,
+              "tolerance": 1e-9
+            },
+            {
+              "key": "URINAL",
+              "value": 2,
+              "tolerance": 1e-9
+            }
+          ]
+        },
+        "checks": [],
+        "hypotheses": ["PLUMBING.SIMULTANEITY_DTU"]
+      }
+    },
+    {
+      "id": "plumbing.flow-rates/inventaire-villa",
+      "engine": "plumbing.flow-rates",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Inventaire (4 lignes) : baignoire 0,33 + évier 0,20 + 2 lavabos 0,40 + 2 WC 0,24 = 1,17 L/s ; x = 6 ; y = 0,8/√5 = 0,357771 ; Q_p = 0,418592 L/s.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "inventory": [
+          {
+            "level": "RDC",
+            "room": "Salle de bain",
+            "fixture": "BATHTUB",
+            "count": 1
+          },
+          {
+            "level": "RDC",
+            "room": "Cuisine",
+            "fixture": "SINK",
+            "count": 1
+          },
+          {
+            "level": "R+1",
+            "room": "Salle d’eau",
+            "fixture": "WASHBASIN",
+            "count": 2
+          },
+          {
+            "level": "R+1",
+            "room": "WC",
+            "fixture": "WC_CISTERN",
+            "count": 2
+          }
+        ]
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "fixtureCount": {
+            "value": 6,
+            "tolerance": 0.000001
+          },
+          "baseFlow": {
+            "value": 1.17,
+            "tolerance": 0.000001
+          },
+          "simultaneity": {
+            "value": 0.3577708764,
+            "tolerance": 0.000001
+          },
+          "probableFlow": {
+            "value": 0.418591925388,
+            "tolerance": 0.000001
+          },
+          "fixtures": [
+            {
+              "key": "BATHTUB",
+              "value": 1,
+              "tolerance": 1e-9
+            },
+            {
+              "key": "SINK",
+              "value": 1,
+              "tolerance": 1e-9
+            },
+            {
+              "key": "WASHBASIN",
+              "value": 2,
+              "tolerance": 1e-9
+            },
+            {
+              "key": "WC_CISTERN",
+              "value": 2,
+              "tolerance": 1e-9
+            }
+          ]
+        },
+        "checks": [],
+        "hypotheses": ["PLUMBING.SIMULTANEITY_DTU"]
+      }
+    },
+    {
+      "id": "plumbing.flow-rates/un-seul-appareil",
+      "engine": "plumbing.flow-rates",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Débits de base (DTU 60.11) : 1 × Poste d’eau (robinet DN 20) 0,42 L/s = 0,42 L/s ; x = 1 ; y = 1 (un seul appareil) ; Q_p = y × Q_b = 0,42 L/s.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "tap20": 1
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "fixtureCount": {
+            "value": 1,
+            "tolerance": 0.000001
+          },
+          "baseFlow": {
+            "value": 0.42,
+            "tolerance": 0.000001
+          },
+          "simultaneity": {
+            "value": 1,
+            "tolerance": 0.000001
+          },
+          "probableFlow": {
+            "value": 0.42,
+            "tolerance": 0.000001
+          },
+          "fixtures": [
+            {
+              "key": "TAP_20",
+              "value": 1,
+              "tolerance": 1e-9
+            }
+          ]
+        },
+        "checks": [],
+        "hypotheses": ["PLUMBING.SIMULTANEITY_DTU"]
+      }
+    },
+    {
+      "id": "plumbing.flow-rates/deux-robinets-de-chasse",
+      "engine": "plumbing.flow-rates",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Débits de base (DTU 60.11) : 2 × WC à robinet de chasse 1,5 L/s = 3 L/s ; x = 2 ; y = min(1 ; 0,8/√1) = 0,8 ; Q_p = y × Q_b = 2,4 L/s.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "wcFlushValve": 2
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "fixtureCount": {
+            "value": 2,
+            "tolerance": 0.000001
+          },
+          "baseFlow": {
+            "value": 3,
+            "tolerance": 0.000001
+          },
+          "simultaneity": {
+            "value": 0.8,
+            "tolerance": 0.000001
+          },
+          "probableFlow": {
+            "value": 2.4,
+            "tolerance": 0.000001
+          },
+          "fixtures": [
+            {
+              "key": "WC_FLUSH_VALVE",
+              "value": 2,
+              "tolerance": 1e-9
+            }
+          ]
+        },
+        "checks": [],
+        "hypotheses": ["PLUMBING.SIMULTANEITY_DTU"]
+      }
+    },
+    {
+      "id": "plumbing.flow-rates/aucun-appareil",
+      "engine": "plumbing.flow-rates",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Aucun appareil ni inventaire : entrée refusée.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {},
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "inventory",
+            "code": "NO_FIXTURE"
+          }
+        ]
+      }
+    },
+    {
+      "id": "plumbing.flow-rates/sans-debits-de-base",
+      "engine": "plumbing.flow-rates",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Référentiel sans table des débits de base : calcul refusé.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "omitParameters": ["plumbing.fixture.base_flow"],
+      "inputs": {
+        "washbasin": 1
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.plumbing.fixture.base_flow",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

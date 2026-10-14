@@ -1,6 +1,7 @@
 import { err, ok, type Result } from '@consulpro/calc-core';
 import {
   boqUnitOf,
+  BREAKDOWN_WORK_PATTERN,
   formatDecimal,
   isCurrency,
   validateAmount,
@@ -11,7 +12,7 @@ import {
 
 import { guarded, type OrgContext } from '../context';
 import { appError, fromDomain, notFound, reread, staleVersion, type AppError } from '../errors';
-import type { ApplicationDeps } from '../ports';
+import type { ApplicationDeps, Repositories } from '../ports';
 import type { PriceItemConflict, PriceItemRecord, PriceLibraryRecord } from '../ports-quantities';
 import { auditBase, contextOf } from '../scope';
 
@@ -27,7 +28,15 @@ export interface WorkItem {
 export interface PriceLibraryView {
   readonly library: PriceLibraryRecord;
   readonly items: readonly PriceItemRecord[];
+  /** Ouvrages chiffrables, variantes ventilées des quantitatifs de l'organisation comprises. */
+  readonly works: readonly WorkItem[];
 }
+
+/** Libellé d'une entrée ventilée : fin de la désignation « <calcul> — <entrée> ». */
+const entryLabelOf = (designation: string): string => {
+  const at = designation.lastIndexOf(' — ');
+  return at < 0 ? designation : designation.slice(at + ' — '.length);
+};
 
 export interface PriceItemInput {
   readonly code: string;
@@ -87,9 +96,39 @@ export function createPriceService({
     );
   }
 
+  /**
+   * Ouvrages des moteurs, plus les variantes ventilées (ex. un diamètre de tube) déjà présentes
+   * dans les quantitatifs de l'organisation (décision Q9) : un prix vise une variante connue.
+   */
+  async function worksOf(repos: Repositories, organizationId: string): Promise<WorkItem[]> {
+    const variants = (await repos.boqs.breakdownWorks(organizationId)).flatMap((v) => {
+      if (!BREAKDOWN_WORK_PATTERN.test(v.workKey)) return [];
+      const base = v.workKey.slice(0, v.workKey.indexOf(':'));
+      const dot = base.lastIndexOf('.');
+      const engine = engines.get(base.slice(0, dot));
+      const output = engine?.presentation.outputs.find(
+        (o) => o.key === base.slice(dot + 1) && o.breakdown,
+      );
+      const unit = boqUnitOf(v.unit);
+      return engine && output && unit
+        ? [
+            {
+              workKey: v.workKey,
+              engineId: engine.id,
+              engineTitle: engine.title,
+              outputLabel: `${output.label} — ${entryLabelOf(v.designation)}`,
+              unit,
+            },
+          ]
+        : [];
+    });
+    return [...works(), ...variants];
+  }
+
   /** Article validé ; un ouvrage impose son unité (celle de la ligne de DQE). */
   function validateItem(
     input: PriceItemInput,
+    known: readonly WorkItem[],
   ): Result<Omit<PriceItemRecord, 'id' | 'libraryId' | 'version'>, AppError> {
     const code = input.code.trim();
     if (code.length < 1 || code.length > 40) {
@@ -101,7 +140,7 @@ export function createPriceService({
     if (!price.ok) return err(fromDomain(price.error));
     const workKey = input.workKey ?? null;
     if (workKey !== null) {
-      const work = works().find((w) => w.workKey === workKey);
+      const work = known.find((w) => w.workKey === workKey);
       if (!work) {
         return err(appError('VALIDATION', 'PRICE_WORK_UNKNOWN', 'Ouvrage inconnu.'));
       }
@@ -143,6 +182,7 @@ export function createPriceService({
           return ok({
             library,
             items: await repos.prices.listItems(ctx.organization.id, libraryId),
+            works: await worksOf(repos, ctx.organization.id),
           });
         }),
       );
@@ -276,7 +316,7 @@ export function createPriceService({
           const orgId = ctx.organization.id;
           const library = await repos.prices.findLibrary(orgId, libraryId);
           if (!library) return err(notFound('Bibliothèque de prix'));
-          const item = validateItem(input);
+          const item = validateItem(input, await worksOf(repos, orgId));
           if (!item.ok) return item;
           const id = ids.next();
           const created = await repos.prices.createItem({
@@ -315,13 +355,16 @@ export function createPriceService({
           const current = await repos.prices.findItem(orgId, libraryId, itemId);
           if (!current) return err(notFound('Prix'));
           if (current.version !== expectedVersion) return err(staleVersion());
-          const item = validateItem({
-            code: input.code ?? current.code,
-            designation: input.designation ?? current.designation,
-            unit: input.unit ?? (current.unit as BoqUnit),
-            price: input.price ?? formatDecimal(current.price),
-            workKey: input.workKey === undefined ? current.workKey : input.workKey,
-          });
+          const item = validateItem(
+            {
+              code: input.code ?? current.code,
+              designation: input.designation ?? current.designation,
+              unit: input.unit ?? (current.unit as BoqUnit),
+              price: input.price ?? formatDecimal(current.price),
+              workKey: input.workKey === undefined ? current.workKey : input.workKey,
+            },
+            await worksOf(repos, orgId),
+          );
           if (!item.ok) return item;
           const updated = await repos.prices.updateItem(
             orgId,

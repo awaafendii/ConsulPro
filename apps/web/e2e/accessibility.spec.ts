@@ -31,7 +31,12 @@ const privatePages = () => {
     elecProjectId,
     elecDatasetId,
     elecCalculationId,
+    plumbingProjectId,
+    plumbingCalculationId,
+    plumbingBoqId,
   } = fixture();
+  const plumbing = `/${orgSlug}/projets/${plumbingProjectId}`;
+  const plumbingHeading = /^PLB-.* — Centre de santé de Matoto$/;
   const elec = `/${orgSlug}/projets/${elecProjectId}`;
   const elecHeading = /^EL-.* — Clinique de Kaloum$/;
   const project = `/${orgSlug}/projets/${projectId}`;
@@ -53,6 +58,21 @@ const privatePages = () => {
     { name: 'quantitatifs', path: `${project}/quantitatifs`, heading: projectHeading },
     { name: 'quantitatif', path: `${project}/quantitatifs/${boqId}`, heading: projectHeading },
     { name: 'tableau de bord BTP', path: `/${orgSlug}/btp`, heading: 'BTP / Génie civil' },
+    {
+      name: 'tableau de bord Plomberie',
+      path: `/${orgSlug}/plomberie`,
+      heading: 'Plomberie & Sanitaire',
+    },
+    {
+      name: 'réseau d’alimentation',
+      path: `${plumbing}/calculs/${plumbingCalculationId}`,
+      heading: plumbingHeading,
+    },
+    {
+      name: 'quantitatif ventilé',
+      path: `${plumbing}/quantitatifs/${plumbingBoqId}`,
+      heading: plumbingHeading,
+    },
     {
       name: 'tableau de bord Électricité',
       path: `/${orgSlug}/electricite`,

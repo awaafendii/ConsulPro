@@ -1,4 +1,4 @@
-import { can } from '@consulpro/domain';
+import { can, isQuantityDiscipline } from '@consulpro/domain';
 import { Callout, ErrorState, Section } from '@consulpro/ui';
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
@@ -17,13 +17,13 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   return { title: `${(await getTranslations('project.tabs'))('takeoff')} — ${project.code}` };
 }
 
-/** Avant-métré du projet : structure des ouvrages et rattachement des calculs BTP. */
+/** Avant-métré du projet : structure des ouvrages et rattachement des calculs BTP et plomberie. */
 export default async function TakeoffPage({ params }: { params: Params }) {
   const { orgSlug, projectId } = await params;
   const { ctx, project } = await requireProject(orgSlug, projectId);
   const t = await getTranslations('takeoff');
   const tTabs = await getTranslations('project.tabs');
-  if (!project.disciplines.includes('BTP')) {
+  if (!project.disciplines.some(isQuantityDiscipline)) {
     return <Callout tone="info">{t('inactive')}</Callout>;
   }
   const takeoff = await getServer().infra.app.takeoff.get(ctx, project.id);

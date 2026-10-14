@@ -1,0 +1,332 @@
+{
+  "engine": "plumbing.pipe-sizing",
+  "parameterSet": {
+    "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+    "version": "2013+2013+1+1"
+  },
+  "cases": [
+    {
+      "id": "plumbing.pipe-sizing/pvc-0.4ls-etage",
+      "engine": "plumbing.pipe-sizing",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "v_max (FLOOR) = 1,5 m/s ; D_min = √(4 × 0,0004 / (π × 1,5)) = 18,4264 mm ; plus petit Tube PVC pression PN16 de D_int ≥ 18,4264 mm : Ø25 (D_int 21,2 mm) ; v = 4Q/(πD²) = 1,133179 m/s ≤ v_max.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "flow": {
+          "value": 0.4,
+          "unit": "L/s"
+        },
+        "material": "PVC_PN16",
+        "location": "FLOOR"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "requiredDiameter": {
+            "value": 18.4263546385,
+            "tolerance": 0.000001
+          },
+          "size": {
+            "value": 25,
+            "tolerance": 0.000001
+          },
+          "innerDiameter": {
+            "value": 21.2,
+            "tolerance": 0.000001
+          },
+          "velocity": {
+            "value": 1.1331786621,
+            "tolerance": 0.000001
+          },
+          "maxVelocity": {
+            "value": 1.5,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "plumbing.supply.velocity",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["PLUMBING.STEADY_FLOW"]
+      }
+    },
+    {
+      "id": "plumbing.pipe-sizing/ppr-0.8ls-sous-sol",
+      "engine": "plumbing.pipe-sizing",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "v_max (BASEMENT) = 2 m/s ; D_min = √(4 × 0,0008 / (π × 2)) = 22,5676 mm ; plus petit Tube PPR PN20 de D_int ≥ 22,5676 mm : Ø40 (D_int 26,6 mm) ; v = 4Q/(πD²) = 1,439583 m/s ≤ v_max.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "flow": {
+          "value": 0.8,
+          "unit": "L/s"
+        },
+        "material": "PPR_PN20",
+        "location": "BASEMENT"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "requiredDiameter": {
+            "value": 22.5675833419,
+            "tolerance": 0.000001
+          },
+          "size": {
+            "value": 40,
+            "tolerance": 0.000001
+          },
+          "innerDiameter": {
+            "value": 26.6,
+            "tolerance": 0.000001
+          },
+          "velocity": {
+            "value": 1.43958340747,
+            "tolerance": 0.000001
+          },
+          "maxVelocity": {
+            "value": 2,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "plumbing.supply.velocity",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["PLUMBING.STEADY_FLOW"]
+      }
+    },
+    {
+      "id": "plumbing.pipe-sizing/cuivre-0.25ls-diametre-impose",
+      "engine": "plumbing.pipe-sizing",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "v_max (FLOOR) = 1,5 m/s ; D_min = √(4 × 0,00025 / (π × 1,5)) = 14,5673 mm ; imposé 20 mm ; plus petit Tube cuivre de D_int ≥ 20 mm : Ø22 (D_int 20 mm) ; v = 4Q/(πD²) = 0,795775 m/s ≤ v_max.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "flow": {
+          "value": 0.25,
+          "unit": "L/s"
+        },
+        "material": "CU",
+        "location": "FLOOR",
+        "minInnerDiameter": {
+          "value": 20,
+          "unit": "mm"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "requiredDiameter": {
+            "value": 20,
+            "tolerance": 0.000001
+          },
+          "size": {
+            "value": 22,
+            "tolerance": 0.000001
+          },
+          "innerDiameter": {
+            "value": 20,
+            "tolerance": 0.000001
+          },
+          "velocity": {
+            "value": 0.795774715459,
+            "tolerance": 0.000001
+          },
+          "maxVelocity": {
+            "value": 1.5,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "plumbing.supply.velocity",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["PLUMBING.STEADY_FLOW"]
+      }
+    },
+    {
+      "id": "plumbing.pipe-sizing/acier-galva-6ls",
+      "engine": "plumbing.pipe-sizing",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "v_max (BASEMENT) = 2 m/s ; D_min = √(4 × 0,006 / (π × 2)) = 61,8039 mm ; plus petit Tube acier galvanisé de D_int ≥ 61,8039 mm : DN65 (D_int 68,9 mm) ; v = 4Q/(πD²) = 1,609248 m/s ≤ v_max.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "flow": {
+          "value": 6,
+          "unit": "L/s"
+        },
+        "material": "STEEL_GALV",
+        "location": "BASEMENT"
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "requiredDiameter": {
+            "value": 61.8038723237,
+            "tolerance": 0.000001
+          },
+          "size": {
+            "value": 65,
+            "tolerance": 0.000001
+          },
+          "innerDiameter": {
+            "value": 68.9,
+            "tolerance": 0.000001
+          },
+          "velocity": {
+            "value": 1.60924780417,
+            "tolerance": 0.000001
+          },
+          "maxVelocity": {
+            "value": 2,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "plumbing.supply.velocity",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["PLUMBING.STEADY_FLOW"]
+      }
+    },
+    {
+      "id": "plumbing.pipe-sizing/pehd-debit-excessif",
+      "engine": "plumbing.pipe-sizing",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "PEHD Ø160 : D_int 130,8 mm ; à 1,5 m/s le débit maximal est π × 0,1308² / 4 × 1,5 = 20,2 L/s < 30 L/s : aucune dimension ne convient (erreur NO_SIZE, aucun résultat).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "flow": {
+          "value": 30,
+          "unit": "L/s"
+        },
+        "material": "PEHD_PN16",
+        "location": "FLOOR"
+      },
+      "expected": {
+        "resultStatus": "ERROR",
+        "failure": "NO_SIZE"
+      }
+    },
+    {
+      "id": "plumbing.pipe-sizing/debit-nul",
+      "engine": "plumbing.pipe-sizing",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Débit nul : hors du domaine, entrée refusée.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "flow": {
+          "value": 0,
+          "unit": "L/s"
+        },
+        "material": "PVC_PN16",
+        "location": "FLOOR"
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "flow.value",
+            "code": "OUT_OF_RANGE"
+          }
+        ]
+      }
+    },
+    {
+      "id": "plumbing.pipe-sizing/sans-vitesses-maximales",
+      "engine": "plumbing.pipe-sizing",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Référentiel sans vitesses maximales : calcul refusé.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "omitParameters": ["plumbing.supply.max_velocity"],
+      "inputs": {
+        "flow": {
+          "value": 0.4,
+          "unit": "L/s"
+        },
+        "material": "PVC_PN16",
+        "location": "FLOOR"
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.plumbing.supply.max_velocity",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import { can } from '@consulpro/domain';
+import { can, isQuantityDiscipline } from '@consulpro/domain';
 import { ErrorState } from '@consulpro/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -17,7 +17,7 @@ const boqId = z.uuid();
 
 async function load(orgSlug: string, projectId: string, id: string) {
   const { ctx, project } = await requireProject(orgSlug, projectId);
-  if (!boqId.safeParse(id).success || !project.disciplines.includes('BTP')) notFound();
+  if (!boqId.safeParse(id).success || !project.disciplines.some(isQuantityDiscipline)) notFound();
   const boq = await getServer().infra.app.boqs.get(ctx, project.id, id);
   if (!boq.ok && boq.error.kind === 'NOT_FOUND') notFound();
   return { ctx, project, boq };

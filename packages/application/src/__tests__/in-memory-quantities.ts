@@ -209,7 +209,14 @@ export function quantityRepositories(
         return boq ? boqView(boq) : null;
       },
       create: async (input) => {
-        s.boqs.push({ ...input, version: 1, syncedAt: null, createdAt: now(), updatedAt: now() });
+        s.boqs.push({
+          ...input,
+          presentation: 'DETAILED',
+          version: 1,
+          syncedAt: null,
+          createdAt: now(),
+          updatedAt: now(),
+        });
       },
       update: async (organizationId, projectId, id, fields, version) => {
         const found = s.boqs.some(
@@ -267,6 +274,8 @@ export function quantityRepositories(
           origin: 'MANUAL',
           calculationId: null,
           outputKey: null,
+          outputPart: '',
+          groupDesignation: null,
           sourceRevisionId: null,
           workKey: null,
           overrideQuantity: null,
@@ -283,10 +292,11 @@ export function quantityRepositories(
               (i) =>
                 i.boqId === input.boqId &&
                 i.calculationId === input.calculationId &&
-                i.outputKey === input.outputKey,
+                i.outputKey === input.outputKey &&
+                i.outputPart === input.outputPart,
             )
           ) {
-            throw new Error('Contrainte d’unicité (boq, calcul, sortie) violée');
+            throw new Error('Contrainte d’unicité (boq, calcul, sortie, entrée) violée');
           }
           s.boqItems.push({
             ...input,
@@ -311,6 +321,7 @@ export function quantityRepositories(
                 sourceRevisionId: line.sourceRevisionId,
                 workKey: line.workKey,
                 designation: line.designation,
+                groupDesignation: line.groupDesignation,
                 unit: line.unit,
                 quantity: line.quantity,
                 version: i.version + 1,
@@ -381,6 +392,16 @@ export function quantityRepositories(
         s.revisions
           .filter((r) => r.organizationId === organizationId && revisionIds.includes(r.id))
           .map(outputsOf),
+      breakdownWorks: async (organizationId) => {
+        const works = new Map<string, { workKey: string; unit: string; designation: string }>();
+        for (const i of s.boqItems) {
+          if (i.organizationId !== organizationId || i.outputPart === '' || !i.workKey) continue;
+          if (!works.has(i.workKey)) {
+            works.set(i.workKey, { workKey: i.workKey, unit: i.unit, designation: i.designation });
+          }
+        }
+        return [...works.values()].sort((a, b) => a.workKey.localeCompare(b.workKey));
+      },
     },
 
     prices: {

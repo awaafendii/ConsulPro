@@ -4,6 +4,8 @@ import {
   boqTotals,
   computedLines,
   formatDecimal,
+  groupLines,
+  isBoqPresentation,
   isCurrency,
   isPlanEmpty,
   lineAmount,
@@ -19,6 +21,7 @@ import {
   type Currency,
   type Decimal,
   type ExistingComputedItem,
+  type LineGroup,
   type MaterialRow,
   type Subtotal,
   type SyncPlan,
@@ -79,6 +82,8 @@ export interface BoqView {
   readonly nodes: readonly BoqNodeView[];
   /** Lignes dans l'ordre du DQE : par nœud, lignes calculées puis saisies. */
   readonly items: readonly BoqItemView[];
+  /** Regroupements des entrées ventilées (présentation agrégée), dans l'ordre du DQE. */
+  readonly groups: readonly LineGroup[];
   readonly total: Subtotal;
   /** Écart avec l'avant-métré et les révisions courantes (mise à jour à faire). */
   readonly pending: PendingChanges;
@@ -99,6 +104,8 @@ const toExisting = (items: readonly BoqItemRecord[]): ExistingComputedItem[] =>
             nodeId: i.nodeId,
             calculationId: i.calculationId,
             outputKey: i.outputKey,
+            outputPart: i.outputPart,
+            groupDesignation: i.groupDesignation,
             sourceRevisionId: i.sourceRevisionId,
             workKey: i.workKey ?? '',
             designation: i.designation,
@@ -205,6 +212,7 @@ export async function boqViewOf(
       const revision = item.sourceRevisionId ? revisions.get(item.sourceRevisionId) : undefined;
       return { ...item, amount: lineAmount(item, currency), source: sourceOf(revision) };
     }),
+    groups: groupLines(ordered, currency),
     total: totals.total,
     pending: pendingOf(plan ?? (await syncPlanOf(repos, orgId, boq.projectId, items))),
   };
@@ -331,7 +339,11 @@ export function createBoqService({
       ctx: OrgContext,
       projectId: string,
       boqId: string,
-      input: { title?: string | undefined; currency?: string | undefined },
+      input: {
+        title?: string | undefined;
+        currency?: string | undefined;
+        presentation?: string | undefined;
+      },
       expectedVersion: number,
     ): Promise<Result<BoqView, AppError>> {
       return inProject(uow, ctx, projectId, MANAGE, async (pctx, repos) => {
@@ -345,6 +357,12 @@ export function createBoqService({
         const currency = input.currency ?? boq.currency;
         if (!isCurrency(currency)) {
           return err(appError('VALIDATION', 'CURRENCY_INVALID', 'Devise non prise en charge.'));
+        }
+        const presentation = input.presentation ?? boq.presentation;
+        if (!isBoqPresentation(presentation)) {
+          return err(
+            appError('VALIDATION', 'BOQ_PRESENTATION_INVALID', 'Présentation non prise en charge.'),
+          );
         }
         if (currency !== boq.currency) {
           const items = await repos.boqs.listItems(orgId, boqId);
@@ -363,7 +381,7 @@ export function createBoqService({
             orgId,
             projectId,
             boqId,
-            { title: title.value, currency },
+            { title: title.value, currency, presentation },
             expectedVersion,
           ))
         ) {
@@ -373,7 +391,7 @@ export function createBoqService({
           repos,
           pctx,
           'boq.updated',
-          { title: title.value, currency },
+          { title: title.value, currency, presentation },
           { type: 'boq', id: boqId },
         );
         const fresh = reread(await repos.boqs.findById(orgId, projectId, boqId), 'Quantitatif');

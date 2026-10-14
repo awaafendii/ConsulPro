@@ -3,6 +3,7 @@ import { createAuditService } from './audit/audit-service';
 import { createCalculationService } from './calculations/calculation-service';
 import { createDatasetService } from './calculations/dataset-service';
 import { createElecDashboardService } from './calculations/elec-dashboard-service';
+import { createPlumbingDashboardService } from './calculations/plumbing-dashboard-service';
 import { createStudyService } from './calculations/study-service';
 import { createLibraryService } from './library/library-service';
 import { createInvitationService } from './organizations/invitation-service';
@@ -39,6 +40,17 @@ export {
   type ElecProjectSummary,
 } from './calculations/elec-dashboard-service';
 export { engineVerification, type EngineVerification } from './calculations/engine-verification';
+export {
+  createPlumbingDashboardService,
+  type PlumbingDashboard,
+  type PlumbingDashboardService,
+  type PlumbingFlowSummary,
+  type PlumbingProjectSummary,
+} from './calculations/plumbing-dashboard-service';
+export type {
+  CalculationStats,
+  NonCompliantCalculation,
+} from './calculations/discipline-dashboard';
 export { toCalculationView } from './calculations/presenter';
 export { createStudyService, type StudyService } from './calculations/study-service';
 export {
@@ -145,6 +157,7 @@ export function createApplication(deps: ApplicationDeps) {
     prices: createPriceService(deps),
     btpDashboard: createBtpDashboardService(deps),
     elecDashboard: createElecDashboardService(deps),
+    plumbingDashboard: createPlumbingDashboardService(deps),
     account: createAccountService(deps),
   };
 }

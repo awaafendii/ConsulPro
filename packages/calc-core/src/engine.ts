@@ -105,6 +105,11 @@ export type QuantityFamily =
   | 'RENDER'
   | 'FINISHES'
   | 'PAINTING'
+  /** Plomberie (Phase 6) : tubes, appareils, ouvrages de réseau (regards, fosses, réservoirs), équipements. */
+  | 'PIPES'
+  | 'FIXTURES'
+  | 'NETWORK_WORKS'
+  | 'EQUIPMENT'
   | 'MATERIAL';
 
 /**
@@ -123,6 +128,11 @@ export interface OutputPresentation {
    * carreau, hauteur d'entrevous…), présenté calcul par calcul, jamais additionné.
    */
   readonly additive?: boolean;
+  /**
+   * Sortie ventilée : sa valeur est une liste d'entrées (`BreakdownEntry`), par exemple le
+   * linéaire de tubes par matériau et diamètre ; chaque entrée devient une ligne de quantitatif.
+   */
+  readonly breakdown?: boolean;
 }
 
 export interface EnginePresentation {

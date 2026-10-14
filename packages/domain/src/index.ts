@@ -50,6 +50,12 @@ export {
   type DatasetRow,
   type RowError,
 } from './dataset/kinds';
+export {
+  checkNetworkTree,
+  FIXTURE_TYPES,
+  PIPE_LOCATIONS,
+  type FixtureType,
+} from './dataset/plumbing';
 export { validateStudy, validateTitle, type NewStudy } from './project/study';
 export {
   isModuleAvailable,
@@ -100,17 +106,24 @@ export {
   TAKEOFF_MAX_NODES,
   TAKEOFF_NODE_KINDS,
   validateNodeCode,
+  isQuantityDiscipline,
+  QUANTITY_DISCIPLINES,
+  type QuantityDiscipline,
   type TakeoffNodeKind,
   type TreeNode,
 } from './quantities/takeoff';
 export {
   BOQ_MAX_ITEMS,
+  BOQ_PRESENTATIONS,
   BOQ_UNITS,
+  BREAKDOWN_WORK_PATTERN,
   boqTotals,
   boqUnitOf,
   computedDesignation,
   computedLines,
   effectiveQuantity,
+  groupLines,
+  isBoqPresentation,
   isBoqUnit,
   isPlanEmpty,
   lineAmount,
@@ -121,10 +134,13 @@ export {
   validateDesignation,
   validateOverride,
   workKeyOf,
+  type BoqPresentation,
   type BoqTotals,
   type BoqUnit,
   type ComputedLine,
   type ExistingComputedItem,
+  type GroupableLine,
+  type LineGroup,
   type MaterialContribution,
   type MaterialRow,
   type MaterialSource,

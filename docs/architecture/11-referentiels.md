@@ -103,8 +103,9 @@ la phase métier concernée. Rien n'est saisi sans source.
 | Électricité  | NF C 15-100 (2002 et amendements, Q4)                  | `NORM`     | Courants admissibles, facteurs de correction, limites de chute de tension, règles de protection             | 5     |
 | Électricité  | UTE C 15-105                                           | `GUIDE`    | Méthodes de calcul (sections, chutes de tension)                                                            | 5     |
 | Électricité  | Normes nationales dérivées (Q3 : Guinée, aucune retenue) | `NORM`   | Versions distinctes de la NF C 15-100 lorsqu'un pays en publie une                                          | ultérieure |
-| Plomberie    | DTU 60.11                                              | `NORM`     | Débits de base, coefficient de simultanéité, diamètres, évacuation                                          | 6     |
-| Plomberie    | DTU 64.1                                               | `NORM`     | Assainissement non collectif (fosses), à adapter aux pratiques locales                                      | 6     |
+| Plomberie    | NF DTU 60.11 (2013, Q7)                                | `NORM`     | Débits de base, coefficient de simultanéité, diamètres, évacuation                                          | 6     |
+| Plomberie    | NF DTU 64.1 (2013, Q7)                                 | `NORM`     | Assainissement non collectif (fosses), à adapter aux pratiques locales                                      | 6     |
+| Plomberie    | Dimensions des tubes (NF EN ISO 1452, NF EN 1329, NF EN ISO 15874, NF EN 12201, NF EN 1057, NF EN 10255 ; Q8) | `NORM` | Diamètres intérieurs par matériau et désignation, rugosités | 6 |
 | Plomberie    | Usages courants — plomberie                            | `PRACTICE` | Vitesses admissibles, pressions minimales aux appareils, consommations journalières, autonomie des réservoirs | 6   |
 | Topographie  | Tolérances de projet                                   | `PRACTICE` | Tolérances de fermeture angulaire et planimétrique, tolérance de nivellement ; fixées par projet ou par organisation | 7 |
 

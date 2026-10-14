@@ -92,16 +92,26 @@ export type SubtotalDto = z.infer<typeof subtotalSchema>;
 
 export const boqBodySchema = z.object({ title, currency: currencySchema.optional() });
 
+/** Présentation du DQE (décision Q9) : entrées ventilées détaillées ou agrégées par groupe. */
+export const boqPresentationSchema = z.enum(['DETAILED', 'AGGREGATED']);
+export type BoqPresentationDto = z.infer<typeof boqPresentationSchema>;
+
 export const updateBoqBodySchema = z
-  .object({ title: title.optional(), currency: currencySchema.optional() })
-  .refine((b) => b.title !== undefined || b.currency !== undefined, {
-    message: 'Indiquez au moins un champ à modifier.',
-  });
+  .object({
+    title: title.optional(),
+    currency: currencySchema.optional(),
+    presentation: boqPresentationSchema.optional(),
+  })
+  .refine(
+    (b) => b.title !== undefined || b.currency !== undefined || b.presentation !== undefined,
+    { message: 'Indiquez au moins un champ à modifier.' },
+  );
 
 export const boqSummarySchema = z.object({
   id: z.uuid(),
   title: z.string(),
   currency: currencySchema,
+  presentation: boqPresentationSchema,
   version: z.number().int().positive(),
   createdByName: z.string(),
   syncedAt: z.iso.datetime().nullable(),
@@ -124,6 +134,9 @@ export const boqItemSchema = z.object({
   origin: z.enum(['CALCULATION', 'MANUAL']),
   calculationId: z.uuid().nullable(),
   outputKey: z.string().nullable(),
+  /** Entrée d'une sortie ventilée (ex. un diamètre de tube) ; vide sinon. */
+  outputPart: z.string(),
+  groupDesignation: z.string().nullable(),
   sourceRevisionId: z.uuid().nullable(),
   workKey: z.string().nullable(),
   designation: z.string(),
@@ -153,9 +166,24 @@ export type BoqItemDto = z.infer<typeof boqItemSchema>;
 export const boqNodeSchema = takeoffNodeSchema.extend({ subtotal: subtotalSchema });
 export type BoqNodeDto = z.infer<typeof boqNodeSchema>;
 
+/** Regroupement des entrées ventilées d'un même groupe (présentation agrégée). */
+export const boqGroupSchema = z.object({
+  key: z.string(),
+  nodeId: z.uuid(),
+  designation: z.string(),
+  unit: boqUnitSchema,
+  quantity: z.string(),
+  amount: z.string().nullable(),
+  lines: z.number().int().positive(),
+  unpriced: z.number().int().nonnegative(),
+  itemIds: z.array(z.uuid()).min(1),
+});
+export type BoqGroupDto = z.infer<typeof boqGroupSchema>;
+
 export const boqSchema = boqSummarySchema.extend({
   nodes: z.array(boqNodeSchema),
   items: z.array(boqItemSchema),
+  groups: z.array(boqGroupSchema),
 });
 export type BoqDto = z.infer<typeof boqSchema>;
 

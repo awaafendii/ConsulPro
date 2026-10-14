@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { checkBoardTree, DATASET_KINDS, validateRows } from '../dataset/kinds';
+import { checkNetworkTree, FIXTURE_TYPES } from '../dataset/plumbing';
 
 const kw = (value: number) => ({ value, unit: 'kW' });
 const board = (code: string, parent: string | null, extra: Record<string, unknown> = {}) => ({
@@ -92,5 +93,61 @@ describe('arborescence électrique (ELEC_BOARD_TREE)', () => {
 
   it('un jeu vide reste enregistrable (saisie en cours)', () => {
     expect(validateRows('ELEC_BOARD_TREE', [])).toEqual({ ok: true, value: [] });
+  });
+});
+
+describe('jeux de données de plomberie (Phase 6)', () => {
+  const m = (value: number) => ({ value, unit: 'm' });
+  const segment = (code: string, parent: string | null, extra: Record<string, unknown> = {}) => ({
+    code,
+    parent,
+    length: m(5),
+    elevation: m(0),
+    location: 'FLOOR',
+    ...extra,
+  });
+
+  it('réseau valide : une origine, des amonts connus, des appareils typés et comptés', () => {
+    const result = validateRows('PLUMBING_NETWORK', [
+      segment('A', null),
+      segment('B', 'A', { fixture: 'WASHBASIN', count: 2 }),
+    ]);
+    expect(result.ok).toBe(true);
+  });
+
+  it('réseau refusé : doublon, amont inconnu, deux origines, boucle, appareils incomplets', () => {
+    const errors = checkNetworkTree([
+      { code: 'A', parent: null },
+      { code: 'A', parent: null },
+      { code: 'B', parent: 'X' },
+      { code: 'C', parent: 'D' },
+      { code: 'D', parent: 'C' },
+      { code: 'E', parent: 'A', fixture: 'SINK', count: null },
+    ]);
+    expect(errors.map((e) => `${String(e.row)}:${e.column}`)).toEqual([
+      '2:code',
+      '2:parent',
+      '3:parent',
+      '6:count',
+      '4:parent',
+      '5:parent',
+    ]);
+    expect(
+      checkNetworkTree([
+        { code: 'A', parent: 'B' },
+        { code: 'B', parent: 'A' },
+      ]),
+    ).toContainEqual(expect.objectContaining({ message: 'Aucun tronçon d’origine (sans amont).' }));
+  });
+
+  it('inventaire des appareils : type parmi ceux du DTU, nombre entier positif', () => {
+    expect(
+      validateRows('SANITARY_FIXTURES', [
+        { level: 'RDC', room: 'WC', fixture: 'WC_CISTERN', count: 2 },
+      ]).ok,
+    ).toBe(true);
+    const refused = validateRows('SANITARY_FIXTURES', [{ fixture: 'JACUZZI', count: 0 }]);
+    expect(refused.ok).toBe(false);
+    expect(FIXTURE_TYPES.map((f) => f.value)).toContain('TAP_20');
   });
 });

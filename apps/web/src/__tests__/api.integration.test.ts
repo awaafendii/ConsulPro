@@ -6,6 +6,7 @@ import {
   activityPageSchema,
   auditLogPageSchema,
   elecDashboardSchema,
+  plumbingDashboardSchema,
   invitationSchema,
   memberListSchema,
   meSchema,
@@ -322,6 +323,17 @@ describe('paramètres d’organisation et Électricité via l’API (Phase 5)', 
     const dashboard = elecDashboardSchema.parse(await response.json());
     expect(dashboard.projects).toEqual([]);
     expect(dashboard.engines.total).toBeGreaterThan(0);
+    expect(dashboard.engines.checkedCases).toBeLessThan(dashboard.engines.cases);
+  });
+});
+
+describe('Plomberie via l’API (Phase 6)', () => {
+  it('tableau de bord Plomberie : contrat respecté, moteurs non contre-vérifiés signalés', async () => {
+    const response = await h.call('plumbing.dashboard', { actor: owner, params: { orgSlug } });
+    expect(response.status).toBe(200);
+    const dashboard = plumbingDashboardSchema.parse(await response.json());
+    expect(dashboard.projects).toEqual([]);
+    expect(dashboard.engines.total).toBe(11);
     expect(dashboard.engines.checkedCases).toBeLessThan(dashboard.engines.cases);
   });
 });

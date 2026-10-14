@@ -84,6 +84,8 @@ export const boqItemDto = (i: BoqItemView): BoqItemDto => ({
   origin: i.origin,
   calculationId: i.calculationId,
   outputKey: i.outputKey,
+  outputPart: i.outputPart,
+  groupDesignation: i.groupDesignation,
   sourceRevisionId: i.sourceRevisionId,
   workKey: i.workKey,
   designation: i.designation,
@@ -108,6 +110,7 @@ export const boqSummaryDto = (s: BoqSummary): BoqSummaryDto => ({
   id: s.boq.id,
   title: s.boq.title,
   currency: s.boq.currency as CurrencyDto,
+  presentation: s.boq.presentation,
   version: s.boq.version,
   createdByName: s.boq.createdByName,
   syncedAt: s.boq.syncedAt?.toISOString() ?? null,
@@ -121,6 +124,17 @@ export const boqDto = (v: BoqView): BoqDto => ({
   ...boqSummaryDto(v),
   nodes: v.nodes.map(boqNodeDto),
   items: v.items.map(boqItemDto),
+  groups: v.groups.map((g) => ({
+    key: g.key,
+    nodeId: g.nodeId,
+    designation: g.designation,
+    unit: g.unit as BoqUnitDto,
+    quantity: formatDecimal(g.quantity),
+    amount: decimalOrNull(g.amount),
+    lines: g.lines,
+    unpriced: g.unpriced,
+    itemIds: [...g.itemIds],
+  })),
 });
 
 export const materialRowDto = (r: MaterialRow): MaterialRowDto => ({

@@ -756,8 +756,8 @@
     "positive": "La valeur doit être strictement positive."
   },
   "takeoff": {
-    "description": "Structure des ouvrages par lot, niveau et ouvrage. Les calculs BTP rattachés alimentent les quantitatifs ; chaque nœud devient un chapitre du DQE, avec son sous-total.",
-    "inactive": "Le métier BTP n’est pas activé sur ce projet : l’avant-métré ne s’applique pas.",
+    "description": "Structure des ouvrages par lot, niveau et ouvrage. Les calculs BTP et plomberie rattachés alimentent les quantitatifs ; chaque nœud devient un chapitre du DQE, avec son sous-total.",
+    "inactive": "Ni le BTP ni la plomberie ne sont activés sur ce projet : l’avant-métré ne s’applique pas.",
     "structure": "Structure",
     "structureTable": "Structure de l’avant-métré",
     "empty": "Aucun lot pour l’instant.",
@@ -795,7 +795,7 @@
     "calculations": "Calculs BTP du projet",
     "calculationsDescription": "Rattachez chaque calcul au nœud dont il quantifie les ouvrages. Un calcul non rattaché n’entre dans aucun quantitatif.",
     "calculationsTable": "Calculs BTP et leur rattachement",
-    "calculationsEmpty": "Aucun calcul BTP : créez une étude BTP et ses calculs depuis l’onglet Études.",
+    "calculationsEmpty": "Aucun calcul BTP ou plomberie : créez une étude et ses calculs depuis l’onglet Études.",
     "calculation": "Calcul",
     "study": "Étude",
     "revision": "Révision",
@@ -810,7 +810,7 @@
   },
   "boq": {
     "description": "Devis quantitatif (DQE) par lot, issu de l’avant-métré. Les prix sont facultatifs : un quantitatif sans prix reste complet et exploitable.",
-    "inactive": "Le métier BTP n’est pas activé sur ce projet.",
+    "inactive": "Ni le BTP ni la plomberie ne sont activés sur ce projet.",
     "listTable": "Quantitatifs du projet",
     "empty": "Aucun quantitatif.",
     "needTakeoff": "Structurez d’abord l’avant-métré et rattachez-y des calculs : le quantitatif en reprend les quantités.",
@@ -911,7 +911,12 @@
     "backToList": "Quantitatifs",
     "workflow": "Contrôle",
     "linesHeader": "Lignes",
-    "save": "Enregistrer"
+    "save": "Enregistrer",
+    "presentation": "Présentation des tubes et appareils",
+    "presentationDetailed": "Détaillée : une ligne par diamètre ou par modèle",
+    "presentationAggregated": "Agrégée : une ligne par matériau ou par famille",
+    "presentationHelp": "Paramètre du quantitatif, repris par les exports. Les prix se saisissent ligne par ligne, en présentation détaillée.",
+    "groupedLines": "{count, plural, one {# ligne regroupée} other {# lignes regroupées}}"
   },
   "prices": {
     "title": "Prix unitaires",
@@ -1044,5 +1049,35 @@
     "validation": {
       "name": "Le nom doit comporter entre 2 et 120 caractères."
     }
+  },
+  "plumbing": {
+    "title": "Plomberie & Sanitaire",
+    "description": "Débits de pointe, réseaux non conformes et calculs à vérifier des projets de plomberie auxquels vous avez accès.",
+    "enginesTitle": "Moteurs de plomberie non contre-vérifiés",
+    "engines": "{checked} cas de référence contre-vérifiés sur {cases} ({verified} moteur(s) sur {total}) : les résultats sont à contrôler avant tout usage.",
+    "standardsNotice": "Les valeurs normatives livrées (NF DTU 60.11 et 64.1 de 2013, dimensions des tubes, usages courants) sont « à vérifier » : contrôlez-les avec les textes officiels avant de publier vos propres versions.",
+    "empty": "Aucun projet de plomberie actif accessible.",
+    "emptyHint": "Activez le métier Plomberie & Sanitaire sur un projet pour suivre ici ses débits et ses réseaux.",
+    "open": "Ouvrir les projets",
+    "truncated": "Seuls les 50 projets les plus récents sont présentés.",
+    "calculations": "Calculs",
+    "calculationsTotal": "{count, plural, =0 {Aucun calcul de plomberie} one {# calcul de plomberie} other {# calculs de plomberie}}",
+    "verified": "Vérifiés",
+    "toVerify": "À vérifier",
+    "notComputed": "Non calculés",
+    "rejected": "Rejetés",
+    "obsolete": "À recalculer",
+    "nonCompliant": "Non conformes",
+    "flows": "Débits de pointe",
+    "noFlow": "Aucun débit calculé.",
+    "calculation": "Calcul",
+    "fixtures": "Appareils",
+    "probableFlow": "Débit probable",
+    "minPressure": "Pression la plus faible",
+    "state": "État",
+    "outdated": "À recalculer",
+    "alerts": "Alertes",
+    "noAlert": "Aucune alerte.",
+    "nonCompliantList": "Calculs non conformes"
   }
 }

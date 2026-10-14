@@ -3,9 +3,12 @@ import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 
 import {
+  BREAKDOWN_WORK_PATTERN,
   boqTotals,
   boqUnitOf,
   computedLines,
+  groupLines,
+  isBoqPresentation,
   isPlanEmpty,
   lineAmount,
   materialBreakdown,
@@ -14,6 +17,7 @@ import {
   validateAmount,
   validateDesignation,
   validateOverride,
+  workKeyOf,
   type ComputedLine,
   type TakeoffSource,
 } from '../quantities/boq';
@@ -235,6 +239,8 @@ describe('lignes calculées', () => {
         nodeId: 'lot1',
         calculationId: 'c1',
         outputKey: 'concrete',
+        outputPart: '',
+        groupDesignation: null,
         sourceRevisionId: 'r1',
         workKey: 'btp.footings.concrete',
         designation: 'Semelles S1 — CONCRETE',
@@ -245,6 +251,8 @@ describe('lignes calculées', () => {
         nodeId: 'lot1',
         calculationId: 'c1',
         outputKey: 'steel',
+        outputPart: '',
+        groupDesignation: null,
         sourceRevisionId: 'r1',
         workKey: 'btp.footings.steel',
         designation: 'Semelles S1 — STEEL',
@@ -273,11 +281,102 @@ describe('lignes calculées', () => {
   });
 });
 
+describe('sorties ventilées (décision Q9)', () => {
+  const pipes = (entries: unknown) =>
+    computedLines([
+      {
+        calculationId: 'c2',
+        calculationTitle: 'Réseau EF',
+        engineId: 'plumbing.supply-network',
+        nodeId: 'lot2',
+        revision: {
+          id: 'r2',
+          resultStatus: 'OK',
+          outputs: { pipes: entries, flow: 1.2 },
+          outputPresentations: [
+            out('pipes', 'PIPES', 'm', { precision: 2, breakdown: true }),
+            out('flow', undefined, 'L/s'),
+          ],
+        },
+      },
+    ]);
+  const entry = (key: string, label: string, value: number) => ({
+    key,
+    label,
+    group: 'PVC_PN16',
+    groupLabel: 'Tube PVC pression PN16',
+    value,
+  });
+
+  it('une ligne par entrée, ouvrage suffixé par l’entrée, groupe désigné', () => {
+    const lines = pipes([
+      entry('PVC_PN16-32', 'Tube PVC Ø32', 48.204),
+      entry('PVC_PN16-20', 'Tube PVC Ø20', 0),
+    ]);
+    expect(lines).toEqual([
+      expect.objectContaining({
+        outputKey: 'pipes',
+        outputPart: 'PVC_PN16-32',
+        workKey: 'plumbing.supply-network.pipes:PVC_PN16-32',
+        designation: 'Réseau EF — Tube PVC Ø32',
+        groupDesignation: 'Réseau EF — Tube PVC pression PN16',
+        unit: 'm',
+        quantity: dec('48.2'),
+      }),
+    ]);
+    expect(lines[0]?.workKey).toMatch(BREAKDOWN_WORK_PATTERN);
+    expect(workKeyOf('btp.footings', 'concrete')).not.toMatch(BREAKDOWN_WORK_PATTERN);
+  });
+
+  it('une ventilation mal formée est ignorée, jamais additionnée', () => {
+    expect(pipes([{ key: 'x', value: 3 }])).toEqual([]);
+    expect(pipes(12)).toEqual([]);
+  });
+
+  it('présentation agrégée : quantités et montants additionnés par groupe', () => {
+    const line = (
+      id: string,
+      groupDesignation: string | null,
+      quantity: string,
+      price: string | null,
+    ) => ({
+      id,
+      nodeId: 'lot2',
+      calculationId: groupDesignation === null ? null : 'c2',
+      outputKey: groupDesignation === null ? null : 'pipes',
+      groupDesignation,
+      unit: 'm',
+      quantity: dec(quantity),
+      overrideQuantity: null,
+      unitPrice: price === null ? null : dec(price),
+    });
+    const groups = groupLines(
+      [
+        line('a', 'Réseau EF — Tube PVC', '10', '1000'),
+        line('b', 'Réseau EF — Tube PVC', '5.5', null),
+        line('c', 'Réseau EF — Tube PPR', '2', '3000'),
+        line('d', null, '1', '50'),
+      ],
+      'GNF',
+    );
+    expect(
+      groups.map((g) => [g.designation, g.quantity, g.amount, g.lines, g.unpriced, g.itemIds]),
+    ).toEqual([
+      ['Réseau EF — Tube PVC', dec('15.5'), dec('10000'), 2, 1, ['a', 'b']],
+      ['Réseau EF — Tube PPR', dec('2'), dec('6000'), 1, 0, ['c']],
+    ]);
+    expect(isBoqPresentation('AGGREGATED')).toBe(true);
+    expect(isBoqPresentation('SUMMARY')).toBe(false);
+  });
+});
+
 describe('mise à jour depuis l’avant-métré', () => {
   const line = (patch: Partial<ComputedLine> = {}): ComputedLine => ({
     nodeId: 'lot1',
     calculationId: 'c1',
     outputKey: 'concrete',
+    outputPart: '',
+    groupDesignation: null,
     sourceRevisionId: 'r1',
     workKey: 'btp.footings.concrete',
     designation: 'Semelles — Béton',

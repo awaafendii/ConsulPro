@@ -1,4 +1,4 @@
-import { err, ok, type OutputPresentation, type Result } from '@consulpro/calc-core';
+import { err, isBreakdown, ok, type OutputPresentation, type Result } from '@consulpro/calc-core';
 
 import type { ResultStatus } from '../calculation/workflow';
 import type { DomainError } from '../errors';
@@ -17,6 +17,8 @@ import { ancestorsOf, type TreeNode } from './takeoff';
  * révision qui les a produites, et lignes saisies. Règles explicites :
  *  - une sortie de moteur alimente le DQE si elle a une famille d'ouvrage (pas MATERIAL) et
  *    une valeur strictement positive ; sa quantité est arrondie à la précision du moteur ;
+ *  - une sortie ventilée (ex. linéaire de tubes par matériau et diamètre, décision Q9) donne
+ *    une ligne par entrée ; la présentation agrégée les regroupe par groupe (matériau) ;
  *  - une quantité retenue différente de la quantité calculée exige une justification et
  *    reste affichée à côté de la quantité calculée (principe P4) ;
  *  - montant d'une ligne = quantité retenue × prix unitaire, arrondi au pair le plus proche
@@ -64,6 +66,10 @@ export interface ComputedLine {
   readonly nodeId: string;
   readonly calculationId: string;
   readonly outputKey: string;
+  /** Entrée d'une sortie ventilée (`''` pour une sortie simple). */
+  readonly outputPart: string;
+  /** Désignation du groupe de l'entrée (présentation agrégée) ; null pour une sortie simple. */
+  readonly groupDesignation: string | null;
   readonly sourceRevisionId: string;
   /** Ouvrage (`<moteur>.<sortie>`) : clé de correspondance avec les bibliothèques de prix. */
   readonly workKey: string;
@@ -78,9 +84,16 @@ const DESIGNATION_MAX = 300;
 export const computedDesignation = (calculationTitle: string, outputLabel: string): string =>
   `${calculationTitle} — ${outputLabel}`.slice(0, DESIGNATION_MAX);
 
-/** Ouvrage d'une sortie de moteur, clé des bibliothèques de prix. */
-export const workKeyOf = (engineId: string, outputKey: string): string =>
-  `${engineId}.${outputKey}`;
+/**
+ * Ouvrage d'une sortie de moteur, clé des bibliothèques de prix : `<moteur>.<sortie>`, suivi de
+ * `:<entrée>` pour une sortie ventilée (ex. `plumbing.supply-network.pipes:PVC_PN16-32`).
+ */
+export const workKeyOf = (engineId: string, outputKey: string, part = ''): string =>
+  part === '' ? `${engineId}.${outputKey}` : `${engineId}.${outputKey}:${part}`;
+
+/** Ouvrage d'une entrée ventilée : `<moteur>.<sortie>:<entrée>`. */
+export const BREAKDOWN_WORK_PATTERN =
+  /^[a-z]+(\.[a-z0-9]+(-[a-z0-9]+)*)+\.[A-Za-z0-9]+:[A-Z0-9][A-Z0-9_.-]{0,59}$/;
 
 /** Lignes attendues au DQE d'après l'avant-métré et les révisions courantes. */
 export function computedLines(sources: readonly TakeoffSource[]): ComputedLine[] {
@@ -92,19 +105,29 @@ export function computedLines(sources: readonly TakeoffSource[]): ComputedLine[]
       if (output.family === undefined || output.family === 'MATERIAL') continue;
       const unit = boqUnitOf(output.unit);
       const value = revision.outputs[output.key];
-      if (unit === null || typeof value !== 'number') continue;
-      const quantity = decimalFromNumber(value, output.precision);
-      if (quantity === null || quantity === 0n) continue;
-      lines.push({
-        nodeId: source.nodeId,
-        calculationId: source.calculationId,
-        outputKey: output.key,
-        sourceRevisionId: revision.id,
-        workKey: workKeyOf(source.engineId, output.key),
-        designation: computedDesignation(source.calculationTitle, output.label),
-        unit,
-        quantity,
-      });
+      if (unit === null) continue;
+      const line = (part: string, label: string, group: string | null, amount: number) => {
+        const quantity = decimalFromNumber(amount, output.precision);
+        if (quantity === null || quantity === 0n) return;
+        lines.push({
+          nodeId: source.nodeId,
+          calculationId: source.calculationId,
+          outputKey: output.key,
+          outputPart: part,
+          groupDesignation:
+            group === null ? null : computedDesignation(source.calculationTitle, group),
+          sourceRevisionId: revision.id,
+          workKey: workKeyOf(source.engineId, output.key, part),
+          designation: computedDesignation(source.calculationTitle, label),
+          unit,
+          quantity,
+        });
+      };
+      if (output.breakdown) {
+        if (isBreakdown(value)) {
+          for (const entry of value) line(entry.key, entry.label, entry.groupLabel, entry.value);
+        }
+      } else if (typeof value === 'number') line('', output.label, null, value);
     }
   }
   return lines;
@@ -122,21 +145,22 @@ export interface SyncPlan {
   readonly unchanged: number;
 }
 
-/** Identité d'une ligne calculée : (calcul, sortie). Ni un UUID ni une clé ne contient « | ». */
-const lineKey = (line: { calculationId: string; outputKey: string }) =>
-  `${line.calculationId}|${line.outputKey}`;
+/** Identité d'une ligne calculée : (calcul, sortie, entrée). Aucune ne contient « | ». */
+const lineKey = (line: { calculationId: string; outputKey: string; outputPart: string }) =>
+  `${line.calculationId}|${line.outputKey}|${line.outputPart}`;
 
 const sameLine = (a: ComputedLine, b: ComputedLine) =>
   a.nodeId === b.nodeId &&
   a.sourceRevisionId === b.sourceRevisionId &&
   a.workKey === b.workKey &&
   a.designation === b.designation &&
+  a.groupDesignation === b.groupDesignation &&
   a.unit === b.unit &&
   a.quantity === b.quantity;
 
 /**
  * Mise à jour d'un quantitatif depuis l'avant-métré : une ligne calculée est identifiée par
- * (calcul, sortie). Ajout des nouvelles, mise à jour des modifiées (quantité, révision, nœud),
+ * (calcul, sortie, entrée). Ajout des nouvelles, mise à jour des modifiées (quantité, révision, nœud),
  * retrait de celles qui ne sont plus produites. Les prix, quantités retenues et lignes
  * saisies sont conservés (l'application ne touche qu'aux champs calculés).
  */
@@ -408,4 +432,75 @@ export function materialBreakdown(sources: readonly MaterialSource[]): MaterialR
     }
   }
   return [...additive.values(), ...specific];
+}
+
+// ---------------------------------------------------------------------------------------
+// Présentation (décision Q9)
+// ---------------------------------------------------------------------------------------
+
+/** Présentation du DQE : détaillée (une ligne par entrée ventilée) ou agrégée par groupe. */
+export const BOQ_PRESENTATIONS = ['DETAILED', 'AGGREGATED'] as const;
+export type BoqPresentation = (typeof BOQ_PRESENTATIONS)[number];
+
+export const isBoqPresentation = (value: string): value is BoqPresentation =>
+  (BOQ_PRESENTATIONS as readonly string[]).includes(value);
+
+export interface GroupableLine extends PricedLine {
+  readonly id: string;
+  readonly calculationId: string | null;
+  readonly outputKey: string | null;
+  readonly groupDesignation: string | null;
+  readonly unit: string;
+}
+
+/** Regroupement des entrées ventilées d'un même groupe (ex. tous les tubes PVC d'un calcul). */
+export interface LineGroup {
+  readonly key: string;
+  readonly nodeId: string;
+  readonly designation: string;
+  readonly unit: string;
+  /** Somme des quantités retenues. */
+  readonly quantity: Decimal;
+  /** Somme des montants des lignes chiffrées ; null si aucune ne l'est. */
+  readonly amount: Decimal | null;
+  readonly lines: number;
+  readonly unpriced: number;
+  /** Lignes regroupées, dans l'ordre du DQE. */
+  readonly itemIds: readonly string[];
+}
+
+/**
+ * Présentation agrégée : les lignes d'une même sortie ventilée, d'un même nœud et d'un même
+ * groupe se présentent en une ligne (quantités et montants additionnés, sans prix unitaire).
+ * Les données restent ligne par ligne : les prix se saisissent en présentation détaillée.
+ */
+export function groupLines(lines: readonly GroupableLine[], currency: Currency): LineGroup[] {
+  const groups = new Map<string, LineGroup>();
+  for (const line of lines) {
+    if (line.groupDesignation === null || line.calculationId === null) continue;
+    const key = [line.nodeId, line.calculationId, line.outputKey ?? '', line.groupDesignation].join(
+      '|',
+    );
+    const amount = lineAmount(line, currency);
+    const group: LineGroup = groups.get(key) ?? {
+      key,
+      nodeId: line.nodeId,
+      designation: line.groupDesignation,
+      unit: line.unit,
+      quantity: 0n,
+      amount: null,
+      lines: 0,
+      unpriced: 0,
+      itemIds: [],
+    };
+    groups.set(key, {
+      ...group,
+      quantity: group.quantity + effectiveQuantity(line),
+      amount: amount === null ? group.amount : (group.amount ?? 0n) + amount,
+      lines: group.lines + 1,
+      unpriced: group.unpriced + (amount === null ? 1 : 0),
+      itemIds: [...group.itemIds, line.id],
+    });
+  }
+  return [...groups.values()];
 }

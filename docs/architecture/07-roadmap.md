@@ -269,14 +269,50 @@ référentiel NF C 15-100 + guide UTE C 15-105 (édition 2002 et amendements, Q4
 
 ---
 
-## Phase 6 — Plomberie & Sanitaire
+## Phase 6 — Plomberie & Sanitaire *(validée le 2026-10-14)*
 
 **Livrables** : moteurs `plumbing.*`, inventaire des appareils, référentiels
-DTU 60.11 / DTU 64.1 et usages, quantitatifs plomberie, tableau de bord.
+DTU 60.11 / DTU 64.1 et usages, quantitatifs plomberie, tableau de bord. Q7, Q8 et Q9 tranchées
+le 2026-10-13 : NF DTU 2013 ; PVC, PPR, PEHD, cuivre, acier galvanisé ; linéaires par diamètre au
+DQE, présentation agrégée au choix.
+
+- 11 moteurs : débits (simultanéité du DTU 60.11), réseau d'alimentation arborescent (débits,
+  diamètres, vitesses, pertes de charge, pression à chaque point de puisage), diamètre, pertes de
+  charge (Darcy-Weisbach, Colebrook-White itératif), pression au point de puisage, évacuation
+  (NF EN 12056-2 système I, Manning-Strickler, chutes), fosse toutes eaux et puisard, regards,
+  réservoir, pompe ou surpresseur, chauffe-eau à accumulation.
+- Jeux de données `SANITARY_FIXTURES` (inventaire par niveau et local) et `PLUMBING_NETWORK`
+  (tronçons, contrôle de l'arborescence).
+- Référentiels `NF-DTU-60.11` (2013), `NF-DTU-64.1` (2013), `TUBES-EN` (dimensions et rugosités) et
+  `PLUMBING-USAGES` : toutes les valeurs sont saisies par ConsulPro et restent « à vérifier ».
+- Sorties ventilées (ADR-0011) : linéaires de tubes par matériau et diamètre, appareils par type,
+  chauffe-eau par capacité ; une ligne de DQE par entrée, présentation agrégée par groupe au choix
+  (paramètre du quantitatif) ; prix par diamètre dans les bibliothèques.
+- Avant-métré et quantitatifs ouverts aux projets de plomberie ; tableau de bord Plomberie ; module
+  actif dans la navigation.
 
 **Critères de sortie**
-- [ ] Seuils de tests atteints ; convergence de Colebrook-White testée (cas limites, non-convergence ⇒ `ERROR`).
-- [ ] Cas de référence contre-vérifiés (Q6).
+- [x] Seuils de tests atteints : 7 cas de référence par moteur au moins (8 pour le chauffe-eau),
+  calculés indépendamment (Colebrook-White par Newton) ; couverture de `calc-plumbing` 99,8 % des
+  lignes, 98,7 % des branches ; propriétés : pertes de charge croissantes avec le débit et la
+  longueur, décroissantes avec le diamètre ; vitesse ≤ vitesse maximale ; débit admissible ≥ débit
+  d'eaux usées.
+- [x] Convergence de Colebrook-White testée : résidu de l'équation implicite < 10⁻⁹ de Re = 4 000
+  à 10⁸, valeur de contrôle du diagramme de Moody, régime laminaire, non-convergence ⇒ échec
+  explicite (aucune valeur).
+- [x] Mutation (moteurs de pression, 06 §3) : 93,9 % sur `hydraulics.ts` et `supply.ts`.
+- Reste la contre-vérification des cas par un ingénieur plombier (`checkedBy`, Q6) et le contrôle
+  des valeurs sur un exemplaire des textes : moteurs affichés « non contre-vérifiés ».
+
+**Écarts et décisions**
+- Simultanéité y = a / √(x − 1) pour tous les usages ; les usages intensifs (douches collectives)
+  restent à traiter par le bureau d'études (hypothèse affichée).
+- Évacuation : méthode de la NF EN 12056-2 (système I) reprise par le DTU 60.11 partie 2 ; tubes
+  PVC d'évacuation seulement ; chutes à ventilation primaire.
+- Fosse : volume du NF DTU 64.1 (pièces principales) ou méthode par usager (pratique courante) ;
+  le puisard se dimensionne seulement d'après une perméabilité mesurée sur site.
+- Eaux pluviales (DTU 60.11 partie 3) non traitées.
+- Une variante de prix (diamètre) n'est proposée qu'après son apparition dans un quantitatif.
 
 ---
 

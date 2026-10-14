@@ -21,6 +21,7 @@ import {
   datasetKindDto,
   datasetRevisionDto,
   elecDashboardDto,
+  plumbingDashboardDto,
   engineDto,
   linkableOutputDto,
   notificationDto,
@@ -408,6 +409,17 @@ export function createCalculationRoutes(deps: ServerDeps): RouteDefinition[] {
       async run({ ctx }) {
         const result = await app.elecDashboard.get(ctx);
         return result.ok ? ok({ status: 200, body: elecDashboardDto(result.value) }) : result;
+      },
+    }),
+
+    // --- Tableau de bord Plomberie ---------------------------------------------------------
+    orgRoute(deps, 'project.read', {
+      id: 'plumbing.dashboard',
+      method: 'GET',
+      path: `${ORG}/plumbing/dashboard`,
+      async run({ ctx }) {
+        const result = await app.plumbingDashboard.get(ctx);
+        return result.ok ? ok({ status: 200, body: plumbingDashboardDto(result.value) }) : result;
       },
     }),
 

@@ -1,0 +1,414 @@
+{
+  "engine": "plumbing.water-heater",
+  "parameterSet": {
+    "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+    "version": "2013+2013+1+1"
+  },
+  "cases": [
+    {
+      "id": "plumbing.water-heater/famille-4-personnes",
+      "engine": "plumbing.water-heater",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V_j = 4 × 50 L = 200 L ; capacité courante 200 L ; E = 1000 × 0.2 m³ × 4185 J/(kg·K) × (60 − 25) K = 8,1375 kWh ; P = E / (6 h × 1) = 1,35625 kW.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "persons": 4,
+        "usage": "DWELLING",
+        "coldWaterTemperature": {
+          "value": 25,
+          "unit": "degC"
+        },
+        "heatingTime": {
+          "value": 6,
+          "unit": "h"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "dailyVolume": {
+            "value": 200,
+            "tolerance": 0.000001
+          },
+          "capacity": {
+            "value": 200,
+            "tolerance": 0.000001
+          },
+          "energy": {
+            "value": 8.1375,
+            "tolerance": 0.000001
+          },
+          "power": {
+            "value": 1.35625,
+            "tolerance": 0.000001
+          },
+          "heater": [
+            {
+              "key": "CAPACITY-200",
+              "value": 1,
+              "tolerance": 1e-9
+            }
+          ]
+        },
+        "checks": [],
+        "hypotheses": ["DEFAULT.efficiency", "PLUMBING.HEATER_ONE_DAY"]
+      }
+    },
+    {
+      "id": "plumbing.water-heater/hotel-5-lits",
+      "engine": "plumbing.water-heater",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V_j = 5 × 80 L = 400 L ; capacité courante 500 L ; E = 1000 × 0.5 m³ × 4185 J/(kg·K) × (60 − 27) K = 19,18125 kWh ; P = E / (4 h × 0.95) = 5,047697 kW.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "persons": 5,
+        "usage": "HOTEL",
+        "coldWaterTemperature": {
+          "value": 27,
+          "unit": "degC"
+        },
+        "heatingTime": {
+          "value": 4,
+          "unit": "h"
+        },
+        "efficiency": {
+          "value": 95,
+          "unit": "%"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "dailyVolume": {
+            "value": 400,
+            "tolerance": 0.000001
+          },
+          "capacity": {
+            "value": 500,
+            "tolerance": 0.000001
+          },
+          "energy": {
+            "value": 19.18125,
+            "tolerance": 0.000001
+          },
+          "power": {
+            "value": 5.04769736842,
+            "tolerance": 0.000001
+          },
+          "heater": [
+            {
+              "key": "CAPACITY-500",
+              "value": 1,
+              "tolerance": 1e-9
+            }
+          ]
+        },
+        "checks": [],
+        "hypotheses": ["PLUMBING.HEATER_ONE_DAY"]
+      }
+    },
+    {
+      "id": "plumbing.water-heater/bureau-20-usagers",
+      "engine": "plumbing.water-heater",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V_j = 20 × 5 L = 100 L ; capacité courante 100 L ; E = 1000 × 0.1 m³ × 4185 J/(kg·K) × (60 − 28) K = 3,72 kWh ; P = E / (8 h × 1) = 0,465 kW.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "persons": 20,
+        "usage": "OFFICE",
+        "coldWaterTemperature": {
+          "value": 28,
+          "unit": "degC"
+        },
+        "heatingTime": {
+          "value": 8,
+          "unit": "h"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "dailyVolume": {
+            "value": 100,
+            "tolerance": 0.000001
+          },
+          "capacity": {
+            "value": 100,
+            "tolerance": 0.000001
+          },
+          "energy": {
+            "value": 3.72,
+            "tolerance": 0.000001
+          },
+          "power": {
+            "value": 0.465,
+            "tolerance": 0.000001
+          },
+          "heater": [
+            {
+              "key": "CAPACITY-100",
+              "value": 1,
+              "tolerance": 1e-9
+            }
+          ]
+        },
+        "checks": [],
+        "hypotheses": ["DEFAULT.efficiency", "PLUMBING.HEATER_ONE_DAY"]
+      }
+    },
+    {
+      "id": "plumbing.water-heater/capacite-tout-juste",
+      "engine": "plumbing.water-heater",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V_j = 6 × 50 L = 300 L ; capacité courante 300 L ; E = 1000 × 0.3 m³ × 4185 J/(kg·K) × (60 − 20) K = 13,95 kWh ; P = E / (2 h × 0.9) = 7,75 kW.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "persons": 6,
+        "usage": "DWELLING",
+        "coldWaterTemperature": {
+          "value": 20,
+          "unit": "degC"
+        },
+        "heatingTime": {
+          "value": 2,
+          "unit": "h"
+        },
+        "efficiency": {
+          "value": 90,
+          "unit": "%"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "dailyVolume": {
+            "value": 300,
+            "tolerance": 0.000001
+          },
+          "capacity": {
+            "value": 300,
+            "tolerance": 0.000001
+          },
+          "energy": {
+            "value": 13.95,
+            "tolerance": 0.000001
+          },
+          "power": {
+            "value": 7.75,
+            "tolerance": 0.000001
+          },
+          "heater": [
+            {
+              "key": "CAPACITY-300",
+              "value": 1,
+              "tolerance": 1e-9
+            }
+          ]
+        },
+        "checks": [],
+        "hypotheses": ["PLUMBING.HEATER_ONE_DAY"]
+      }
+    },
+    {
+      "id": "plumbing.water-heater/plus-grande-capacite",
+      "engine": "plumbing.water-heater",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V_j = 5 × 100 L = 500 L ; capacité courante 500 L ; E = 1000 × 0.5 m³ × 4185 J/(kg·K) × (60 − 22) K = 22,0875 kWh ; P = E / (10 h × 1) = 2,20875 kW.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "persons": 5,
+        "usage": "HEALTH",
+        "coldWaterTemperature": {
+          "value": 22,
+          "unit": "degC"
+        },
+        "heatingTime": {
+          "value": 10,
+          "unit": "h"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "dailyVolume": {
+            "value": 500,
+            "tolerance": 0.000001
+          },
+          "capacity": {
+            "value": 500,
+            "tolerance": 0.000001
+          },
+          "energy": {
+            "value": 22.0875,
+            "tolerance": 0.000001
+          },
+          "power": {
+            "value": 2.20875,
+            "tolerance": 0.000001
+          },
+          "heater": [
+            {
+              "key": "CAPACITY-500",
+              "value": 1,
+              "tolerance": 1e-9
+            }
+          ]
+        },
+        "checks": [],
+        "hypotheses": ["DEFAULT.efficiency", "PLUMBING.HEATER_ONE_DAY"]
+      }
+    },
+    {
+      "id": "plumbing.water-heater/besoin-trop-grand",
+      "engine": "plumbing.water-heater",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Santé, 6 lits × 100 L = 600 L > 500 L, plus grande capacité courante : erreur NO_CAPACITY, aucun résultat.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "persons": 6,
+        "usage": "HEALTH",
+        "coldWaterTemperature": {
+          "value": 25,
+          "unit": "degC"
+        },
+        "heatingTime": {
+          "value": 6,
+          "unit": "h"
+        }
+      },
+      "expected": {
+        "resultStatus": "ERROR",
+        "failure": "NO_CAPACITY"
+      }
+    },
+    {
+      "id": "plumbing.water-heater/eau-froide-hors-domaine",
+      "engine": "plumbing.water-heater",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Eau froide à 60 °C : hors du domaine (0 à 50 °C), entrée refusée.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "persons": 4,
+        "usage": "DWELLING",
+        "coldWaterTemperature": {
+          "value": 60,
+          "unit": "degC"
+        },
+        "heatingTime": {
+          "value": 6,
+          "unit": "h"
+        }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "coldWaterTemperature.value",
+            "code": "OUT_OF_RANGE"
+          }
+        ]
+      }
+    },
+    {
+      "id": "plumbing.water-heater/sans-capacites",
+      "engine": "plumbing.water-heater",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Référentiel sans capacités courantes : calcul refusé.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "omitParameters": ["plumbing.water_heater.capacity"],
+      "inputs": {
+        "persons": 4,
+        "usage": "DWELLING",
+        "coldWaterTemperature": {
+          "value": 25,
+          "unit": "degC"
+        },
+        "heatingTime": {
+          "value": 6,
+          "unit": "h"
+        }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.plumbing.water_heater.capacity",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

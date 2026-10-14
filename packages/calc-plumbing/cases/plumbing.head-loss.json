@@ -1,0 +1,492 @@
+{
+  "engine": "plumbing.head-loss",
+  "parameterSet": {
+    "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+    "version": "2013+2013+1+1"
+  },
+  "cases": [
+    {
+      "id": "plumbing.head-loss/pvc25-0.4ls-20m",
+      "engine": "plumbing.head-loss",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Tube PVC pression PN16 Ø25 : D = 21,2 mm ; v = 1,133179 m/s ; ν(25 °C) = 0,893 mm²/s ; Re = 26 901,89 ; ε/D = 0,00033019 ; Colebrook-White résolu par Newton : λ = 0,02492052 ; j = λ/D × ρv²/2 = 754,7239 Pa/m ; ΔP_l = 15,094478 kPa ; ΔP_s = 15 % × ΔP_l = 2,264172 kPa ; total 17,35865 kPa.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "flow": {
+          "value": 0.4,
+          "unit": "L/s"
+        },
+        "material": "PVC_PN16",
+        "size": {
+          "value": 25,
+          "unit": "mm"
+        },
+        "length": {
+          "value": 20,
+          "unit": "m"
+        },
+        "temperature": {
+          "value": 25,
+          "unit": "degC"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "innerDiameter": {
+            "value": 21.2,
+            "tolerance": 0.000001
+          },
+          "velocity": {
+            "value": 1.1331786621,
+            "tolerance": 0.000001
+          },
+          "reynolds": {
+            "value": 26901.8898505,
+            "tolerance": 0.0001
+          },
+          "frictionFactor": {
+            "value": 0.0249205249413,
+            "tolerance": 1e-9
+          },
+          "gradient": {
+            "value": 754.723904941,
+            "tolerance": 0.00001
+          },
+          "linearLoss": {
+            "value": 15.0944780988,
+            "tolerance": 0.000001
+          },
+          "singularLoss": {
+            "value": 2.26417171482,
+            "tolerance": 0.000001
+          },
+          "totalLoss": {
+            "value": 17.3586498136,
+            "tolerance": 0.000001
+          },
+          "totalHead": {
+            "value": 1.77008966504,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["DEFAULT.singularCoefficients", "PLUMBING.STEADY_FLOW"]
+      }
+    },
+    {
+      "id": "plumbing.head-loss/acier-dn32-1.5ls-coefficients",
+      "engine": "plumbing.head-loss",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Tube acier galvanisé DN32 : D = 36 mm ; v = 1,473657 m/s ; ν(20 °C) = 1,004 mm²/s ; Re = 52 840,29 ; ε/D = 0,00416667 ; Colebrook-White résolu par Newton : λ = 0,03067743 ; j = λ/D × ρv²/2 = 925,2928 Pa/m ; ΔP_l = 32,385249 kPa ; ΔP_s = 4.5 × ρv²/2 = 4,886245 kPa ; total 37,271494 kPa.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "flow": {
+          "value": 1.5,
+          "unit": "L/s"
+        },
+        "material": "STEEL_GALV",
+        "size": {
+          "value": 32,
+          "unit": "mm"
+        },
+        "length": {
+          "value": 35,
+          "unit": "m"
+        },
+        "temperature": {
+          "value": 20,
+          "unit": "degC"
+        },
+        "singularCoefficients": {
+          "value": 4.5,
+          "unit": "1"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "innerDiameter": {
+            "value": 36,
+            "tolerance": 0.000001
+          },
+          "velocity": {
+            "value": 1.47365688048,
+            "tolerance": 0.000001
+          },
+          "reynolds": {
+            "value": 52840.2865511,
+            "tolerance": 0.0001
+          },
+          "frictionFactor": {
+            "value": 0.0306774274838,
+            "tolerance": 1e-9
+          },
+          "gradient": {
+            "value": 925.292824003,
+            "tolerance": 0.00001
+          },
+          "linearLoss": {
+            "value": 32.3852488401,
+            "tolerance": 0.000001
+          },
+          "singularLoss": {
+            "value": 4.88624535312,
+            "tolerance": 0.000001
+          },
+          "totalLoss": {
+            "value": 37.2714941932,
+            "tolerance": 0.000001
+          },
+          "totalHead": {
+            "value": 3.80063469107,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["PLUMBING.STEADY_FLOW"]
+      }
+    },
+    {
+      "id": "plumbing.head-loss/ppr32-0.6ls-eau-chaude",
+      "engine": "plumbing.head-loss",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Tube PPR PN20 Ø32 : D = 21,2 mm ; v = 1,699768 m/s ; ν(60 °C) = 0,474 mm²/s ; Re = 76 023,38 ; ε/D = 0,00033019 ; Colebrook-White résolu par Newton : λ = 0,02046855 ; j = λ/D × ρv²/2 = 1 394,7631 Pa/m ; ΔP_l = 25,105736 kPa ; ΔP_s = 15 % × ΔP_l = 3,76586 kPa ; total 28,871597 kPa.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "flow": {
+          "value": 0.6,
+          "unit": "L/s"
+        },
+        "material": "PPR_PN20",
+        "size": {
+          "value": 32,
+          "unit": "mm"
+        },
+        "length": {
+          "value": 18,
+          "unit": "m"
+        },
+        "temperature": {
+          "value": 60,
+          "unit": "degC"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "innerDiameter": {
+            "value": 21.2,
+            "tolerance": 0.000001
+          },
+          "velocity": {
+            "value": 1.69976799315,
+            "tolerance": 0.000001
+          },
+          "reynolds": {
+            "value": 76023.3785966,
+            "tolerance": 0.0001
+          },
+          "frictionFactor": {
+            "value": 0.0204685472399,
+            "tolerance": 1e-9
+          },
+          "gradient": {
+            "value": 1394.76312638,
+            "tolerance": 0.00001
+          },
+          "linearLoss": {
+            "value": 25.1057362748,
+            "tolerance": 0.000001
+          },
+          "singularLoss": {
+            "value": 3.76586044122,
+            "tolerance": 0.000001
+          },
+          "totalLoss": {
+            "value": 28.871596716,
+            "tolerance": 0.000001
+          },
+          "totalHead": {
+            "value": 2.94408352659,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["DEFAULT.singularCoefficients", "PLUMBING.STEADY_FLOW"]
+      }
+    },
+    {
+      "id": "plumbing.head-loss/cuivre12-laminaire",
+      "engine": "plumbing.head-loss",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Tube cuivre Ø12 : D = 10 mm ; v = 0,101859 m/s ; ν(20 °C) = 1,004 mm²/s ; Re = 1 014,53 ; λ = 64/Re = 0,06308318 ; j = λ/D × ρv²/2 = 32,7253 Pa/m ; ΔP_l = 0,163627 kPa ; ΔP_s = 15 % × ΔP_l = 0,024544 kPa ; total 0,188171 kPa.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "flow": {
+          "value": 0.008,
+          "unit": "L/s"
+        },
+        "material": "CU",
+        "size": {
+          "value": 12,
+          "unit": "mm"
+        },
+        "length": {
+          "value": 5,
+          "unit": "m"
+        },
+        "temperature": {
+          "value": 20,
+          "unit": "degC"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "innerDiameter": {
+            "value": 10,
+            "tolerance": 0.000001
+          },
+          "velocity": {
+            "value": 0.101859163579,
+            "tolerance": 0.000001
+          },
+          "reynolds": {
+            "value": 1014.53350178,
+            "tolerance": 0.0001
+          },
+          "frictionFactor": {
+            "value": 0.0630831804841,
+            "tolerance": 1e-9
+          },
+          "gradient": {
+            "value": 32.7253120746,
+            "tolerance": 0.00001
+          },
+          "linearLoss": {
+            "value": 0.163626560373,
+            "tolerance": 0.000001
+          },
+          "singularLoss": {
+            "value": 0.024543984056,
+            "tolerance": 0.000001
+          },
+          "totalLoss": {
+            "value": 0.188170544429,
+            "tolerance": 0.000001
+          },
+          "totalHead": {
+            "value": 0.0191880554959,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["DEFAULT.singularCoefficients", "PLUMBING.STEADY_FLOW"]
+      }
+    },
+    {
+      "id": "plumbing.head-loss/pehd160-turbulent-rugueux",
+      "engine": "plumbing.head-loss",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Tube PEHD PN16 Ø160 : D = 130,8 mm ; v = 1,488417 m/s ; ν(10 °C) = 1,307 mm²/s ; Re = 148 955,58 ; ε/D = 0,00005352 ; Colebrook-White résolu par Newton : λ = 0,01693812 ; j = λ/D × ρv²/2 = 143,4422 Pa/m ; ΔP_l = 71,721081 kPa ; ΔP_s = 15 % × ΔP_l = 10,758162 kPa ; total 82,479243 kPa.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "flow": {
+          "value": 20,
+          "unit": "L/s"
+        },
+        "material": "PEHD_PN16",
+        "size": {
+          "value": 160,
+          "unit": "mm"
+        },
+        "length": {
+          "value": 500,
+          "unit": "m"
+        },
+        "temperature": {
+          "value": 10,
+          "unit": "degC"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "innerDiameter": {
+            "value": 130.8,
+            "tolerance": 0.000001
+          },
+          "velocity": {
+            "value": 1.48841701589,
+            "tolerance": 0.000001
+          },
+          "reynolds": {
+            "value": 148955.582003,
+            "tolerance": 0.0001
+          },
+          "frictionFactor": {
+            "value": 0.0169381240816,
+            "tolerance": 1e-9
+          },
+          "gradient": {
+            "value": 143.442162193,
+            "tolerance": 0.00001
+          },
+          "linearLoss": {
+            "value": 71.7210810963,
+            "tolerance": 0.000001
+          },
+          "singularLoss": {
+            "value": 10.7581621644,
+            "tolerance": 0.000001
+          },
+          "totalLoss": {
+            "value": 82.4792432607,
+            "tolerance": 0.000001
+          },
+          "totalHead": {
+            "value": 8.41054215871,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["DEFAULT.singularCoefficients", "PLUMBING.STEADY_FLOW"]
+      }
+    },
+    {
+      "id": "plumbing.head-loss/temperature-hors-domaine",
+      "engine": "plumbing.head-loss",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Eau à 95 °C : hors du domaine (0 à 80 °C), entrée refusée.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "flow": {
+          "value": 0.4,
+          "unit": "L/s"
+        },
+        "material": "PVC_PN16",
+        "size": {
+          "value": 25,
+          "unit": "mm"
+        },
+        "length": {
+          "value": 20,
+          "unit": "m"
+        },
+        "temperature": {
+          "value": 95,
+          "unit": "degC"
+        }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "temperature.value",
+            "code": "OUT_OF_RANGE"
+          }
+        ]
+      }
+    },
+    {
+      "id": "plumbing.head-loss/sans-viscosite",
+      "engine": "plumbing.head-loss",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Référentiel sans viscosité de l’eau : calcul refusé.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "omitParameters": ["plumbing.water.kinematic_viscosity"],
+      "inputs": {
+        "flow": {
+          "value": 0.4,
+          "unit": "L/s"
+        },
+        "material": "PVC_PN16",
+        "size": {
+          "value": 25,
+          "unit": "mm"
+        },
+        "length": {
+          "value": 20,
+          "unit": "m"
+        },
+        "temperature": {
+          "value": 25,
+          "unit": "degC"
+        }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.plumbing.water.kinematic_viscosity",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

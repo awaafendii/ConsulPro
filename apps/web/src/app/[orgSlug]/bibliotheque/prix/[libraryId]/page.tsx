@@ -37,7 +37,6 @@ export default async function PriceLibraryPage({ params }: { params: Params }) {
   const { ctx, library } = await load(orgSlug, id);
   const tLibrary = await getTranslations('library');
   const t = await getTranslations('prices');
-  const { app } = getServer().infra;
 
   return (
     <>
@@ -47,7 +46,7 @@ export default async function PriceLibraryPage({ params }: { params: Params }) {
         <PriceLibraryView
           orgSlug={ctx.organization.slug}
           canManage={can(ctx.role, 'price.manage')}
-          library={priceLibraryDetailDto(library.value, app.prices.works())}
+          library={priceLibraryDetailDto(library.value, library.value.works)}
         />
       ) : (
         <ErrorState message={library.error.message} requestId={ctx.meta.requestId} />

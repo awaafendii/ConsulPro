@@ -1,0 +1,409 @@
+{
+  "engine": "plumbing.pump",
+  "parameterSet": {
+    "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+    "version": "2013+2013+1+1"
+  },
+  "cases": [
+    {
+      "id": "plumbing.pump/surpresseur-immeuble",
+      "engine": "plumbing.pump",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "HMT = 15 + (30 + 150) kPa / (ρg = 9806,65) = 33,354892 m ; P_h = ρgQ·HMT = 0,654199 kW ; P_a = P_h / 60 % = 1,090332 kW ; P_m = P_a × (1 + 0,2) = 1,308399 kW.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "flow": {
+          "value": 2,
+          "unit": "L/s"
+        },
+        "geometricHeight": {
+          "value": 15,
+          "unit": "m"
+        },
+        "losses": {
+          "value": 30,
+          "unit": "kPa"
+        },
+        "residualPressure": {
+          "value": 150,
+          "unit": "kPa"
+        },
+        "efficiency": {
+          "value": 60,
+          "unit": "%"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "totalHead": {
+            "value": 33.3548918336,
+            "tolerance": 0.000001
+          },
+          "hydraulicPower": {
+            "value": 0.6541995,
+            "tolerance": 0.000001
+          },
+          "absorbedPower": {
+            "value": 1.0903325,
+            "tolerance": 0.000001
+          },
+          "motorPower": {
+            "value": 1.308399,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["PLUMBING.PUMP_DUTY_POINT"]
+      }
+    },
+    {
+      "id": "plumbing.pump/forage-chateau-deau",
+      "engine": "plumbing.pump",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "HMT = 42 + (55 + 0) kPa / (ρg = 9806,65) = 47,608439 m ; P_h = ρgQ·HMT = 2,334397 kW ; P_a = P_h / 55 % = 4,244357 kW ; P_m = P_a × (1 + 0,2) = 5,093229 kW.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "flow": {
+          "value": 5,
+          "unit": "L/s"
+        },
+        "geometricHeight": {
+          "value": 42,
+          "unit": "m"
+        },
+        "losses": {
+          "value": 55,
+          "unit": "kPa"
+        },
+        "residualPressure": {
+          "value": 0,
+          "unit": "kPa"
+        },
+        "efficiency": {
+          "value": 55,
+          "unit": "%"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "totalHead": {
+            "value": 47.6084391714,
+            "tolerance": 0.000001
+          },
+          "hydraulicPower": {
+            "value": 2.3343965,
+            "tolerance": 0.000001
+          },
+          "absorbedPower": {
+            "value": 4.24435727273,
+            "tolerance": 0.000001
+          },
+          "motorPower": {
+            "value": 5.09322872727,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["PLUMBING.PUMP_DUTY_POINT"]
+      }
+    },
+    {
+      "id": "plumbing.pump/relevage-sous-sol",
+      "engine": "plumbing.pump",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "HMT = 4.5 + (12 + 20) kPa / (ρg = 9806,65) = 7,763092 m ; P_h = ρgQ·HMT = 0,091356 kW ; P_a = P_h / 45 % = 0,203013 kW ; P_m = P_a × (1 + 0,2) = 0,243616 kW.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "flow": {
+          "value": 1.2,
+          "unit": "L/s"
+        },
+        "geometricHeight": {
+          "value": 4.5,
+          "unit": "m"
+        },
+        "losses": {
+          "value": 12,
+          "unit": "kPa"
+        },
+        "residualPressure": {
+          "value": 20,
+          "unit": "kPa"
+        },
+        "efficiency": {
+          "value": 45,
+          "unit": "%"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "totalHead": {
+            "value": 7.76309188153,
+            "tolerance": 0.000001
+          },
+          "hydraulicPower": {
+            "value": 0.09135591,
+            "tolerance": 0.000001
+          },
+          "absorbedPower": {
+            "value": 0.203013133333,
+            "tolerance": 0.000001
+          },
+          "motorPower": {
+            "value": 0.24361576,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["PLUMBING.PUMP_DUTY_POINT"]
+      }
+    },
+    {
+      "id": "plumbing.pump/aspiration-en-charge",
+      "engine": "plumbing.pump",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "HMT = -3 + (10 + 200) kPa / (ρg = 9806,65) = 18,41404 m ; P_h = ρgQ·HMT = 0,18058 kW ; P_a = P_h / 70 % = 0,257971 kW ; P_m = P_a × (1 + 0,2) = 0,309566 kW.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "flow": {
+          "value": 1,
+          "unit": "L/s"
+        },
+        "geometricHeight": {
+          "value": -3,
+          "unit": "m"
+        },
+        "losses": {
+          "value": 10,
+          "unit": "kPa"
+        },
+        "residualPressure": {
+          "value": 200,
+          "unit": "kPa"
+        },
+        "efficiency": {
+          "value": 70,
+          "unit": "%"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "totalHead": {
+            "value": 18.4140404725,
+            "tolerance": 0.000001
+          },
+          "hydraulicPower": {
+            "value": 0.18058005,
+            "tolerance": 0.000001
+          },
+          "absorbedPower": {
+            "value": 0.2579715,
+            "tolerance": 0.000001
+          },
+          "motorPower": {
+            "value": 0.3095658,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["PLUMBING.PUMP_DUTY_POINT"]
+      }
+    },
+    {
+      "id": "plumbing.pump/rendement-100",
+      "engine": "plumbing.pump",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "HMT = 10 + (20 + 100) kPa / (ρg = 9806,65) = 22,236595 m ; P_h = ρgQ·HMT = 0,654199 kW ; P_a = P_h / 100 % = 0,654199 kW ; P_m = P_a × (1 + 0,2) = 0,785039 kW.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "flow": {
+          "value": 3,
+          "unit": "L/s"
+        },
+        "geometricHeight": {
+          "value": 10,
+          "unit": "m"
+        },
+        "losses": {
+          "value": 20,
+          "unit": "kPa"
+        },
+        "residualPressure": {
+          "value": 100,
+          "unit": "kPa"
+        },
+        "efficiency": {
+          "value": 100,
+          "unit": "%"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "totalHead": {
+            "value": 22.2365945557,
+            "tolerance": 0.000001
+          },
+          "hydraulicPower": {
+            "value": 0.6541995,
+            "tolerance": 0.000001
+          },
+          "absorbedPower": {
+            "value": 0.6541995,
+            "tolerance": 0.000001
+          },
+          "motorPower": {
+            "value": 0.7850394,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [],
+        "hypotheses": ["PLUMBING.PUMP_DUTY_POINT"]
+      }
+    },
+    {
+      "id": "plumbing.pump/rendement-nul",
+      "engine": "plumbing.pump",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Rendement nul : hors du domaine, entrée refusée.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "flow": {
+          "value": 2,
+          "unit": "L/s"
+        },
+        "geometricHeight": {
+          "value": 15,
+          "unit": "m"
+        },
+        "losses": {
+          "value": 30,
+          "unit": "kPa"
+        },
+        "residualPressure": {
+          "value": 150,
+          "unit": "kPa"
+        },
+        "efficiency": {
+          "value": 0,
+          "unit": "%"
+        }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "efficiency.value",
+            "code": "OUT_OF_RANGE"
+          }
+        ]
+      }
+    },
+    {
+      "id": "plumbing.pump/sans-marge-moteur",
+      "engine": "plumbing.pump",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Référentiel sans marge moteur : calcul refusé.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "omitParameters": ["plumbing.pump.motor_margin"],
+      "inputs": {
+        "flow": {
+          "value": 2,
+          "unit": "L/s"
+        },
+        "geometricHeight": {
+          "value": 15,
+          "unit": "m"
+        },
+        "losses": {
+          "value": 30,
+          "unit": "kPa"
+        },
+        "residualPressure": {
+          "value": 150,
+          "unit": "kPa"
+        },
+        "efficiency": {
+          "value": 60,
+          "unit": "%"
+        }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.plumbing.pump.motor_margin",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

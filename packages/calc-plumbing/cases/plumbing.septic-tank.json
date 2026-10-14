@@ -1,0 +1,347 @@
+{
+  "engine": "plumbing.septic-tank",
+  "parameterSet": {
+    "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+    "version": "2013+2013+1+1"
+  },
+  "cases": [
+    {
+      "id": "plumbing.septic-tank/maison-4-pieces",
+      "engine": "plumbing.septic-tank",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "NF DTU 64.1 : V = 3 + max(0 ; 4 − 5) × 1 = 3 m³ ; usagers = pièces = 4 ; minimum 3 m³.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "method": "ROOMS",
+        "rooms": 4
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "volume": {
+            "value": 3,
+            "tolerance": 0.000001
+          },
+          "minVolume": {
+            "value": 3,
+            "tolerance": 0.000001
+          },
+          "users": {
+            "value": 4,
+            "tolerance": 0.000001
+          },
+          "dailyEffluent": {
+            "value": 400,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "plumbing.septic.min-volume",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["PLUMBING.SEPTIC_ALL_WATERS", "PLUMBING.USERS_ROOMS"]
+      }
+    },
+    {
+      "id": "plumbing.septic-tank/maison-7-pieces-puisard",
+      "engine": "plumbing.septic-tank",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "NF DTU 64.1 : V = 3 + max(0 ; 7 − 5) × 1 = 5 m³ ; usagers = pièces = 7 ; puisard : S = 0,7 m³/j / (0.5 × 40 mm/h × 24 h) = 1,458333 m² ; h = (S − πD²/4)/(πD) = 0 m (D = 1.5 m) ; minimum 3 m³.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "method": "ROOMS",
+        "rooms": 7,
+        "permeability": {
+          "value": 40,
+          "unit": "mm/h"
+        },
+        "soakawayDiameter": {
+          "value": 1.5,
+          "unit": "m"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "volume": {
+            "value": 5,
+            "tolerance": 0.000001
+          },
+          "minVolume": {
+            "value": 3,
+            "tolerance": 0.000001
+          },
+          "users": {
+            "value": 7,
+            "tolerance": 0.000001
+          },
+          "dailyEffluent": {
+            "value": 700,
+            "tolerance": 0.000001
+          },
+          "infiltrationArea": {
+            "value": 1.45833333333,
+            "tolerance": 0.000001
+          },
+          "soakawayDepth": {
+            "value": 0,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "plumbing.septic.min-volume",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["PLUMBING.SEPTIC_ALL_WATERS", "PLUMBING.USERS_ROOMS"]
+      }
+    },
+    {
+      "id": "plumbing.septic-tank/ecole-60-usagers",
+      "engine": "plumbing.septic-tank",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V = N (q t_s + s T) = 60 × (0,1 × 3 + 40 × 2 / 1000) = 22,8 m³ ; puisard : S = 6 m³/j / (0.5 × 25 mm/h × 24 h) = 20 m² ; minimum 3 m³.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "method": "USERS",
+        "users": 60,
+        "permeability": {
+          "value": 25,
+          "unit": "mm/h"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "volume": {
+            "value": 22.8,
+            "tolerance": 0.000001
+          },
+          "minVolume": {
+            "value": 3,
+            "tolerance": 0.000001
+          },
+          "users": {
+            "value": 60,
+            "tolerance": 0.000001
+          },
+          "dailyEffluent": {
+            "value": 6000,
+            "tolerance": 0.000001
+          },
+          "infiltrationArea": {
+            "value": 20,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "plumbing.septic.min-volume",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["PLUMBING.SEPTIC_ALL_WATERS"]
+      }
+    },
+    {
+      "id": "plumbing.septic-tank/petit-effectif-sous-le-minimum",
+      "engine": "plumbing.septic-tank",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "V = N (q t_s + s T) = 6 × (0,1 × 3 + 40 × 2 / 1000) = 2,28 m³ ; minimum 3 m³.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "method": "USERS",
+        "users": 6
+      },
+      "expected": {
+        "resultStatus": "NON_COMPLIANT",
+        "outputs": {
+          "volume": {
+            "value": 2.28,
+            "tolerance": 0.000001
+          },
+          "minVolume": {
+            "value": 3,
+            "tolerance": 0.000001
+          },
+          "users": {
+            "value": 6,
+            "tolerance": 0.000001
+          },
+          "dailyEffluent": {
+            "value": 600,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "plumbing.septic.min-volume",
+            "status": "FAIL"
+          }
+        ],
+        "hypotheses": ["PLUMBING.SEPTIC_ALL_WATERS"]
+      }
+    },
+    {
+      "id": "plumbing.septic-tank/puisard-fond-suffisant",
+      "engine": "plumbing.septic-tank",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "NF DTU 64.1 : V = 3 + max(0 ; 2 − 5) × 1 = 3 m³ ; usagers = pièces = 2 ; puisard : S = 0,2 m³/j / (0.5 × 200 mm/h × 24 h) = 0,083333 m² ; h = (S − πD²/4)/(πD) = 0 m (D = 2 m) ; minimum 3 m³.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "method": "ROOMS",
+        "rooms": 2,
+        "permeability": {
+          "value": 200,
+          "unit": "mm/h"
+        },
+        "soakawayDiameter": {
+          "value": 2,
+          "unit": "m"
+        }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "volume": {
+            "value": 3,
+            "tolerance": 0.000001
+          },
+          "minVolume": {
+            "value": 3,
+            "tolerance": 0.000001
+          },
+          "users": {
+            "value": 2,
+            "tolerance": 0.000001
+          },
+          "dailyEffluent": {
+            "value": 200,
+            "tolerance": 0.000001
+          },
+          "infiltrationArea": {
+            "value": 0.0833333333333,
+            "tolerance": 0.000001
+          },
+          "soakawayDepth": {
+            "value": 0,
+            "tolerance": 0.000001
+          }
+        },
+        "checks": [
+          {
+            "rule": "plumbing.septic.min-volume",
+            "status": "PASS"
+          }
+        ],
+        "hypotheses": ["PLUMBING.SEPTIC_ALL_WATERS", "PLUMBING.USERS_ROOMS"]
+      }
+    },
+    {
+      "id": "plumbing.septic-tank/pieces-manquantes",
+      "engine": "plumbing.septic-tank",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Méthode des pièces principales sans nombre de pièces : entrée refusée.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "inputs": {
+        "method": "ROOMS"
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "rooms",
+            "code": "METHOD_INPUT_REQUIRED"
+          }
+        ]
+      }
+    },
+    {
+      "id": "plumbing.septic-tank/sans-volume-minimal",
+      "engine": "plumbing.septic-tank",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Référentiel sans volume minimal : calcul refusé.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": {
+        "standard": "NF-DTU-60.11+NF-DTU-64.1+TUBES-EN+PLUMBING-USAGES",
+        "version": "2013+2013+1+1"
+      },
+      "omitParameters": ["plumbing.septic.base_volume"],
+      "inputs": {
+        "method": "ROOMS",
+        "rooms": 4
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [
+          {
+            "path": "parameters.plumbing.septic.base_volume",
+            "code": "PARAMETER_MISSING"
+          }
+        ]
+      }
+    }
+  ]
+}

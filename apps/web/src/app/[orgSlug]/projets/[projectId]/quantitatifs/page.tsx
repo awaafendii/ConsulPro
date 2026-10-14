@@ -1,4 +1,4 @@
-import { can } from '@consulpro/domain';
+import { can, isQuantityDiscipline } from '@consulpro/domain';
 import { Callout, ErrorState, Section } from '@consulpro/ui';
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
@@ -23,7 +23,7 @@ export default async function BoqsPage({ params }: { params: Params }) {
   const { ctx, project } = await requireProject(orgSlug, projectId);
   const t = await getTranslations('boq');
   const tTabs = await getTranslations('project.tabs');
-  if (!project.disciplines.includes('BTP')) {
+  if (!project.disciplines.some(isQuantityDiscipline)) {
     return <Callout tone="info">{t('inactive')}</Callout>;
   }
   const { app } = getServer().infra;

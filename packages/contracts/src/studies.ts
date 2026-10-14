@@ -292,3 +292,52 @@ export const elecDashboardSchema = z.object({
   }),
 });
 export type ElecDashboardDto = z.infer<typeof elecDashboardSchema>;
+
+// --- Tableau de bord Plomberie --------------------------------------------------------------
+
+export const plumbingDashboardSchema = z.object({
+  projects: z.array(
+    z.object({
+      project: z.object({ id: z.uuid(), code: z.string(), name: z.string() }),
+      calculations: z.object({
+        total: z.number().int(),
+        notComputed: z.number().int(),
+        verified: z.number().int(),
+        toVerify: z.number().int(),
+        rejected: z.number().int(),
+        nonCompliant: z.number().int(),
+        obsolete: z.number().int(),
+      }),
+      flows: z.array(
+        z.object({
+          calculationId: z.uuid(),
+          title: z.string(),
+          engineId: z.string(),
+          revisionNumber: z.number().int(),
+          workflowStatus: workflowStatusSchema,
+          resultStatus: resultStatusSchema,
+          fixtureCount: z.number().nullable(),
+          probableFlow: z.number().nullable(),
+          minPressure: z.number().nullable(),
+          obsolete: z.boolean(),
+        }),
+      ),
+      nonCompliant: z.array(
+        z.object({
+          calculationId: z.uuid(),
+          title: z.string(),
+          engineId: z.string(),
+          engineTitle: z.string(),
+        }),
+      ),
+    }),
+  ),
+  truncated: z.boolean(),
+  engines: z.object({
+    total: z.number().int(),
+    verified: z.number().int(),
+    cases: z.number().int(),
+    checkedCases: z.number().int(),
+  }),
+});
+export type PlumbingDashboardDto = z.infer<typeof plumbingDashboardSchema>;

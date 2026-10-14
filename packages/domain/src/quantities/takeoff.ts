@@ -97,3 +97,13 @@ export function ancestorsOf(nodes: readonly TreeNode[], id: string): string[] {
   }
   return chain;
 }
+
+/**
+ * Métiers dont les calculs se rattachent à l'avant-métré et alimentent les quantitatifs :
+ * BTP (Phase 4) et Plomberie (Phase 6 : tubes, appareils, ouvrages de réseau).
+ */
+export const QUANTITY_DISCIPLINES = ['BTP', 'PLUMBING'] as const;
+export type QuantityDiscipline = (typeof QUANTITY_DISCIPLINES)[number];
+
+export const isQuantityDiscipline = (value: string): value is QuantityDiscipline =>
+  (QUANTITY_DISCIPLINES as readonly string[]).includes(value);
