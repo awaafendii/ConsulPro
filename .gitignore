@@ -12,6 +12,7 @@ test-results/
 .env
 .env.*
 !.env.example
+!apps/web/.env.production.example
 
 .DS_Store
 Thumbs.db

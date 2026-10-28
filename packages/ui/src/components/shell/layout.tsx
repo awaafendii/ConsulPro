@@ -1,17 +1,20 @@
 import type { ReactNode } from 'react';
 
 import { cn } from '../../lib/utils';
+import { AppLink } from '../navigation/link';
 
 export interface PageHeaderProps {
   readonly title: string;
   readonly description?: ReactNode;
   /** Actions principales de la page (boutons). */
   readonly actions?: ReactNode;
+  /** Lien de retour vers la page parente (« ← label »), au-dessus du titre. */
+  readonly back?: { readonly href: string; readonly label: string };
   readonly className?: string | undefined;
 }
 
 /** En-tête de page : un seul <h1> par page. */
-export function PageHeader({ title, description, actions, className }: PageHeaderProps) {
+export function PageHeader({ title, description, actions, back, className }: PageHeaderProps) {
   return (
     <div
       className={cn(
@@ -20,6 +23,15 @@ export function PageHeader({ title, description, actions, className }: PageHeade
       )}
     >
       <div className="min-w-0 space-y-1">
+        {back && (
+          <AppLink
+            href={back.href}
+            className="inline-flex items-center gap-1 text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+          >
+            <span aria-hidden>←</span>
+            {back.label}
+          </AppLink>
+        )}
         <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
         {description && <div className="text-sm text-muted-foreground">{description}</div>}
       </div>

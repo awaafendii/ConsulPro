@@ -9,15 +9,17 @@ const envSchema = z.object({
   DATABASE_URL: z.url().refine((u) => u.startsWith('postgres'), 'URL PostgreSQL attendue'),
   APP_URL: z.url(),
   BETTER_AUTH_SECRET: z.string().min(32, 'Le secret doit comporter au moins 32 caractères'),
-  SMTP_HOST: z.string().min(1),
-  SMTP_PORT: z.coerce.number().int().positive(),
+  // SMTP optionnel : sans lui, aucun e-mail n'est envoyé et l'inscription ne requiert pas
+  // de vérification par e-mail (voir apps/web/src/server/container.ts).
+  SMTP_HOST: z.string().min(1).optional(),
+  SMTP_PORT: z.coerce.number().int().positive().optional(),
   SMTP_SECURE: z
     .enum(['true', 'false'])
     .default('false')
     .transform((v) => v === 'true'),
   SMTP_USER: z.string().optional(),
   SMTP_PASSWORD: z.string().optional(),
-  MAIL_FROM: z.string().min(3),
+  MAIL_FROM: z.string().min(3).optional(),
   /** Fuseau horaire par défaut (IANA) ; chaque utilisateur peut choisir le sien. */
   APP_TIME_ZONE: z.string().min(1).default('Africa/Abidjan'),
   /**

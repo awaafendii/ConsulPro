@@ -322,6 +322,7 @@
       "quantities": "Quantitatifs"
     },
     "archivedNotice": "Ce projet est archivé : il est en lecture seule. Désarchivez-le depuis l’onglet Paramètres pour le modifier.",
+    "backToList": "Projets",
     "role": "Votre rôle : {role}",
     "overview": {
       "details": "Informations",

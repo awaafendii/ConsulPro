@@ -14,6 +14,11 @@ export interface AuthConfig {
   readonly audit: Pick<AuditService, 'recordAuthEvent'>;
   /** Limitation de débit des endpoints d'authentification (désactivable en test). */
   readonly rateLimit?: boolean;
+  /**
+   * Exiger la vérification de l'adresse e-mail à l'inscription (défaut : true). Mis à false
+   * quand aucun SMTP n'est configuré : l'inscription donne alors un accès immédiat, sans e-mail.
+   */
+  readonly requireEmailVerification?: boolean;
 }
 
 const RATE_WINDOW_S = 15 * 60;
@@ -38,6 +43,7 @@ const DISABLED_PATHS = [
  */
 export function createAuth(config: AuthConfig) {
   const { mailer, audit } = config;
+  const requireEmailVerification = config.requireEmailVerification ?? true;
 
   return betterAuth({
     appName: 'ConsulPro',
@@ -66,7 +72,7 @@ export function createAuth(config: AuthConfig) {
     },
     emailAndPassword: {
       enabled: true,
-      requireEmailVerification: true,
+      requireEmailVerification,
       minPasswordLength: 12,
       maxPasswordLength: 128,
       revokeSessionsOnPasswordReset: true,
@@ -99,7 +105,7 @@ export function createAuth(config: AuthConfig) {
       },
     },
     emailVerification: {
-      sendOnSignUp: true,
+      sendOnSignUp: requireEmailVerification,
       autoSignInAfterVerification: true,
       expiresIn: 24 * 3600,
       async sendVerificationEmail({ user, url }) {

@@ -18,6 +18,7 @@ const config: NextConfig = {
     '@consulpro/calc-btp',
     '@consulpro/calc-elec',
     '@consulpro/calc-plumbing',
+    '@consulpro/calc-topo',
     '@consulpro/calc-core',
     '@consulpro/contracts',
     '@consulpro/db',

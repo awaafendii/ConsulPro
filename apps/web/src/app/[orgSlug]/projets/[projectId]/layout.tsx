@@ -26,6 +26,7 @@ export default async function ProjectLayout({
     <>
       <PageHeader
         title={`${project.code} — ${project.name}`}
+        back={{ href: `/${ctx.organization.slug}/projets`, label: t('backToList') }}
         description={
           <span className="flex flex-wrap items-center gap-2">
             <Badge variant={project.status === 'ACTIVE' ? 'success' : 'muted'}>
