@@ -352,6 +352,43 @@ importers:
         specifier: 5.0.3
         version: 5.0.3(@types/node@24.19.1)(@vitest/coverage-v8@5.0.3)(jsdom@30.1.2(@noble/hashes@2.4.0))(vite@8.3.3(@types/node@24.19.1)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
 
+  packages/calc-topo:
+    dependencies:
+      '@consulpro/calc-core':
+        specifier: workspace:*
+        version: link:../calc-core
+      zod:
+        specifier: 4.6.5
+        version: 4.6.5
+    devDependencies:
+      '@consulpro/config-eslint':
+        specifier: workspace:*
+        version: link:../config-eslint
+      '@consulpro/config-typescript':
+        specifier: workspace:*
+        version: link:../config-typescript
+      '@consulpro/standards':
+        specifier: workspace:*
+        version: link:../standards
+      '@stryker-mutator/core':
+        specifier: 10.0.0
+        version: 10.0.0(@types/node@24.19.1)
+      '@vitest/coverage-v8':
+        specifier: 5.0.3
+        version: 5.0.3(vitest@5.0.3)
+      eslint:
+        specifier: 10.12.0
+        version: 10.12.0(jiti@2.7.0)
+      fast-check:
+        specifier: 4.10.2
+        version: 4.10.2
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: 5.0.3
+        version: 5.0.3(@types/node@24.19.1)(@vitest/coverage-v8@5.0.3)(jsdom@30.1.2(@noble/hashes@2.4.0))(vite@8.3.3(@types/node@24.19.1)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+
   packages/config-eslint:
     dependencies:
       '@eslint/js':
@@ -470,6 +507,9 @@ importers:
       '@consulpro/calc-plumbing':
         specifier: workspace:*
         version: link:../calc-plumbing
+      '@consulpro/calc-topo':
+        specifier: workspace:*
+        version: link:../calc-topo
       '@consulpro/db':
         specifier: workspace:*
         version: link:../db

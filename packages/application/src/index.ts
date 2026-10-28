@@ -5,6 +5,7 @@ import { createDatasetService } from './calculations/dataset-service';
 import { createElecDashboardService } from './calculations/elec-dashboard-service';
 import { createPlumbingDashboardService } from './calculations/plumbing-dashboard-service';
 import { createStudyService } from './calculations/study-service';
+import { createTopographyDashboardService } from './calculations/topography-dashboard-service';
 import { createLibraryService } from './library/library-service';
 import { createInvitationService } from './organizations/invitation-service';
 import { createMemberService } from './organizations/member-service';
@@ -40,6 +41,13 @@ export {
   type ElecProjectSummary,
 } from './calculations/elec-dashboard-service';
 export { engineVerification, type EngineVerification } from './calculations/engine-verification';
+export {
+  createTopographyDashboardService,
+  type TopographyDashboard,
+  type TopographyDashboardService,
+  type TopographyProjectSummary,
+  type TopographyTraverseSummary,
+} from './calculations/topography-dashboard-service';
 export {
   createPlumbingDashboardService,
   type PlumbingDashboard,
@@ -158,6 +166,7 @@ export function createApplication(deps: ApplicationDeps) {
     btpDashboard: createBtpDashboardService(deps),
     elecDashboard: createElecDashboardService(deps),
     plumbingDashboard: createPlumbingDashboardService(deps),
+    topographyDashboard: createTopographyDashboardService(deps),
     account: createAccountService(deps),
   };
 }

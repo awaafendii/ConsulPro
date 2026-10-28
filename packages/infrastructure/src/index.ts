@@ -2,6 +2,7 @@ import { createApplication, type Application, type Mailer } from '@consulpro/app
 import { BTP_ENGINES } from '@consulpro/calc-btp';
 import { ELEC_ENGINES } from '@consulpro/calc-elec';
 import { PLUMBING_ENGINES } from '@consulpro/calc-plumbing';
+import { TOPO_ENGINES } from '@consulpro/calc-topo';
 import { EngineRegistry } from '@consulpro/calc-core';
 import { DEMO_ENGINES } from '@consulpro/calc-demo';
 import { createDatabase, type Database } from '@consulpro/db';
@@ -39,6 +40,7 @@ export function createEngineRegistry(options: { demoEngines: boolean }): EngineR
   for (const engine of BTP_ENGINES) registry.register(engine);
   for (const engine of ELEC_ENGINES) registry.register(engine);
   for (const engine of PLUMBING_ENGINES) registry.register(engine);
+  for (const engine of TOPO_ENGINES) registry.register(engine);
   if (options.demoEngines) for (const engine of DEMO_ENGINES) registry.register(engine);
   return registry;
 }

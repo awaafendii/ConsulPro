@@ -1,0 +1,272 @@
+{
+  "engine": "topo.traverse",
+  "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+  "cases": [
+    {
+      "id": "topo.traverse/linked-rectangle-within-tolerance",
+      "engine": "topo.traverse",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Polygonale encadrée, rectangle 100×50 : gisement de départ 100 gon, angles de station 100 gon (gisements transmis 100/0/300/200 gon), longueurs 100/50/100/50, ΣD = 300 m. Point calculé (1000;1000), point d’arrivée connu (999,97;999,96) : f_X = 0,03 ; f_Y = 0,04 ; f_L = 0,05 m ; précision relative 0,05/300 = 1,667e-4 ≤ 2e-4 (1/6000) → conforme.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "type": "LINKED",
+        "x0": { "value": 1000, "unit": "m" },
+        "y0": { "value": 1000, "unit": "m" },
+        "initialBearing": { "value": 100, "unit": "gon" },
+        "endX": { "value": 999.97, "unit": "m" },
+        "endY": { "value": 999.96, "unit": "m" },
+        "legs": [
+          { "angle": { "value": 100, "unit": "gon" }, "distance": { "value": 100, "unit": "m" } },
+          { "angle": { "value": 100, "unit": "gon" }, "distance": { "value": 50, "unit": "m" } },
+          { "angle": { "value": 100, "unit": "gon" }, "distance": { "value": 100, "unit": "m" } },
+          { "angle": { "value": 100, "unit": "gon" }, "distance": { "value": 50, "unit": "m" } }
+        ]
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "angularMisclosure": { "value": null, "tolerance": 0 },
+          "fX": { "value": 0.03, "tolerance": 1e-9 },
+          "fY": { "value": 0.04, "tolerance": 1e-9 },
+          "fL": { "value": 0.05, "tolerance": 1e-9 },
+          "perimeter": { "value": 300, "tolerance": 1e-9 },
+          "relativePrecision": { "value": 0.00016666666666666666, "tolerance": 1e-9 },
+          "relativeDenominator": { "value": 6000, "tolerance": 1e-6 },
+          "endX": { "value": 999.97, "tolerance": 1e-9 },
+          "endY": { "value": 999.96, "tolerance": 1e-9 },
+          "numberOfLegs": { "value": 4, "tolerance": 0 }
+        },
+        "checks": [{ "rule": "topo.traverse.relative-precision", "status": "PASS" }],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION", "TOPO.TRAVERSE_ANGLE"]
+      }
+    },
+    {
+      "id": "topo.traverse/closed-rectangle-perfect",
+      "engine": "topo.traverse",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Polygonale fermée (retour au départ), même rectangle 100×50 depuis (1000;1000), gisement de départ 100 gon, gisement d’arrivée connu 200 gon. Fermeture angulaire nulle (f_a = 0), fermeture planimétrique nulle (f_X = f_Y = f_L = 0), précision relative 0 (1/N indéfini) → conforme.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "type": "CLOSED",
+        "x0": { "value": 1000, "unit": "m" },
+        "y0": { "value": 1000, "unit": "m" },
+        "initialBearing": { "value": 100, "unit": "gon" },
+        "closingBearing": { "value": 200, "unit": "gon" },
+        "legs": [
+          { "angle": { "value": 100, "unit": "gon" }, "distance": { "value": 100, "unit": "m" } },
+          { "angle": { "value": 100, "unit": "gon" }, "distance": { "value": 50, "unit": "m" } },
+          { "angle": { "value": 100, "unit": "gon" }, "distance": { "value": 100, "unit": "m" } },
+          { "angle": { "value": 100, "unit": "gon" }, "distance": { "value": 50, "unit": "m" } }
+        ]
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "angularMisclosure": { "value": 0, "tolerance": 1e-9 },
+          "fX": { "value": 0, "tolerance": 1e-9 },
+          "fY": { "value": 0, "tolerance": 1e-9 },
+          "fL": { "value": 0, "tolerance": 1e-9 },
+          "perimeter": { "value": 300, "tolerance": 1e-9 },
+          "relativePrecision": { "value": 0, "tolerance": 1e-9 },
+          "relativeDenominator": { "value": null, "tolerance": 0 },
+          "endX": { "value": 1000, "tolerance": 1e-9 },
+          "endY": { "value": 1000, "tolerance": 1e-9 },
+          "numberOfLegs": { "value": 4, "tolerance": 0 }
+        },
+        "checks": [
+          { "rule": "topo.traverse.relative-precision", "status": "PASS" },
+          { "rule": "topo.traverse.angular-closure", "status": "PASS" }
+        ],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION", "TOPO.TRAVERSE_ANGLE"]
+      }
+    },
+    {
+      "id": "topo.traverse/open-no-closure-control",
+      "engine": "topo.traverse",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Polygonale ouverte (sans contrôle de fermeture) depuis (500;500), gisement de départ 50 gon, deux tronçons de 100 m avec angle de station 100 gon (gisements 50 puis 350 gon). Aucune fermeture : f_X/f_Y/f_L/précision/1N nuls. ΣD = 200 m ; arrivée (500;641,4213562373). Moteur sans vérification → état OK.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "type": "OPEN",
+        "x0": { "value": 500, "unit": "m" },
+        "y0": { "value": 500, "unit": "m" },
+        "initialBearing": { "value": 50, "unit": "gon" },
+        "legs": [
+          { "angle": { "value": 100, "unit": "gon" }, "distance": { "value": 100, "unit": "m" } },
+          { "angle": { "value": 100, "unit": "gon" }, "distance": { "value": 100, "unit": "m" } }
+        ]
+      },
+      "expected": {
+        "resultStatus": "OK",
+        "outputs": {
+          "angularMisclosure": { "value": null, "tolerance": 0 },
+          "fX": { "value": null, "tolerance": 0 },
+          "fY": { "value": null, "tolerance": 0 },
+          "fL": { "value": null, "tolerance": 0 },
+          "perimeter": { "value": 200, "tolerance": 1e-9 },
+          "relativePrecision": { "value": null, "tolerance": 0 },
+          "relativeDenominator": { "value": null, "tolerance": 0 },
+          "endX": { "value": 500, "tolerance": 1e-9 },
+          "endY": { "value": 641.4213562373095, "tolerance": 1e-9 },
+          "numberOfLegs": { "value": 2, "tolerance": 0 }
+        },
+        "checks": [],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION", "TOPO.TRAVERSE_ANGLE"]
+      }
+    },
+    {
+      "id": "topo.traverse/single-leg-gross-misclosure",
+      "engine": "topo.traverse",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Cas limite : polygonale fermée à un seul tronçon (minimum admis). Départ (0;0), gisement 100 gon, un tronçon de 100 m plein Est aboutit en (100;0) sans revenir : f_X = 100 ; f_L = 100 m ; précision relative 100/100 = 1 ≫ 2e-4 → non conforme (1/N = 1).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "type": "CLOSED",
+        "x0": { "value": 0, "unit": "m" },
+        "y0": { "value": 0, "unit": "m" },
+        "initialBearing": { "value": 100, "unit": "gon" },
+        "legs": [
+          { "angle": { "value": 100, "unit": "gon" }, "distance": { "value": 100, "unit": "m" } }
+        ]
+      },
+      "expected": {
+        "resultStatus": "NON_COMPLIANT",
+        "outputs": {
+          "angularMisclosure": { "value": null, "tolerance": 0 },
+          "fX": { "value": 100, "tolerance": 1e-9 },
+          "fY": { "value": 0, "tolerance": 1e-9 },
+          "fL": { "value": 100, "tolerance": 1e-9 },
+          "perimeter": { "value": 100, "tolerance": 1e-9 },
+          "relativePrecision": { "value": 1, "tolerance": 1e-9 },
+          "relativeDenominator": { "value": 1, "tolerance": 1e-9 },
+          "endX": { "value": 0, "tolerance": 1e-9 },
+          "endY": { "value": 0, "tolerance": 1e-9 },
+          "numberOfLegs": { "value": 1, "tolerance": 0 }
+        },
+        "checks": [{ "rule": "topo.traverse.relative-precision", "status": "FAIL" }],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION", "TOPO.TRAVERSE_ANGLE"]
+      }
+    },
+    {
+      "id": "topo.traverse/linked-just-over-tolerance",
+      "engine": "topo.traverse",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Cas limite au-dessus de la tolérance : rectangle encadré depuis (1000;1000), point d’arrivée connu (999,955;999,94). f_X = 0,045 ; f_Y = 0,06 ; f_L = 0,075 m ; précision relative 0,075/300 = 2,5e-4 > 2e-4 → non conforme (1/N = 4000).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "type": "LINKED",
+        "x0": { "value": 1000, "unit": "m" },
+        "y0": { "value": 1000, "unit": "m" },
+        "initialBearing": { "value": 100, "unit": "gon" },
+        "endX": { "value": 999.955, "unit": "m" },
+        "endY": { "value": 999.94, "unit": "m" },
+        "legs": [
+          { "angle": { "value": 100, "unit": "gon" }, "distance": { "value": 100, "unit": "m" } },
+          { "angle": { "value": 100, "unit": "gon" }, "distance": { "value": 50, "unit": "m" } },
+          { "angle": { "value": 100, "unit": "gon" }, "distance": { "value": 100, "unit": "m" } },
+          { "angle": { "value": 100, "unit": "gon" }, "distance": { "value": 50, "unit": "m" } }
+        ]
+      },
+      "expected": {
+        "resultStatus": "NON_COMPLIANT",
+        "outputs": {
+          "angularMisclosure": { "value": null, "tolerance": 0 },
+          "fX": { "value": 0.045, "tolerance": 1e-9 },
+          "fY": { "value": 0.06, "tolerance": 1e-9 },
+          "fL": { "value": 0.075, "tolerance": 1e-9 },
+          "perimeter": { "value": 300, "tolerance": 1e-9 },
+          "relativePrecision": { "value": 0.00025, "tolerance": 1e-9 },
+          "relativeDenominator": { "value": 4000, "tolerance": 1e-6 },
+          "endX": { "value": 999.955, "tolerance": 1e-9 },
+          "endY": { "value": 999.94, "tolerance": 1e-9 },
+          "numberOfLegs": { "value": 4, "tolerance": 0 }
+        },
+        "checks": [{ "rule": "topo.traverse.relative-precision", "status": "FAIL" }],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION", "TOPO.TRAVERSE_ANGLE"]
+      }
+    },
+    {
+      "id": "topo.traverse/null-leg-distance",
+      "engine": "topo.traverse",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Longueur de tronçon nulle : hors du domaine admissible (strictement positive), entrée refusée au schéma (OUT_OF_RANGE sur legs.0.distance.value).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "type": "OPEN",
+        "x0": { "value": 0, "unit": "m" },
+        "y0": { "value": 0, "unit": "m" },
+        "initialBearing": { "value": 100, "unit": "gon" },
+        "legs": [
+          { "angle": { "value": 100, "unit": "gon" }, "distance": { "value": 0, "unit": "m" } }
+        ]
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [{ "path": "legs.0.distance.value", "code": "OUT_OF_RANGE" }]
+      }
+    },
+    {
+      "id": "topo.traverse/linked-missing-end-point",
+      "engine": "topo.traverse",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Polygonale encadrée sans coordonnées du point d’arrivée : l’entrée est valide au schéma mais le moteur refuse le calcul (END_REQUIRED), car une polygonale encadrée exige le point d’arrivée connu. État ERROR.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "type": "LINKED",
+        "x0": { "value": 0, "unit": "m" },
+        "y0": { "value": 0, "unit": "m" },
+        "initialBearing": { "value": 100, "unit": "gon" },
+        "legs": [
+          { "angle": { "value": 100, "unit": "gon" }, "distance": { "value": 100, "unit": "m" } },
+          { "angle": { "value": 100, "unit": "gon" }, "distance": { "value": 100, "unit": "m" } }
+        ]
+      },
+      "expected": {
+        "resultStatus": "ERROR",
+        "failure": { "code": "END_REQUIRED" }
+      }
+    }
+  ]
+}

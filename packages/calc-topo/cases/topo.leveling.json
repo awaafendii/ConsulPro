@@ -1,0 +1,231 @@
+{
+  "engine": "topo.leveling",
+  "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+  "cases": [
+    {
+      "id": "topo.leveling/loop-three-stations",
+      "engine": "topo.leveling",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Nivellement en boucle (arrivée = départ, hypothèse DEFAULT.endElevation) depuis Z0 = 100,000 m. Dénivelées δ = AR − AV : 0,300 ; −0,100 ; −0,202 → Σδ = −0,002 m. Z_calc = 99,998 ; fermeture f = −0,002 m = −2 mm ; T = 4·√3 = 6,93 mm → conforme. c = +0,000667 m/station ; Z compensée arrivée = 100,000.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "startElevation": { "value": 100, "unit": "m" },
+        "stations": [
+          { "back": { "value": 1.5, "unit": "m" }, "fore": { "value": 1.2, "unit": "m" } },
+          { "back": { "value": 1.0, "unit": "m" }, "fore": { "value": 1.1, "unit": "m" } },
+          { "back": { "value": 1.3, "unit": "m" }, "fore": { "value": 1.502, "unit": "m" } }
+        ]
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "deltaSum": { "value": -0.002, "tolerance": 1e-9 },
+          "computedEndElevation": { "value": 99.998, "tolerance": 1e-9 },
+          "knownEndElevation": { "value": 100, "tolerance": 1e-9 },
+          "closure": { "value": -0.002, "tolerance": 1e-9 },
+          "stationCount": { "value": 3, "tolerance": 0 },
+          "correctionPerStation": { "value": 0.0006666666666666666, "tolerance": 1e-9 },
+          "compensatedEndElevation": { "value": 100, "tolerance": 1e-9 }
+        },
+        "checks": [{ "rule": "topo.leveling.closure", "status": "PASS" }],
+        "hypotheses": ["DEFAULT.endElevation", "TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.leveling/point-to-point-four-stations",
+      "engine": "topo.leveling",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Nivellement entre repères connus Z0 = 200,000 et Z_conn = 205,000 m, 4 stations. δ = 2,000 ; 1,000 ; 1,200 ; 0,804 → Σδ = 5,004 m. Z_calc = 205,004 ; fermeture f = +0,004 m = 4 mm ; T = 4·√4 = 8 mm → conforme. c = −0,001 m/station ; Z compensée arrivée = 205,000.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "startElevation": { "value": 200, "unit": "m" },
+        "endElevation": { "value": 205, "unit": "m" },
+        "stations": [
+          { "back": { "value": 3, "unit": "m" }, "fore": { "value": 1, "unit": "m" } },
+          { "back": { "value": 2.5, "unit": "m" }, "fore": { "value": 1.5, "unit": "m" } },
+          { "back": { "value": 2.2, "unit": "m" }, "fore": { "value": 1, "unit": "m" } },
+          { "back": { "value": 1.8, "unit": "m" }, "fore": { "value": 0.996, "unit": "m" } }
+        ]
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "deltaSum": { "value": 5.004, "tolerance": 1e-9 },
+          "computedEndElevation": { "value": 205.004, "tolerance": 1e-9 },
+          "knownEndElevation": { "value": 205, "tolerance": 1e-9 },
+          "closure": { "value": 0.004, "tolerance": 1e-9 },
+          "stationCount": { "value": 4, "tolerance": 0 },
+          "correctionPerStation": { "value": -0.001, "tolerance": 1e-9 },
+          "compensatedEndElevation": { "value": 205, "tolerance": 1e-9 }
+        },
+        "checks": [{ "rule": "topo.leveling.closure", "status": "PASS" }],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.leveling/single-station-loop",
+      "engine": "topo.leveling",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Nivellement en boucle à une station (DEFAULT.endElevation) depuis Z0 = 50,000 m. AR = AV = 1,234 → δ = 0 ; Σδ = 0 ; fermeture nulle ; T = 4·√1 = 4 mm → conforme. c = 0 ; Z compensée arrivée = 50,000.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "startElevation": { "value": 50, "unit": "m" },
+        "stations": [
+          { "back": { "value": 1.234, "unit": "m" }, "fore": { "value": 1.234, "unit": "m" } }
+        ]
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "deltaSum": { "value": 0, "tolerance": 1e-9 },
+          "computedEndElevation": { "value": 50, "tolerance": 1e-9 },
+          "knownEndElevation": { "value": 50, "tolerance": 1e-9 },
+          "closure": { "value": 0, "tolerance": 1e-9 },
+          "stationCount": { "value": 1, "tolerance": 0 },
+          "correctionPerStation": { "value": 0, "tolerance": 1e-9 },
+          "compensatedEndElevation": { "value": 50, "tolerance": 1e-9 }
+        },
+        "checks": [{ "rule": "topo.leveling.closure", "status": "PASS" }],
+        "hypotheses": ["DEFAULT.endElevation", "TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.leveling/closure-near-tolerance",
+      "engine": "topo.leveling",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Cas limite sous la tolérance : Z0 = 300,000 → Z_conn = 310,000 m, 4 stations. δ = 3 ; 2 ; 2,5 ; 2,507 → Σδ = 10,007 ; fermeture f = +0,007 m = 7 mm ; T = 4·√4 = 8 mm → 7 ≤ 8, conforme. c = −0,00175 m/station ; Z compensée arrivée = 310,000.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "startElevation": { "value": 300, "unit": "m" },
+        "endElevation": { "value": 310, "unit": "m" },
+        "stations": [
+          { "back": { "value": 4, "unit": "m" }, "fore": { "value": 1, "unit": "m" } },
+          { "back": { "value": 3, "unit": "m" }, "fore": { "value": 1, "unit": "m" } },
+          { "back": { "value": 3.5, "unit": "m" }, "fore": { "value": 1, "unit": "m" } },
+          { "back": { "value": 2.507, "unit": "m" }, "fore": { "value": 0, "unit": "m" } }
+        ]
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "deltaSum": { "value": 10.007, "tolerance": 1e-9 },
+          "computedEndElevation": { "value": 310.007, "tolerance": 1e-9 },
+          "knownEndElevation": { "value": 310, "tolerance": 1e-9 },
+          "closure": { "value": 0.007, "tolerance": 1e-9 },
+          "stationCount": { "value": 4, "tolerance": 0 },
+          "correctionPerStation": { "value": -0.00175, "tolerance": 1e-9 },
+          "compensatedEndElevation": { "value": 310, "tolerance": 1e-9 }
+        },
+        "checks": [{ "rule": "topo.leveling.closure", "status": "PASS" }],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.leveling/closure-over-tolerance",
+      "engine": "topo.leveling",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Cas limite au-dessus de la tolérance : boucle Z0 = Z_conn = 400,000 m, 4 stations. δ = 0,5 ; −0,5 ; 1 ; −0,99 → Σδ = 0,010 ; fermeture f = +0,010 m = 10 mm ; T = 4·√4 = 8 mm → 10 > 8, non conforme (BLOQUANT).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "startElevation": { "value": 400, "unit": "m" },
+        "endElevation": { "value": 400, "unit": "m" },
+        "stations": [
+          { "back": { "value": 1, "unit": "m" }, "fore": { "value": 0.5, "unit": "m" } },
+          { "back": { "value": 0.5, "unit": "m" }, "fore": { "value": 1, "unit": "m" } },
+          { "back": { "value": 2, "unit": "m" }, "fore": { "value": 1, "unit": "m" } },
+          { "back": { "value": 0.5, "unit": "m" }, "fore": { "value": 1.49, "unit": "m" } }
+        ]
+      },
+      "expected": {
+        "resultStatus": "NON_COMPLIANT",
+        "outputs": {
+          "deltaSum": { "value": 0.01, "tolerance": 1e-9 },
+          "computedEndElevation": { "value": 400.01, "tolerance": 1e-9 },
+          "knownEndElevation": { "value": 400, "tolerance": 1e-9 },
+          "closure": { "value": 0.01, "tolerance": 1e-9 },
+          "stationCount": { "value": 4, "tolerance": 0 },
+          "correctionPerStation": { "value": -0.0025, "tolerance": 1e-9 },
+          "compensatedEndElevation": { "value": 400, "tolerance": 1e-9 }
+        },
+        "checks": [{ "rule": "topo.leveling.closure", "status": "FAIL" }],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.leveling/reading-out-of-range",
+      "engine": "topo.leveling",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Lecture sur mire de 15 m : au-delà du domaine admissible (0 à 10 m sur une mire), entrée refusée au schéma (OUT_OF_RANGE sur stations.0.back.value).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "startElevation": { "value": 100, "unit": "m" },
+        "stations": [
+          { "back": { "value": 15, "unit": "m" }, "fore": { "value": 1, "unit": "m" } }
+        ]
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [{ "path": "stations.0.back.value", "code": "OUT_OF_RANGE" }]
+      }
+    },
+    {
+      "id": "topo.leveling/start-elevation-out-of-range",
+      "engine": "topo.leveling",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Altitude de départ de 50 000 m : hors du domaine admissible des altitudes (−10 000 à +10 000 m), entrée refusée au schéma (OUT_OF_RANGE sur startElevation.value).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "startElevation": { "value": 50000, "unit": "m" },
+        "stations": [
+          { "back": { "value": 1, "unit": "m" }, "fore": { "value": 1, "unit": "m" } }
+        ]
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [{ "path": "startElevation.value", "code": "OUT_OF_RANGE" }]
+      }
+    }
+  ]
+}

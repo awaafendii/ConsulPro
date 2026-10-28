@@ -5,6 +5,7 @@ import type {
   DatasetListItem,
   ElecDashboard,
   PlumbingDashboard,
+  TopographyDashboard,
   LinkableOutput,
   DatasetRevisionRecord,
   NotificationRecord,
@@ -38,6 +39,7 @@ import type {
   DatasetRevisionDto,
   ElecDashboardDto,
   PlumbingDashboardDto,
+  TopographyDashboardDto,
   EngineDto,
   NotificationDto,
   RevisionDto,
@@ -468,6 +470,17 @@ export const plumbingDashboardDto = (d: PlumbingDashboard): PlumbingDashboardDto
     project: { ...p.project },
     calculations: { ...p.calculations },
     flows: p.flows.map((f) => ({ ...f })),
+    nonCompliant: p.nonCompliant.map((c) => ({ ...c })),
+  })),
+  truncated: d.truncated,
+  engines: { ...d.engines },
+});
+
+export const topographyDashboardDto = (d: TopographyDashboard): TopographyDashboardDto => ({
+  projects: d.projects.map((p) => ({
+    project: { ...p.project },
+    calculations: { ...p.calculations },
+    traverses: p.traverses.map((t) => ({ ...t })),
     nonCompliant: p.nonCompliant.map((c) => ({ ...c })),
   })),
   truncated: d.truncated,

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { checkBoardTree, DATASET_KINDS, validateRows } from '../dataset/kinds';
+import { checkBoardTree, checkUniquePointId, DATASET_KINDS, validateRows } from '../dataset/kinds';
 import { checkNetworkTree, FIXTURE_TYPES } from '../dataset/plumbing';
 
 const kw = (value: number) => ({ value, unit: 'kW' });
@@ -149,5 +149,84 @@ describe('jeux de données de plomberie (Phase 6)', () => {
     const refused = validateRows('SANITARY_FIXTURES', [{ fixture: 'JACUZZI', count: 0 }]);
     expect(refused.ok).toBe(false);
     expect(FIXTURE_TYPES.map((f) => f.value)).toContain('TAP_20');
+  });
+});
+
+describe('jeux de données topographiques (Phase 7)', () => {
+  const m = (value: number) => ({ value, unit: 'm' });
+  const gon = (value: number) => ({ value, unit: 'gon' });
+
+  it('points : matricule et X/Y obligatoires ; Z, code et description facultatifs', () => {
+    const result = validateRows('TOPO_POINTS', [
+      { pointId: 'S1', x: m(1000), y: m(2000) },
+      {
+        pointId: 'S2',
+        x: m(1010.5),
+        y: m(2005),
+        z: m(120.3),
+        code: 'BORNE',
+        description: 'Angle de parcelle',
+      },
+    ]);
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.value[0]).toMatchObject({ pointId: 'S1', x: { value: 1000, unit: 'm' }, z: null });
+    expect(result.value[1]).toMatchObject({ z: { value: 120.3, unit: 'm' }, code: 'BORNE' });
+    expect(DATASET_KINDS.TOPO_POINTS.discipline).toBe('TOPO');
+  });
+
+  it('points refusés : matricule manquant, unité angulaire pour X, Y non numérique', () => {
+    const result = validateRows('TOPO_POINTS', [
+      { x: m(1), y: m(2) },
+      { pointId: 'A', x: gon(1), y: m(2) },
+      { pointId: 'B', x: m(1), y: { value: 'x', unit: 'm' } },
+    ]);
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.error.map((e) => `${String(e.row)}:${e.column}`)).toEqual(['1:pointId', '2:x', '3:y']);
+  });
+
+  it('matricules uniques (checkUniquePointId)', () => {
+    const refused = validateRows('TOPO_POINTS', [
+      { pointId: 'P1', x: m(0), y: m(0) },
+      { pointId: 'P1', x: m(1), y: m(1) },
+    ]);
+    expect(refused.ok).toBe(false);
+    if (refused.ok) return;
+    expect(refused.error).toEqual([
+      { row: 2, column: 'pointId', message: 'Matricule « P1 » en double.' },
+    ]);
+    // Appel direct : un matricule non textuel (défensif) compte comme « » puis double.
+    expect(checkUniquePointId([{ pointId: 1 }, { pointId: null }]).map((e) => e.row)).toEqual([2]);
+  });
+
+  it('observations valides : station et visée obligatoires, angles en gon ou degrés', () => {
+    const result = validateRows('TOPO_OBSERVATIONS', [
+      { station: 'S1', target: 'P1', horizontalAngle: gon(123.456) },
+      {
+        station: 'S1',
+        target: 'P2',
+        horizontalAngle: { value: 95, unit: 'deg' },
+        zenithAngle: gon(100),
+        slopeDistance: m(42.3),
+      },
+    ]);
+    expect(result.ok).toBe(true);
+    expect(DATASET_KINDS.TOPO_OBSERVATIONS.discipline).toBe('TOPO');
+  });
+
+  it('observations refusées : station manquante, angle en mètres, distance non positive', () => {
+    const result = validateRows('TOPO_OBSERVATIONS', [
+      { target: 'P1', horizontalAngle: gon(1) },
+      { station: 'S', target: 'P', horizontalAngle: m(1) },
+      { station: 'S', target: 'P', horizontalAngle: gon(1), slopeDistance: m(0) },
+    ]);
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.error.map((e) => `${String(e.row)}:${e.column}`)).toEqual([
+      '1:station',
+      '2:horizontalAngle',
+      '3:slopeDistance',
+    ]);
   });
 });

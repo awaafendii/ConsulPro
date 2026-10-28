@@ -1,0 +1,219 @@
+{
+  "engine": "topo.coordinates",
+  "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+  "cases": [
+    {
+      "id": "topo.coordinates/join-3-4-5",
+      "engine": "topo.coordinates",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Problème inverse A(1000;1000) → B(1003;1004) : ΔX = 3 ; ΔY = 4 ; D = √(3²+4²) = 5 m ; G = atan2(3,4) = 0,6435011088 rad (40,6460 gon). Moteur sans paramètre : état OK.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "mode": "JOIN",
+        "x1": { "value": 1000, "unit": "m" },
+        "y1": { "value": 1000, "unit": "m" },
+        "x2": { "value": 1003, "unit": "m" },
+        "y2": { "value": 1004, "unit": "m" }
+      },
+      "expected": {
+        "resultStatus": "OK",
+        "outputs": {
+          "x": { "value": 1003, "tolerance": 1e-9 },
+          "y": { "value": 1004, "tolerance": 1e-9 },
+          "deltaX": { "value": 3, "tolerance": 1e-9 },
+          "deltaY": { "value": 4, "tolerance": 1e-9 },
+          "distance": { "value": 5, "tolerance": 1e-9 },
+          "bearing": { "value": 0.6435011087932844, "tolerance": 1e-9 }
+        },
+        "checks": [],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.coordinates/join-due-east",
+      "engine": "topo.coordinates",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Problème inverse A(500;500) → B(600;500), visée plein Est : ΔX = 100 ; ΔY = 0 ; D = 100 m ; G = atan2(100,0) = π/2 = 1,5707963268 rad (100 gon).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "mode": "JOIN",
+        "x1": { "value": 500, "unit": "m" },
+        "y1": { "value": 500, "unit": "m" },
+        "x2": { "value": 600, "unit": "m" },
+        "y2": { "value": 500, "unit": "m" }
+      },
+      "expected": {
+        "resultStatus": "OK",
+        "outputs": {
+          "x": { "value": 600, "tolerance": 1e-9 },
+          "y": { "value": 500, "tolerance": 1e-9 },
+          "deltaX": { "value": 100, "tolerance": 1e-9 },
+          "deltaY": { "value": 0, "tolerance": 1e-9 },
+          "distance": { "value": 100, "tolerance": 1e-9 },
+          "bearing": { "value": 1.5707963267948966, "tolerance": 1e-9 }
+        },
+        "checks": [],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.coordinates/radiation-50gon-100m",
+      "engine": "topo.coordinates",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Problème direct (rayonnement) depuis A(1000;2000), gisement 50 gon = π/4 rad, distance 100 m : ΔX = 100·sin(π/4) = 70,7106781187 ; ΔY = 100·cos(π/4) = 70,7106781187 ; XB = 1070,7106781187 ; YB = 2070,7106781187.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "mode": "RADIATION",
+        "x1": { "value": 1000, "unit": "m" },
+        "y1": { "value": 2000, "unit": "m" },
+        "bearing": { "value": 50, "unit": "gon" },
+        "distance": { "value": 100, "unit": "m" }
+      },
+      "expected": {
+        "resultStatus": "OK",
+        "outputs": {
+          "x": { "value": 1070.7106781186546, "tolerance": 1e-9 },
+          "y": { "value": 2070.710678118655, "tolerance": 1e-9 },
+          "deltaX": { "value": 70.71067811865474, "tolerance": 1e-9 },
+          "deltaY": { "value": 70.71067811865476, "tolerance": 1e-9 },
+          "distance": { "value": 100, "tolerance": 1e-9 },
+          "bearing": { "value": 0.7853981633974483, "tolerance": 1e-9 }
+        },
+        "checks": [],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.coordinates/join-coincident-points",
+      "engine": "topo.coordinates",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Cas limite : deux points confondus A = B = (0;0). Distance nulle, gisement indéterminé (0 retenu) ; le moteur émet l’avertissement TOPO.NULL_DISTANCE → état OK_WITH_WARNINGS.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "mode": "JOIN",
+        "x1": { "value": 0, "unit": "m" },
+        "y1": { "value": 0, "unit": "m" },
+        "x2": { "value": 0, "unit": "m" },
+        "y2": { "value": 0, "unit": "m" }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "x": { "value": 0, "tolerance": 1e-9 },
+          "y": { "value": 0, "tolerance": 1e-9 },
+          "deltaX": { "value": 0, "tolerance": 1e-9 },
+          "deltaY": { "value": 0, "tolerance": 1e-9 },
+          "distance": { "value": 0, "tolerance": 1e-9 },
+          "bearing": { "value": 0, "tolerance": 1e-9 }
+        },
+        "checks": [],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.coordinates/radiation-400gon-wrap",
+      "engine": "topo.coordinates",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Cas limite de la borne angulaire : gisement 400 gon (= 2π rad, borne haute tolérée à un epsilon) ramené à 0 par le moteur. Rayonnement 10 m depuis (0;0) : ΔX = 0 ; ΔY = 10 ; gisement normalisé 0.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "mode": "RADIATION",
+        "x1": { "value": 0, "unit": "m" },
+        "y1": { "value": 0, "unit": "m" },
+        "bearing": { "value": 400, "unit": "gon" },
+        "distance": { "value": 10, "unit": "m" }
+      },
+      "expected": {
+        "resultStatus": "OK",
+        "outputs": {
+          "x": { "value": 0, "tolerance": 1e-9 },
+          "y": { "value": 10, "tolerance": 1e-9 },
+          "deltaX": { "value": 0, "tolerance": 1e-9 },
+          "deltaY": { "value": 10, "tolerance": 1e-9 },
+          "distance": { "value": 10, "tolerance": 1e-9 },
+          "bearing": { "value": 0, "tolerance": 1e-9 }
+        },
+        "checks": [],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.coordinates/radiation-null-distance",
+      "engine": "topo.coordinates",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Distance de rayonnement nulle : hors du domaine admissible (strictement positive), entrée refusée au schéma (OUT_OF_RANGE sur distance.value).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "mode": "RADIATION",
+        "x1": { "value": 1000, "unit": "m" },
+        "y1": { "value": 2000, "unit": "m" },
+        "bearing": { "value": 100, "unit": "gon" },
+        "distance": { "value": 0, "unit": "m" }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [{ "path": "distance.value", "code": "OUT_OF_RANGE" }]
+      }
+    },
+    {
+      "id": "topo.coordinates/join-wrong-unit",
+      "engine": "topo.coordinates",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Unité angulaire (gon) fournie pour une coordonnée planimétrique X : incompatible avec la grandeur longueur, entrée refusée au schéma (UNIT_INCOMPATIBLE sur x1.unit).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "mode": "JOIN",
+        "x1": { "value": 1000, "unit": "gon" },
+        "y1": { "value": 1000, "unit": "m" },
+        "x2": { "value": 1003, "unit": "m" },
+        "y2": { "value": 1004, "unit": "m" }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [{ "path": "x1.unit", "code": "UNIT_INCOMPATIBLE" }]
+      }
+    }
+  ]
+}

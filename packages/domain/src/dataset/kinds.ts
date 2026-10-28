@@ -236,6 +236,82 @@ export const DATASET_KINDS = {
     ],
     check: (rows) => checkNetworkTree(rows),
   },
+  TOPO_POINTS: {
+    id: 'TOPO_POINTS',
+    discipline: 'TOPO',
+    label: 'Points topographiques',
+    maxRows: 50_000,
+    columns: [
+      { key: 'pointId', label: 'Matricule', type: 'text', required: true, maxLength: 40 },
+      {
+        key: 'x',
+        label: 'X (Est)',
+        type: 'quantity',
+        required: true,
+        unitKind: 'length',
+        units: ['m'],
+        positive: false,
+      },
+      {
+        key: 'y',
+        label: 'Y (Nord)',
+        type: 'quantity',
+        required: true,
+        unitKind: 'length',
+        units: ['m'],
+        positive: false,
+      },
+      {
+        key: 'z',
+        label: 'Z (altitude)',
+        type: 'quantity',
+        required: false,
+        unitKind: 'length',
+        units: ['m'],
+        positive: false,
+      },
+      { key: 'code', label: 'Code', type: 'text', required: false, maxLength: 20 },
+      { key: 'description', label: 'Description', type: 'text', required: false, maxLength: 200 },
+    ],
+    check: (rows) => checkUniquePointId(rows),
+  },
+  TOPO_OBSERVATIONS: {
+    id: 'TOPO_OBSERVATIONS',
+    discipline: 'TOPO',
+    label: 'Observations topographiques',
+    maxRows: 50_000,
+    columns: [
+      { key: 'station', label: 'Station', type: 'text', required: true, maxLength: 40 },
+      { key: 'target', label: 'Point visé', type: 'text', required: true, maxLength: 40 },
+      {
+        key: 'horizontalAngle',
+        label: 'Lecture horizontale',
+        type: 'quantity',
+        required: true,
+        unitKind: 'angle',
+        units: ['gon', 'deg'],
+        positive: false,
+      },
+      {
+        key: 'zenithAngle',
+        label: 'Angle zénithal',
+        type: 'quantity',
+        required: false,
+        unitKind: 'angle',
+        units: ['gon', 'deg'],
+        positive: false,
+      },
+      {
+        key: 'slopeDistance',
+        label: 'Distance inclinée',
+        type: 'quantity',
+        required: false,
+        unitKind: 'length',
+        units: ['m'],
+        positive: true,
+      },
+    ],
+  },
 } as const satisfies Record<string, DatasetKind>;
 
 export type DatasetKindId = keyof typeof DATASET_KINDS;
@@ -346,6 +422,20 @@ export function validateRows(
  * toujours un tableau, aucune boucle ; un départ porte puissance et cos φ, un tableau n'en a
  * pas (ils viennent de ses départs) et seul un tableau porte un ks.
  */
+/** Jeu de points : matricules uniques (un même point ne peut porter deux jeux de coordonnées). */
+export function checkUniquePointId(rows: readonly DatasetRow[]): RowError[] {
+  const errors: RowError[] = [];
+  const seen = new Set<string>();
+  rows.forEach((row, index) => {
+    const value = row['pointId'];
+    const pointId = typeof value === 'string' ? value : '';
+    if (seen.has(pointId)) {
+      errors.push({ row: index + 1, column: 'pointId', message: `Matricule « ${pointId} » en double.` });
+    } else seen.add(pointId);
+  });
+  return errors;
+}
+
 export function checkBoardTree(rows: readonly DatasetRow[]): RowError[] {
   const errors: RowError[] = [];
   const text = (row: DatasetRow, key: string) => {
