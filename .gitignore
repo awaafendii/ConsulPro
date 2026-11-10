@@ -34,3 +34,6 @@ apps/web/test-results/
 # Tests de mutation (Stryker)
 .stryker-tmp/
 **/reports/mutation/
+
+# Lien local vers le projet Vercel
+.vercel
