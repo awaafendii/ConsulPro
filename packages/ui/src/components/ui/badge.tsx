@@ -13,10 +13,10 @@ const badgeVariants = cva(
         destructive:
           'bg-destructive text-destructive-foreground focus-visible:ring-destructive/30 [a&]:hover:bg-destructive/90',
         // Statuts (tokens du design system, contrastes vérifiés).
-        success: 'bg-success-subtle text-success-subtle-foreground',
-        warning: 'bg-warning-subtle text-warning-subtle-foreground',
-        info: 'bg-info-subtle text-info-subtle-foreground',
-        muted: 'bg-muted text-muted-foreground',
+        success: 'border-success/25 bg-success-subtle text-success-subtle-foreground',
+        warning: 'border-warning/40 bg-warning-subtle text-warning-subtle-foreground',
+        info: 'border-info/25 bg-info-subtle text-info-subtle-foreground',
+        muted: 'border-border bg-muted text-muted-foreground',
         outline:
           'border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground',
         ghost: '[a&]:hover:bg-accent [a&]:hover:text-accent-foreground',

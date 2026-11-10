@@ -7,7 +7,7 @@ Package : `packages/ui` (`@consulpro/ui`). Documentation vivante : Storybook
 
 | Principe                     | Traduction concrète                                                                                       |
 | ---------------------------- | --------------------------------------------------------------------------------------------------------- |
-| Interface d'ingénierie sobre | Peu de couleurs, une seule couleur d'action (bleu « ingénierie »), chiffres tabulaires, densité maîtrisée |
+| Interface d'ingénierie sobre | Direction « Encre & Laiton » : papier ivoire, une seule couleur d'action (encre bleu nuit ; champagne en sombre), accent laiton décoratif, chiffres tabulaires, densité maîtrisée |
 | Tokens, jamais de valeurs    | Toute couleur passe par un token. Un audit recherche les couleurs codées en dur (§6).                    |
 | Accessible par construction  | WCAG 2.2 AA vérifié automatiquement (contrastes, axe sur chaque story, axe en navigateur réel sur chaque page) |
 | Clavier d'abord              | Tout se fait au clavier : palette Ctrl+K, raccourcis, grille de données navigable et éditable             |
@@ -25,16 +25,20 @@ forcer clair ou sombre (`ThemeToggle`, mémorisé).
 | Surfaces          | `background`, `card`, `popover`, `muted`, `accent`, `secondary`, `sidebar`, `sidebar-accent`             | Fonds                                       |
 | Texte             | `foreground`, `*-foreground`, `muted-foreground`                                                         | Texte sur la surface correspondante         |
 | Action            | `primary`, `primary-foreground`, `ring`                                                                  | Boutons principaux, liens, focus            |
+| Marque            | `brand`, `brand-foreground` ; utilitaires `brand-rule` (filet) et `blueprint-grid` (trame)               | Accent laiton décoratif : filets, repères, survol. Jamais comme couleur de texte sur fond clair |
 | Statuts pleins    | `success`, `warning`, `info`, `destructive` (+ `-foreground`)                                            | Badges de statut, bouton destructif         |
 | Statuts atténués  | `*-subtle`, `*-subtle-foreground`                                                                        | Encadrés, badges discrets                   |
 | Contours          | `border` (décoratif), `input` (champs, ≥ 3:1)                                                            | Séparations, champs de saisie               |
-| Rayons            | `--radius` (0,5 rem) → `rounded-sm/md/lg/xl`                                                             |                                             |
-| Typographie       | `font-sans` : Inter (auto-hébergée) ; `font-mono` : JetBrains Mono ; chiffres tabulaires dans les tableaux |                                         |
+| Rayons            | `--radius` (0,625 rem) → `rounded-sm/md/lg/xl/2xl`                                                       |                                             |
+| Élévation         | `shadow-xs/sm/md/lg`, teintées d'encre (`--shadow-tint`, `--shadow-strength` par thème)                  | Champs, cartes, survol, surcouches          |
+| Typographie       | `font-sans` : Inter ; `font-display` : Fraunces (tout `<h1>`, marque, slogan) ; `font-mono` : JetBrains Mono ; polices auto-hébergées ; chiffres tabulaires dans les tableaux | |
 | Mouvement         | `--duration-fast/normal/slow`, `ease-standard` ; neutralisé si `prefers-reduced-motion`                  |                                             |
 
 **Contrôle automatique** : `src/styles/__tests__/contrast.test.ts` lit les tokens dans le
-CSS et vérifie 28 paires dans chaque thème (texte ≥ 4,5:1, contours et focus ≥ 3:1).
-Ratios actuels : de 5,5 à 17:1 pour le texte, 3,5:1 pour le contour des champs.
+CSS et vérifie 31 paires dans chaque thème (texte ≥ 4,5:1, contours et focus ≥ 3:1).
+
+La barre latérale et le panneau des écrans publics sont des surfaces d'encre dans les deux
+thèmes (tokens `sidebar-*`) : l'entrée active porte un repère laiton (`sidebar-primary`).
 
 ## 3. Composants
 
@@ -104,7 +108,7 @@ Avatar, Squelette, Séparateur, Zone défilante, Touche (`Kbd`), Barre latérale
 | Contrôle                                    | Résultat                                                         |
 | ------------------------------------------- | ---------------------------------------------------------------- |
 | Couleurs codées en dur dans les composants  | 0 (hors voile d'arrière-plan `bg-black/50` des boîtes modales)   |
-| Contrastes des tokens (clair + sombre)      | 57 contrôles, tous conformes                                     |
+| Contrastes des tokens (clair + sombre)      | 63 contrôles, tous conformes                                     |
 | Stories                                     | 49, toutes analysées par axe sans violation                      |
 | Tests du package                            | 136, couverture 89 % des lignes                                  |
 | Pages réelles (navigateur, clair + sombre)  | 0 violation axe (WCAG 2.2 AA + bonnes pratiques)                 |

@@ -193,6 +193,7 @@ export const PageDeConnexion: StoryObj = {
       title="Connexion"
       description="Accédez à vos projets."
       corner={<ThemeToggle />}
+      tagline="La plateforme métier des professionnels de la construction."
       footer={<a href="#">Créer un compte</a>}
     >
       <form className="grid gap-4">
