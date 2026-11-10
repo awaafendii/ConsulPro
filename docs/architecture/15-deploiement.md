@@ -1,7 +1,7 @@
 # 15 — Déploiement (Vercel + PostgreSQL managé)
 
 Cible : l'application `apps/web` (Next.js, sortie `standalone`) sur **Vercel**, avec une base
-**PostgreSQL managée** (Neon ou Supabase). Les fichiers de support sont `vercel.json` (racine) et
+**PostgreSQL managée** (Neon ou Supabase). Les fichiers de support sont `apps/web/vercel.json` et
 `apps/web/.env.production.example`.
 
 > Principe de sécurité (12-securite-rbac.md) : l'application se connecte avec le rôle **restreint**
@@ -74,9 +74,10 @@ pnpm standards:load packages/standards/seeds/topo/topo-tolerances.json       --p
 
 ## 5. Projet Vercel
 
-1. Importer le dépôt dans Vercel. Garder le **Root Directory** à la racine du dépôt (le `vercel.json`
-   fourni définit `installCommand`, `buildCommand` via Turborepo — qui déclenche `prisma generate` — et
-   `outputDirectory: apps/web/.next`).
+1. Importer le dépôt dans Vercel. Régler le **Root Directory** sur `apps/web` (c'est là que `next`
+   est déclaré : à la racine du dépôt, Vercel échoue avec « No Next.js version detected ») et la
+   version de **Node.js** sur 24.x. Le `apps/web/vercel.json` fourni définit `installCommand` et
+   `buildCommand` (Turborepo depuis la racine du dépôt, ce qui déclenche `prisma generate`).
 2. **Variables d'environnement** (Production et Preview) : reprendre `apps/web/.env.production.example`.
    - `DATABASE_URL` = URL **poolée** du rôle `consulpro_app`.
    - `APP_URL` = domaine public https (voir étape 6).
