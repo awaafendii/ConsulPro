@@ -9,3 +9,10 @@ export type { Delimiter, Grid } from './delimited';
 
 export { detectFormat, isXlsx } from './detect';
 export type { SourceFormat } from './detect';
+
+export { normalizeText } from './normalize';
+
+export { applyMapping, autoMap } from './mapping';
+export type { ColumnMapping } from './mapping';
+
+export { coerceCell, coerceRow, parseNumber } from './coerce';
