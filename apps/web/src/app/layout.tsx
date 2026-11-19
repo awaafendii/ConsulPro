@@ -34,7 +34,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="min-h-dvh">
         <NextIntlClientProvider>
           <Providers>{children}</Providers>
-          <PwaRegister />
+          <PwaRegister enabled={process.env.APP_ENV !== 'test'} />
         </NextIntlClientProvider>
       </body>
     </html>
