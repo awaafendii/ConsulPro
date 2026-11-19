@@ -11,6 +11,7 @@ import { datasetKindDto, datasetRevisionDto } from '@/server/http/presenters';
 import { requireProject } from '@/server/project';
 
 import { DatasetEditor } from './dataset-editor';
+import { DatasetImport } from './dataset-import';
 
 type Params = Promise<{ orgSlug: string; projectId: string; datasetId: string }>;
 type Search = Promise<{ revision?: string }>;
@@ -72,6 +73,17 @@ export default async function DatasetPage({
             >
               {t('viewing', { number: older.number })}
             </Callout>
+          )}
+          {editable && (
+            <div className="flex justify-end">
+              <DatasetImport
+                orgSlug={ctx.organization.slug}
+                projectId={project.id}
+                datasetId={dataset.id}
+                version={dataset.version}
+                kind={datasetKindDto(kind)}
+              />
+            </div>
           )}
           <DatasetEditor
             orgSlug={ctx.organization.slug}
