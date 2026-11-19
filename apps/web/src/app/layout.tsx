@@ -3,14 +3,20 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 
+import { PwaRegister } from '@/features/shell/pwa/pwa-register';
+
 import { Providers } from './providers';
 import './globals.css';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('common');
+  const appName = t('appName');
   return {
-    title: { default: t('appName'), template: `%s · ${t('appName')}` },
+    title: { default: appName, template: `%s · ${appName}` },
     description: t('tagline'),
+    applicationName: appName,
+    // Installation sur l'écran d'accueil iOS (Safari n'utilise pas le manifeste).
+    appleWebApp: { capable: true, title: appName, statusBarStyle: 'default' },
   };
 }
 
@@ -28,6 +34,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="min-h-dvh">
         <NextIntlClientProvider>
           <Providers>{children}</Providers>
+          <PwaRegister />
         </NextIntlClientProvider>
       </body>
     </html>

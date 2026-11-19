@@ -10,6 +10,9 @@
     "signOut": "Se déconnecter",
     "theme": "Thème d’affichage"
   },
+  "pwa": {
+    "install": "Installer l’application"
+  },
   "roles": {
     "OWNER": "Propriétaire",
     "ADMIN": "Administrateur",

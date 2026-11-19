@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fbf9f6" />
+    <title>Hors ligne · ConsulPro</title>
+    <style>
+      /* Styles en ligne : cette page doit s'afficher sans réseau ni CSS de l'app.
+         Couleurs reprises de la direction « Encre & Laiton » (ivoire / encre / laiton). */
+      :root {
+        color-scheme: light dark;
+        --ink: #141d33;
+        --ivory: #fbf9f6;
+        --brass: #c79a4f;
+        --muted: #5a6477;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+      }
+      body {
+        display: flex;
+        min-height: 100dvh;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: var(--ivory);
+        color: var(--ink);
+        font-family:
+          ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.5;
+      }
+      main {
+        width: 100%;
+        max-width: 26rem;
+        text-align: center;
+      }
+      .mark {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 72px;
+        height: 72px;
+        margin-bottom: 20px;
+        border-radius: 16px;
+        background: linear-gradient(145deg, #1b2747 0%, #0c1526 100%);
+        color: var(--brass);
+        font-size: 34px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-size: 1.375rem;
+      }
+      p {
+        margin: 0 auto 24px;
+        max-width: 22rem;
+        color: var(--muted);
+      }
+      button {
+        appearance: none;
+        cursor: pointer;
+        border: 0;
+        border-radius: 10px;
+        padding: 10px 20px;
+        background: var(--ink);
+        color: var(--ivory);
+        font: inherit;
+        font-weight: 600;
+      }
+      button:hover {
+        opacity: 0.92;
+      }
+      .rule {
+        width: 48px;
+        height: 3px;
+        margin: 0 auto 24px;
+        border-radius: 3px;
+        background: var(--brass);
+      }
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: #090e18;
+          color: var(--ivory);
+        }
+        p {
+          color: #9aa3b5;
+        }
+        button {
+          background: var(--ivory);
+          color: var(--ink);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="mark" aria-hidden="true">CP</div>
+      <div class="rule" aria-hidden="true"></div>
+      <h1>Vous êtes hors ligne</h1>
+      <p>
+        ConsulPro a besoin d'une connexion pour afficher vos projets et effectuer les calculs.
+        Vérifiez votre connexion, puis réessayez.
+      </p>
+      <button type="button" onclick="location.reload()">Réessayer</button>
+    </main>
+  </body>
+</html>
