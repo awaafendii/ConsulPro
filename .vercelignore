@@ -1,0 +1,22 @@
+# Fichiers inutiles au build distant Vercel (réinstallés/régénérés côté serveur).
+# Réduit drastiquement la taille de l'upload du monorepo.
+node_modules
+**/node_modules
+.git
+.next
+**/.next
+.turbo
+**/.turbo
+.vercel
+**/.vercel
+coverage
+**/coverage
+test-results
+**/test-results
+playwright-report
+**/playwright-report
+storybook-static
+**/storybook-static
+.stryker-tmp
+**/reports/mutation
+*.tsbuildinfo
