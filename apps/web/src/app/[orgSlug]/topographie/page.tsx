@@ -13,11 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /** Tableau de bord Topographie : jeux de points, cheminements, fermetures hors tolérance. */
-export default async function TopographyPage({
-  params,
-}: {
-  params: Promise<{ orgSlug: string }>;
-}) {
+export default async function TopographyPage({ params }: { params: Promise<{ orgSlug: string }> }) {
   const { orgSlug } = await params;
   const ctx = await requireOrganization(orgSlug);
   const t = await getTranslations('topography');

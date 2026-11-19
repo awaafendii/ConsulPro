@@ -56,8 +56,20 @@ export const topoStakeout: EngineDefinition<
     description:
       'Fiche d’implantation : angle horizontal et distance depuis une station orientée vers un point à implanter.',
     inputs: [
-      { key: 'xS', label: 'X de la station (Est)', kind: 'quantity', unitKind: 'length', units: ['m'] },
-      { key: 'yS', label: 'Y de la station (Nord)', kind: 'quantity', unitKind: 'length', units: ['m'] },
+      {
+        key: 'xS',
+        label: 'X de la station (Est)',
+        kind: 'quantity',
+        unitKind: 'length',
+        units: ['m'],
+      },
+      {
+        key: 'yS',
+        label: 'Y de la station (Nord)',
+        kind: 'quantity',
+        unitKind: 'length',
+        units: ['m'],
+      },
       {
         key: 'orientation',
         label: 'Orientation (gisement du zéro du limbe)',
@@ -66,8 +78,20 @@ export const topoStakeout: EngineDefinition<
         units: ['gon', 'deg', 'rad'],
         help: 'Gisement correspondant à la lecture horizontale nulle, après mise en station orientée.',
       },
-      { key: 'xT', label: 'X du point à implanter (Est)', kind: 'quantity', unitKind: 'length', units: ['m'] },
-      { key: 'yT', label: 'Y du point à implanter (Nord)', kind: 'quantity', unitKind: 'length', units: ['m'] },
+      {
+        key: 'xT',
+        label: 'X du point à implanter (Est)',
+        kind: 'quantity',
+        unitKind: 'length',
+        units: ['m'],
+      },
+      {
+        key: 'yT',
+        label: 'Y du point à implanter (Nord)',
+        kind: 'quantity',
+        unitKind: 'length',
+        units: ['m'],
+      },
     ],
     outputs: [
       { key: 'horizontalAngle', label: 'Angle horizontal à afficher', unit: 'gon', precision: 4 },

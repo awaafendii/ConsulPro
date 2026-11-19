@@ -27,7 +27,9 @@ describe('implantation', () => {
     expect(north.horizontalAngle).toBeCloseTo(Math.PI / 4, 12);
     expect(north.distance).toBeCloseTo(Math.hypot(100, 100), 9);
     // Orientée sur la cible : l'angle à afficher est nul.
-    const aligned = outputs<{ horizontalAngle: number }>(stake({ ...base, orientation: q(50, 'gon') }));
+    const aligned = outputs<{ horizontalAngle: number }>(
+      stake({ ...base, orientation: q(50, 'gon') }),
+    );
     expect(aligned.horizontalAngle).toBeCloseTo(0, 9);
   });
 
@@ -62,9 +64,13 @@ describe('levé par rayonnement', () => {
       targetHeight: q(1.5, 'm'),
     });
     expect(result.status).toBe('OK');
-    const out = outputs<{ x: number; y: number; z: number; horizontalDistance: number; deltaH: number }>(
-      result,
-    );
+    const out = outputs<{
+      x: number;
+      y: number;
+      z: number;
+      horizontalDistance: number;
+      deltaH: number;
+    }>(result);
     expect(out.horizontalDistance).toBeCloseTo(100, 9);
     expect(out.deltaH).toBeCloseTo(0, 9);
     expect(out.z).toBeCloseTo(100, 9);
@@ -102,7 +108,9 @@ describe('levé par rayonnement', () => {
       slopeDistance: q(100, 'm'),
       zenithAngle: q(80, 'gon'),
     });
-    const fields = result.hypotheses.filter((h) => h.origin === 'DEFAULT_VALUE').map((h) => h.field);
+    const fields = result.hypotheses
+      .filter((h) => h.origin === 'DEFAULT_VALUE')
+      .map((h) => h.field);
     expect(fields).toEqual(expect.arrayContaining(['instrumentHeight', 'targetHeight']));
     const out = outputs<{ deltaH: number }>(result);
     expect(out.deltaH).toBeCloseTo(100 * Math.cos(80 * (Math.PI / 200)), 9);

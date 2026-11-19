@@ -430,7 +430,11 @@ export function checkUniquePointId(rows: readonly DatasetRow[]): RowError[] {
     const value = row['pointId'];
     const pointId = typeof value === 'string' ? value : '';
     if (seen.has(pointId)) {
-      errors.push({ row: index + 1, column: 'pointId', message: `Matricule « ${pointId} » en double.` });
+      errors.push({
+        row: index + 1,
+        column: 'pointId',
+        message: `Matricule « ${pointId} » en double.`,
+      });
     } else seen.add(pointId);
   });
   return errors;

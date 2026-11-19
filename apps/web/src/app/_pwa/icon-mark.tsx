@@ -39,53 +39,51 @@ export function renderIcon(size: number, shape: IconShape): ImageResponse {
   const ruleHeight = Math.max(2, Math.round(size * 0.022));
 
   return new ImageResponse(
-    (
+    <div
+      style={{
+        width: size,
+        height: size,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: INK,
+        backgroundImage: INK_SHEEN,
+        borderRadius: radius,
+      }}
+    >
       <div
         style={{
-          width: size,
-          height: size,
+          width: safe,
+          height: safe,
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: INK,
-          backgroundImage: INK_SHEEN,
-          borderRadius: radius,
         }}
       >
         <div
           style={{
-            width: safe,
-            height: safe,
             display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
+            fontSize: monogram,
+            fontWeight: 800,
+            letterSpacing: -Math.round(monogram * 0.06),
+            lineHeight: 1,
+            color: BRASS,
           }}
         >
-          <div
-            style={{
-              display: 'flex',
-              fontSize: monogram,
-              fontWeight: 800,
-              letterSpacing: -Math.round(monogram * 0.06),
-              lineHeight: 1,
-              color: BRASS,
-            }}
-          >
-            CP
-          </div>
-          <div
-            style={{
-              marginTop: Math.round(size * 0.04),
-              width: ruleWidth,
-              height: ruleHeight,
-              borderRadius: ruleHeight,
-              backgroundColor: IVORY,
-            }}
-          />
+          CP
         </div>
+        <div
+          style={{
+            marginTop: Math.round(size * 0.04),
+            width: ruleWidth,
+            height: ruleHeight,
+            borderRadius: ruleHeight,
+            backgroundColor: IVORY,
+          }}
+        />
       </div>
-    ),
+    </div>,
     { width: size, height: size },
   );
 }

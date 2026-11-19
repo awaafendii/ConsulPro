@@ -73,10 +73,7 @@ test('polygonale saisie tronçon par tronçon, fermeture hors tolérance, tablea
   // La précision relative (f_L / ΣD = 1) dépasse la tolérance : résultat non conforme.
   const results = page.getByRole('region', { name: /^Résultats/ });
   await expect(
-    results
-      .getByRole('term')
-      .filter({ hasText: 'Précision relative 1 / N' })
-      .first(),
+    results.getByRole('term').filter({ hasText: 'Précision relative 1 / N' }).first(),
   ).toBeVisible();
 
   // 2. Tableau de bord Topographie : le projet, son cheminement et sa non-conformité.

@@ -23,7 +23,13 @@ const radiate = (x: number, y: number, bearing: number, d: number) =>
   outputs<{ x: number; y: number }>(
     run(
       topoCoordinates,
-      { mode: 'RADIATION', x1: q(x, 'm'), y1: q(y, 'm'), bearing: q(bearing, 'rad'), distance: q(d, 'm') },
+      {
+        mode: 'RADIATION',
+        x1: q(x, 'm'),
+        y1: q(y, 'm'),
+        bearing: q(bearing, 'rad'),
+        distance: q(d, 'm'),
+      },
       params,
     ),
   );
@@ -68,9 +74,18 @@ describe('symétrie et proportionnalité', () => {
   it('la distance rayonnée est proportionnelle à la distance saisie', () => {
     fc.assert(
       fc.property(coordinate, coordinate, angle, positiveDistance, (x, y, bearing, d) => {
-        const single = join(x, y, radiate(x, y, bearing, d).x, radiate(x, y, bearing, d).y).distance;
-        const triple = join(x, y, radiate(x, y, bearing, 3 * d).x, radiate(x, y, bearing, 3 * d).y)
-          .distance;
+        const single = join(
+          x,
+          y,
+          radiate(x, y, bearing, d).x,
+          radiate(x, y, bearing, d).y,
+        ).distance;
+        const triple = join(
+          x,
+          y,
+          radiate(x, y, bearing, 3 * d).x,
+          radiate(x, y, bearing, 3 * d).y,
+        ).distance;
         expect(triple).toBeCloseTo(3 * single, 6);
       }),
     );

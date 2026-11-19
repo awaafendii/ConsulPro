@@ -170,7 +170,11 @@ describe('jeux de données topographiques (Phase 7)', () => {
     ]);
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.value[0]).toMatchObject({ pointId: 'S1', x: { value: 1000, unit: 'm' }, z: null });
+    expect(result.value[0]).toMatchObject({
+      pointId: 'S1',
+      x: { value: 1000, unit: 'm' },
+      z: null,
+    });
     expect(result.value[1]).toMatchObject({ z: { value: 120.3, unit: 'm' }, code: 'BORNE' });
     expect(DATASET_KINDS.TOPO_POINTS.discipline).toBe('TOPO');
   });
@@ -183,7 +187,11 @@ describe('jeux de données topographiques (Phase 7)', () => {
     ]);
     expect(result.ok).toBe(false);
     if (result.ok) return;
-    expect(result.error.map((e) => `${String(e.row)}:${e.column}`)).toEqual(['1:pointId', '2:x', '3:y']);
+    expect(result.error.map((e) => `${String(e.row)}:${e.column}`)).toEqual([
+      '1:pointId',
+      '2:x',
+      '3:y',
+    ]);
   });
 
   it('matricules uniques (checkUniquePointId)', () => {

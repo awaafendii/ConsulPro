@@ -82,7 +82,13 @@ export const topoControl: EngineDefinition<
       'Écarts entre coordonnées théoriques et levées (ΔX, ΔY, ΔZ, écart planimétrique) et comparaison aux tolérances.',
     inputs: [
       { key: 'xT', label: 'X théorique (Est)', kind: 'quantity', unitKind: 'length', units: ['m'] },
-      { key: 'yT', label: 'Y théorique (Nord)', kind: 'quantity', unitKind: 'length', units: ['m'] },
+      {
+        key: 'yT',
+        label: 'Y théorique (Nord)',
+        kind: 'quantity',
+        unitKind: 'length',
+        units: ['m'],
+      },
       {
         key: 'zT',
         label: 'Altitude théorique',

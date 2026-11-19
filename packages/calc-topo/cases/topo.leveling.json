@@ -195,9 +195,7 @@
       "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
       "inputs": {
         "startElevation": { "value": 100, "unit": "m" },
-        "stations": [
-          { "back": { "value": 15, "unit": "m" }, "fore": { "value": 1, "unit": "m" } }
-        ]
+        "stations": [{ "back": { "value": 15, "unit": "m" }, "fore": { "value": 1, "unit": "m" } }]
       },
       "expected": {
         "resultStatus": "INVALID",
@@ -218,9 +216,7 @@
       "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
       "inputs": {
         "startElevation": { "value": 50000, "unit": "m" },
-        "stations": [
-          { "back": { "value": 1, "unit": "m" }, "fore": { "value": 1, "unit": "m" } }
-        ]
+        "stations": [{ "back": { "value": 1, "unit": "m" }, "fore": { "value": 1, "unit": "m" } }]
       },
       "expected": {
         "resultStatus": "INVALID",

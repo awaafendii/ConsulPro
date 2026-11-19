@@ -1,4 +1,12 @@
-import { checkLimit, err, fromSI, ok, quantity, type Check, type EngineDefinition } from '@consulpro/calc-core';
+import {
+  checkLimit,
+  err,
+  fromSI,
+  ok,
+  quantity,
+  type Check,
+  type EngineDefinition,
+} from '@consulpro/calc-core';
 import { z } from 'zod';
 
 import { normalizeAngle, TAU, TOPO_HYPOTHESIS } from '../common/geometry';
@@ -47,7 +55,7 @@ const traverseOutput = z.object({
 
 /** Écart angulaire signé a − b ramené dans [−π ; π). */
 function signedDelta(a: number, b: number): number {
-  return (((a - b + PI) % TAU) + TAU) % TAU - PI;
+  return ((((a - b + PI) % TAU) + TAU) % TAU) - PI;
 }
 
 export const topoTraverse: EngineDefinition<
@@ -118,8 +126,20 @@ export const topoTraverse: EngineDefinition<
           { value: 'OPEN', label: 'Ouvert (sans contrôle de fermeture)' },
         ],
       },
-      { key: 'x0', label: 'X du point de départ (Est)', kind: 'quantity', unitKind: 'length', units: ['m'] },
-      { key: 'y0', label: 'Y du point de départ (Nord)', kind: 'quantity', unitKind: 'length', units: ['m'] },
+      {
+        key: 'x0',
+        label: 'X du point de départ (Est)',
+        kind: 'quantity',
+        unitKind: 'length',
+        units: ['m'],
+      },
+      {
+        key: 'y0',
+        label: 'Y du point de départ (Nord)',
+        kind: 'quantity',
+        unitKind: 'length',
+        units: ['m'],
+      },
       {
         key: 'initialBearing',
         label: 'Gisement de départ (premier tronçon)',
@@ -160,13 +180,30 @@ export const topoTraverse: EngineDefinition<
         kind: 'list',
         maxItems: 1000,
         fields: [
-          { key: 'angle', label: 'Angle de station (à droite)', kind: 'quantity', unitKind: 'angle', units: ['gon', 'deg', 'rad'] },
-          { key: 'distance', label: 'Longueur du tronçon', kind: 'quantity', unitKind: 'length', units: ['m'] },
+          {
+            key: 'angle',
+            label: 'Angle de station (à droite)',
+            kind: 'quantity',
+            unitKind: 'angle',
+            units: ['gon', 'deg', 'rad'],
+          },
+          {
+            key: 'distance',
+            label: 'Longueur du tronçon',
+            kind: 'quantity',
+            unitKind: 'length',
+            units: ['m'],
+          },
         ],
       },
     ],
     outputs: [
-      { key: 'angularMisclosure', label: 'Erreur de fermeture angulaire', unit: 'gon', precision: 4 },
+      {
+        key: 'angularMisclosure',
+        label: 'Erreur de fermeture angulaire',
+        unit: 'gon',
+        precision: 4,
+      },
       { key: 'fX', label: 'Fermeture f_X (Est)', unit: 'm', precision: 4 },
       { key: 'fY', label: 'Fermeture f_Y (Nord)', unit: 'm', precision: 4 },
       { key: 'fL', label: 'Fermeture planimétrique f_L', unit: 'm', precision: 4 },
@@ -261,7 +298,8 @@ export const topoTraverse: EngineDefinition<
       ctx.trace.step({
         id: `L${String(k + 1)}`,
         label: `Tronçon ${String(k + 1)}`,
-        formula: 'X_k = X_{k-1} + \\Delta X_k^{\\prime} ; \\; Y_k = Y_{k-1} + \\Delta Y_k^{\\prime}',
+        formula:
+          'X_k = X_{k-1} + \\Delta X_k^{\\prime} ; \\; Y_k = Y_{k-1} + \\Delta Y_k^{\\prime}',
         substitutions: [
           { symbol: 'G_k', value: fromSI(d.bearing, 'gon'), unit: 'gon' },
           { symbol: 'X_k', value: cx, unit: 'm' },

@@ -56,8 +56,7 @@ export const topoRadiationSurvey: EngineDefinition<
     {
       id: 'reduction',
       label: 'Réduction à l’horizontale et dénivelée',
-      latex:
-        'D_h = D \\sin V ; \\; \\Delta h = D \\cos V + h_i - h_v ; \\; G = G_0 + H_z',
+      latex: 'D_h = D \\sin V ; \\; \\Delta h = D \\cos V + h_i - h_v ; \\; G = G_0 + H_z',
       symbols: [
         { symbol: 'D', meaning: 'distance inclinée', unit: 'm' },
         { symbol: 'V', meaning: 'angle zénithal (zénith = 0)', unit: 'gon' },
@@ -79,9 +78,27 @@ export const topoRadiationSurvey: EngineDefinition<
     description:
       'Coordonnées et altitude d’un point levé par rayonnement depuis une station orientée, distance inclinée réduite à l’horizontale.',
     inputs: [
-      { key: 'xS', label: 'X de la station (Est)', kind: 'quantity', unitKind: 'length', units: ['m'] },
-      { key: 'yS', label: 'Y de la station (Nord)', kind: 'quantity', unitKind: 'length', units: ['m'] },
-      { key: 'zS', label: 'Altitude de la station', kind: 'quantity', unitKind: 'length', units: ['m'] },
+      {
+        key: 'xS',
+        label: 'X de la station (Est)',
+        kind: 'quantity',
+        unitKind: 'length',
+        units: ['m'],
+      },
+      {
+        key: 'yS',
+        label: 'Y de la station (Nord)',
+        kind: 'quantity',
+        unitKind: 'length',
+        units: ['m'],
+      },
+      {
+        key: 'zS',
+        label: 'Altitude de la station',
+        kind: 'quantity',
+        unitKind: 'length',
+        units: ['m'],
+      },
       {
         key: 'instrumentHeight',
         label: 'Hauteur de l’instrument',

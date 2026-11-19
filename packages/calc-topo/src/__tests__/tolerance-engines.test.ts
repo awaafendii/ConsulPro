@@ -50,9 +50,9 @@ describe('contrôle de points', () => {
     const plan = result.checks.find((c) => c.rule === 'topo.control.planimetric');
     expect(plan?.status).toBe('FAIL');
     // Contrôle 2D : aucun écart altimétrique.
-    expect(outputs<{ deltaZ: number | null; altimetricDeviation: number | null }>(result)).toMatchObject(
-      { deltaZ: null, altimetricDeviation: null },
-    );
+    expect(
+      outputs<{ deltaZ: number | null; altimetricDeviation: number | null }>(result),
+    ).toMatchObject({ deltaZ: null, altimetricDeviation: null });
   });
 
   it('une seule altitude fournie est refusée (théorique ou levée)', () => {
@@ -100,9 +100,11 @@ describe('nivellement direct', () => {
         { back: q(1.503, 'm'), fore: q(1.0, 'm') },
       ],
     });
-    const out = outputs<{ closure: number; compensatedEndElevation: number; correctionPerStation: number }>(
-      result,
-    );
+    const out = outputs<{
+      closure: number;
+      compensatedEndElevation: number;
+      correctionPerStation: number;
+    }>(result);
     expect(out.closure).toBeCloseTo(0.003, 9);
     expect(out.correctionPerStation).toBeCloseTo(-0.0015, 9);
     expect(out.compensatedEndElevation).toBeCloseTo(101, 9);
@@ -182,7 +184,12 @@ describe('polygonale', () => {
       legs: [{ angle: gon(0), distance: q(100, 'm') }],
     });
     expect(result.status).toBe('OK_WITH_WARNINGS');
-    const out = outputs<{ endX: number; endY: number; fL: number | null; angularMisclosure: number | null }>(result);
+    const out = outputs<{
+      endX: number;
+      endY: number;
+      fL: number | null;
+      angularMisclosure: number | null;
+    }>(result);
     expect(out.endX).toBeCloseTo(100, 9);
     expect(out.endY).toBeCloseTo(0, 9);
     expect(out.fL).toBeCloseTo(0, 9);
@@ -198,7 +205,9 @@ describe('polygonale', () => {
       legs: [{ angle: gon(0), distance: q(100, 'm') }],
     });
     expect(result.status).toBe('OK');
-    const out = outputs<{ fL: number | null; relativePrecision: number | null; endX: number }>(result);
+    const out = outputs<{ fL: number | null; relativePrecision: number | null; endX: number }>(
+      result,
+    );
     expect(out.fL).toBeNull();
     expect(out.relativePrecision).toBeNull();
     expect(out.endX).toBeCloseTo(100 * Math.sin(Math.PI / 4), 9);
@@ -221,7 +230,9 @@ describe('polygonale', () => {
     });
     const out = outputs<{ angularMisclosure: number | null }>(result);
     expect((out.angularMisclosure ?? NaN) * (200 / Math.PI)).toBeCloseTo(10, 9);
-    expect(result.checks.find((c) => c.rule === 'topo.traverse.angular-closure')?.status).toBe('FAIL');
+    expect(result.checks.find((c) => c.rule === 'topo.traverse.angular-closure')?.status).toBe(
+      'FAIL',
+    );
   });
 
   it('polygonale encadrée sans point d’arrivée : erreur explicite, aucune valeur', () => {
