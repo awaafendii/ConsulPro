@@ -7,19 +7,23 @@
 import type { ColumnDefinition } from '@consulpro/domain';
 
 import { coerceRow } from './coerce';
+import { decodeBytes } from './decode';
 import { parseDelimited, type Delimiter, type Grid } from './delimited';
 import { detectFormat } from './detect';
+import { isHtml, parseHtmlTable } from './html';
 import { applyMapping, autoMap, type ColumnMapping } from './mapping';
 import { parseXlsx } from './xlsx';
 
 /**
  * Lit des octets source en grille de chaînes : un classeur XLSX est reconnu par sa signature et
- * lu par SheetJS ; tout le reste est décodé en texte (UTF-8) et analysé comme délimité. Le
+ * lu par SheetJS ; sinon les octets sont décodés en texte (UTF-8 ou Windows-1252), et un tableau
+ * HTML (collage Excel/Word) est reconnu puis lu, le reste étant analysé comme texte délimité. Le
  * séparateur est deviné sauf s'il est imposé. Déterministe.
  */
 export function readGrid(bytes: Uint8Array, delimiter?: Delimiter): Grid {
   if (detectFormat(bytes) === 'xlsx') return parseXlsx(bytes);
-  return parseDelimited(new TextDecoder().decode(bytes), delimiter);
+  const text = decodeBytes(bytes);
+  return isHtml(text) ? parseHtmlTable(text) : parseDelimited(text, delimiter);
 }
 
 /**

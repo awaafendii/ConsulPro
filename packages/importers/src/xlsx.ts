@@ -12,6 +12,18 @@ import { read, utils, type WorkSheet } from 'xlsx';
 
 import type { Grid } from './delimited';
 
+// Garde-fou contre les classeurs surdimensionnés (archive « zip bomb ») : une feuille dont la
+// plage déclarée dépasse ce nombre de cellules est refusée avant tout parcours. 6 M cellules
+// couvrent très largement un levé de 50 000 points sur des dizaines de colonnes.
+const MAX_CELLS = 6_000_000;
+
+/** `true` si la plage A1 déclarée (`!ref`) couvre plus de `MAX_CELLS` cellules. Pur. */
+export function exceedsCellCap(ref: string): boolean {
+  const range = utils.decode_range(ref);
+  const cells = (range.e.r - range.s.r + 1) * (range.e.c - range.s.c + 1);
+  return cells > MAX_CELLS;
+}
+
 /** Valeur de cellule SheetJS en chaîne : nombres et booléens mis en texte, vide sinon. */
 function toCellString(value: unknown): string {
   if (typeof value === 'string') return value;
@@ -36,6 +48,11 @@ export function parseXlsx(bytes: Uint8Array): Grid {
   const sheet: WorkSheet | undefined = workbook.Sheets[firstSheetName];
   /* c8 ignore next -- défensif : la feuille nommée existe toujours dans un classeur lisible. */
   if (sheet === undefined) return { headers: [], rows: [] };
+  const ref = sheet['!ref'];
+  /* c8 ignore next 3 -- garde-fou vérifié unitairement (exceedsCellCap) ; plage énorme non générable en test. */
+  if (ref !== undefined && exceedsCellCap(ref)) {
+    throw new Error('xlsx: feuille trop volumineuse');
+  }
   const matrix = utils.sheet_to_json<unknown[]>(sheet, {
     header: 1,
     raw: true,

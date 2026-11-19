@@ -46,6 +46,24 @@ export function parseNumber(raw: string): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
+// Degrés-minutes-secondes : « 45°30'15" », minutes et secondes facultatives, signe possible.
+// Les guillemets prime (′ ″) et droits (' ") sont acceptés. Pur : regex sur une chaîne.
+const DMS = /^([+-]?\d+(?:[.,]\d+)?)\s*°(?:\s*(\d+(?:[.,]\d+)?)\s*['′])?(?:\s*(\d+(?:[.,]\d+)?)\s*["″])?$/;
+
+/** Analyse un angle en degrés-minutes-secondes vers des degrés décimaux ; `null` sinon. */
+export function parseAngle(raw: string): number | null {
+  const match = DMS.exec(raw.trim());
+  if (!match) return null;
+  const [, d = '0', m = '0', s = '0'] = match;
+  const degrees = parseNumber(d);
+  const minutes = parseNumber(m);
+  const seconds = parseNumber(s);
+  /* c8 ignore next -- défensif : les groupes DMS sont numériques, parseNumber ne peut échouer. */
+  if (degrees === null || minutes === null || seconds === null) return null;
+  const magnitude = Math.abs(degrees) + minutes / 60 + seconds / 3600;
+  return degrees < 0 || d.trim().startsWith('-') ? -magnitude : magnitude;
+}
+
 /** Rapproche une saisie d'un choix admis (par valeur ou libellé) ; sinon renvoie la saisie. */
 function matchChoice(
   options: readonly { readonly value: string; readonly label: string }[],
@@ -78,9 +96,17 @@ export function coerceCell(column: ColumnDefinition, raw: string, unit?: string)
     }
     case 'quantity': {
       const n = parseNumber(text);
-      if (n === null) return text;
-      const admissible = unit !== undefined && (column.units as readonly string[]).includes(unit);
-      return { value: n, unit: admissible ? unit : (column.units[0] ?? '') };
+      if (n !== null) {
+        const admissible =
+          unit !== undefined && (column.units as readonly string[]).includes(unit);
+        return { value: n, unit: admissible ? unit : (column.units[0] ?? '') };
+      }
+      // Angle en degrés-minutes-secondes : converti en degrés décimaux (notation « deg »).
+      if (column.unitKind === 'angle') {
+        const degrees = parseAngle(text);
+        if (degrees !== null) return { value: degrees, unit: 'deg' };
+      }
+      return text;
     }
   }
 }

@@ -10,12 +10,16 @@ export type { Delimiter, Grid } from './delimited';
 export { detectFormat, isXlsx } from './detect';
 export type { SourceFormat } from './detect';
 
+export { decodeBytes } from './decode';
+
+export { isHtml, parseHtmlTable } from './html';
+
 export { normalizeText } from './normalize';
 
 export { applyMapping, autoMap } from './mapping';
 export type { ColumnMapping } from './mapping';
 
-export { coerceCell, coerceRow, parseNumber } from './coerce';
+export { coerceCell, coerceRow, parseAngle, parseNumber } from './coerce';
 
 export { parseXlsx } from './xlsx';
 
