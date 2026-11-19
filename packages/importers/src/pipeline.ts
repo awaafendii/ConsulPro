@@ -7,8 +7,20 @@
 import type { ColumnDefinition } from '@consulpro/domain';
 
 import { coerceRow } from './coerce';
-import type { Grid } from './delimited';
+import { parseDelimited, type Delimiter, type Grid } from './delimited';
+import { detectFormat } from './detect';
 import { applyMapping, autoMap, type ColumnMapping } from './mapping';
+import { parseXlsx } from './xlsx';
+
+/**
+ * Lit des octets source en grille de chaînes : un classeur XLSX est reconnu par sa signature et
+ * lu par SheetJS ; tout le reste est décodé en texte (UTF-8) et analysé comme délimité. Le
+ * séparateur est deviné sauf s'il est imposé. Déterministe.
+ */
+export function readGrid(bytes: Uint8Array, delimiter?: Delimiter): Grid {
+  if (detectFormat(bytes) === 'xlsx') return parseXlsx(bytes);
+  return parseDelimited(new TextDecoder().decode(bytes), delimiter);
+}
 
 /**
  * Transforme une grille en lignes typées (enregistrements clé → valeur) selon les colonnes du

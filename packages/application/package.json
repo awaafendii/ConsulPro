@@ -15,6 +15,7 @@
     "@consulpro/calc-core": "workspace:*",
     "@consulpro/contracts": "workspace:*",
     "@consulpro/domain": "workspace:*",
+    "@consulpro/importers": "workspace:*",
     "@consulpro/standards": "workspace:*"
   },
   "devDependencies": {

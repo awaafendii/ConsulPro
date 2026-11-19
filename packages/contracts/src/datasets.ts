@@ -95,3 +95,46 @@ export const datasetRevisionSchema = z.object({
   createdAt: z.iso.datetime(),
 });
 export type DatasetRevisionDto = z.infer<typeof datasetRevisionSchema>;
+
+/* Import de données (Phase 7) : un fichier CSV/TSV/XLSX (ou un collage) est lu, rapproché,
+   coercé et validé côté serveur. La prévisualisation ne modifie rien ; la validation reste
+   celle du type (jusqu'à `maxRows`, soit 50 000 pour la topographie). */
+
+export const importDelimiterSchema = z.enum([',', ';', '\t']);
+export type ImportDelimiter = z.infer<typeof importDelimiterSchema>;
+
+/** Rattachement d'une colonne du type à une colonne source (par indice), ou absente (`null`). */
+export const importColumnMappingSchema = z.object({
+  key: z.string().max(80),
+  sourceIndex: z.number().int().min(0).nullable(),
+});
+
+const importBaseBody = z.object({
+  // Octets source encodés en base64 (CSV, TSV, XLSX ou collage) ; ~15 Mo décodés au plus.
+  content: z.string().min(1).max(20_000_000),
+  delimiter: importDelimiterSchema.optional(),
+  mapping: z.array(importColumnMappingSchema).max(200).optional(),
+  units: z.record(z.string().max(80), z.string().max(20)).optional(),
+});
+
+export const datasetImportPreviewBodySchema = importBaseBody;
+export const datasetImportCommitBodySchema = importBaseBody.extend({
+  note: z.string().trim().max(500).optional(),
+});
+
+export const datasetImportPreviewSchema = z.object({
+  format: z.enum(['xlsx', 'delimited']),
+  headers: z.array(z.string()),
+  mapping: z.array(importColumnMappingSchema),
+  rowCount: z.number().int().nonnegative(),
+  sample: z.array(z.record(z.string(), cell)),
+  errors: z.array(
+    z.object({
+      row: z.number().int().nonnegative(),
+      column: z.string(),
+      message: z.string(),
+    }),
+  ),
+  valid: z.boolean(),
+});
+export type DatasetImportPreviewDto = z.infer<typeof datasetImportPreviewSchema>;

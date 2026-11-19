@@ -1,8 +1,9 @@
 import { DATASET_KINDS, validateRows } from '@consulpro/domain';
 import { describe, expect, it } from 'vitest';
+import { utils, write } from 'xlsx';
 
 import type { Grid } from '../delimited';
-import { gridToRows } from '../pipeline';
+import { gridToRows, readGrid } from '../pipeline';
 
 const topoPoints = DATASET_KINDS.TOPO_POINTS.columns;
 
@@ -39,5 +40,28 @@ describe('gridToRows', () => {
     const rows = gridToRows(topoPoints, grid, undefined, { x: 'm', y: 'm', z: 'm' });
     const result = validateRows('TOPO_POINTS', rows);
     expect(result.ok).toBe(true);
+  });
+});
+
+describe('readGrid', () => {
+  it('décode des octets texte comme une grille délimitée', () => {
+    const bytes = new TextEncoder().encode('a,b\n1,2');
+    expect(readGrid(bytes)).toEqual({ headers: ['a', 'b'], rows: [['1', '2']] });
+  });
+
+  it('respecte un séparateur imposé', () => {
+    const bytes = new TextEncoder().encode('a;b\n1;2');
+    expect(readGrid(bytes, ';')).toEqual({ headers: ['a', 'b'], rows: [['1', '2']] });
+  });
+
+  it('reconnaît et lit un classeur XLSX par sa signature', () => {
+    const sheet = utils.aoa_to_sheet([
+      ['pointId', 'x'],
+      ['P1', 100.5],
+    ]);
+    const workbook = utils.book_new();
+    utils.book_append_sheet(workbook, sheet, 'Feuille1');
+    const bytes = new Uint8Array(write(workbook, { type: 'array', bookType: 'xlsx' }) as ArrayBuffer);
+    expect(readGrid(bytes)).toEqual({ headers: ['pointId', 'x'], rows: [['P1', '100.5']] });
   });
 });

@@ -19,4 +19,4 @@ export { coerceCell, coerceRow, parseNumber } from './coerce';
 
 export { parseXlsx } from './xlsx';
 
-export { gridToRows } from './pipeline';
+export { gridToRows, readGrid } from './pipeline';

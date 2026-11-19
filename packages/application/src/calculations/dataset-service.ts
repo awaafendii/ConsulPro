@@ -6,18 +6,126 @@ import {
   validateTitle,
   type DatasetKind,
 } from '@consulpro/domain';
+import {
+  autoMap,
+  detectFormat,
+  gridToRows,
+  readGrid,
+  type ColumnMapping,
+  type Delimiter,
+  type SourceFormat,
+} from '@consulpro/importers';
 
 import type { OrgContext } from '../context';
 import { appError, fromDomain, notFound, reread, staleVersion, type AppError } from '../errors';
-import type { ApplicationDeps } from '../ports';
+import type { ApplicationDeps, Repositories } from '../ports';
 import type { DatasetListItem, DatasetRecord, DatasetRevisionRecord } from '../ports-calculations';
-import { appendActivity, inProject, projectDisciplines } from '../projects/project-context';
+import {
+  appendActivity,
+  inProject,
+  projectDisciplines,
+  type ProjectContext,
+} from '../projects/project-context';
 import { auditBase } from '../scope';
 
 const READ = { permission: 'project.read', write: false } as const;
 const WRITE = { permission: 'dataset.write', write: true } as const;
+/** Prévisualisation d'import : vérifie la permission d'écriture sans ouvrir de transaction d'écriture. */
+const IMPORT = { permission: 'dataset.write', write: false } as const;
+
+/** Nombre de lignes et d'erreurs renvoyées dans un aperçu d'import (le reste est résumé par le total). */
+const PREVIEW_SAMPLE = 20;
+const PREVIEW_ERRORS = 200;
+
+/** Entrée commune aux opérations d'import : octets source et choix de lecture/rapprochement. */
+export interface ImportInput {
+  readonly content: Uint8Array;
+  readonly delimiter?: Delimiter | undefined;
+  readonly mapping?: readonly ColumnMapping[] | undefined;
+  readonly units?: Readonly<Record<string, string>> | undefined;
+  readonly note?: string | undefined;
+}
+
+/** Aperçu d'un import avant enregistrement : rapprochement proposé, échantillon et validation. */
+export interface ImportPreview {
+  readonly format: SourceFormat;
+  readonly headers: readonly string[];
+  readonly mapping: readonly ColumnMapping[];
+  readonly rowCount: number;
+  readonly sample: readonly Readonly<Record<string, unknown>>[];
+  readonly errors: readonly {
+    readonly row: number;
+    readonly column: string;
+    readonly message: string;
+  }[];
+  readonly valid: boolean;
+}
 
 export function createDatasetService({ uow, ids }: Pick<ApplicationDeps, 'uow' | 'ids'>) {
+  /** Valide les lignes brutes et enregistre une révision immuable : cœur partagé saisie/import. */
+  async function writeRevision(
+    pctx: ProjectContext,
+    repos: Repositories,
+    projectId: string,
+    datasetId: string,
+    dataset: DatasetRecord,
+    rawRows: readonly Readonly<Record<string, unknown>>[],
+    note: string | undefined,
+    expectedVersion: number,
+  ): Promise<Result<DatasetRevisionRecord, AppError>> {
+    const orgId = pctx.organization.id;
+    if (!isDatasetKind(dataset.kind)) {
+      return err(appError('VALIDATION', 'DATASET_KIND_UNKNOWN', 'Type de données inconnu.'));
+    }
+    const rows = validateRows(dataset.kind, rawRows);
+    if (!rows.ok) {
+      return err(
+        appError(
+          'VALIDATION',
+          'DATASET_ROWS_INVALID',
+          'Certaines lignes sont invalides : rien n’a été enregistré.',
+          rows.error.map((e) => ({
+            path: `rows.${String(e.row)}.${e.column}`,
+            code: 'ROW_INVALID',
+            message: `Ligne ${String(e.row)} — ${e.message}`,
+          })),
+        ),
+      );
+    }
+    const id = ids.next();
+    const number = await repos.datasets.nextRevisionNumber(datasetId);
+    const trimmed = note?.trim() ? note.trim() : null;
+    const created = await repos.datasets.createRevision({
+      id,
+      organizationId: orgId,
+      projectId,
+      datasetId,
+      number,
+      rows: rows.value,
+      note: trimmed,
+      authorId: pctx.actor.userId,
+    });
+    if (!created.ok) return err(staleVersion());
+    if (!(await repos.datasets.setCurrentRevision(orgId, datasetId, id, expectedVersion))) {
+      return err(staleVersion());
+    }
+    await appendActivity(
+      repos,
+      pctx,
+      'dataset.revised',
+      { title: dataset.title, number, rows: rows.value.length },
+      { type: 'dataset', id: datasetId },
+    );
+    await repos.audit.append({
+      ...auditBase(pctx, orgId),
+      action: 'dataset.revision_created',
+      targetType: 'dataset_revision',
+      targetId: id,
+      metadata: { datasetId, projectId, number, rows: rows.value.length },
+    });
+    return ok(reread(await repos.datasets.findRevision(orgId, datasetId, id), 'Révision'));
+  }
+
   return {
     /** Types de jeux de données disponibles pour les métiers activés du projet. */
     async kinds(ctx: OrgContext, projectId: string): Promise<Result<DatasetKind[], AppError>> {
@@ -93,60 +201,106 @@ export function createDatasetService({ uow, ids }: Pick<ApplicationDeps, 'uow' |
       expectedVersion: number,
     ): Promise<Result<DatasetRevisionRecord, AppError>> {
       return inProject(uow, ctx, projectId, WRITE, async (pctx, repos) => {
-        const orgId = ctx.organization.id;
-        const dataset = await repos.datasets.findById(orgId, projectId, datasetId);
+        const dataset = await repos.datasets.findById(ctx.organization.id, projectId, datasetId);
+        if (!dataset) return err(notFound('Jeu de données'));
+        if (dataset.version !== expectedVersion) return err(staleVersion());
+        return writeRevision(
+          pctx,
+          repos,
+          projectId,
+          datasetId,
+          dataset,
+          input.rows,
+          input.note,
+          expectedVersion,
+        );
+      });
+    },
+
+    /** Aperçu d'un import (fichier CSV/TSV/XLSX ou collage) : lu, rapproché, coercé et validé, sans rien enregistrer. */
+    async importPreview(
+      ctx: OrgContext,
+      projectId: string,
+      datasetId: string,
+      input: Pick<ImportInput, 'content' | 'delimiter' | 'mapping' | 'units'>,
+    ): Promise<Result<ImportPreview, AppError>> {
+      return inProject(uow, ctx, projectId, IMPORT, async (_pctx, repos) => {
+        const dataset = await repos.datasets.findById(ctx.organization.id, projectId, datasetId);
+        if (!dataset) return err(notFound('Jeu de données'));
+        if (!isDatasetKind(dataset.kind)) {
+          return err(appError('VALIDATION', 'DATASET_KIND_UNKNOWN', 'Type de données inconnu.'));
+        }
+        const columns = DATASET_KINDS[dataset.kind].columns;
+        const format = detectFormat(input.content);
+        let grid;
+        try {
+          grid = readGrid(input.content, input.delimiter);
+        } catch {
+          return err(
+            appError(
+              'VALIDATION',
+              'IMPORT_UNREADABLE',
+              'Fichier illisible : format non reconnu ou corrompu.',
+            ),
+          );
+        }
+        const mapping = input.mapping ?? autoMap(columns, grid.headers);
+        const coerced = gridToRows(columns, grid, mapping, input.units ?? {});
+        const validation = validateRows(dataset.kind, coerced);
+        const sample = (validation.ok ? validation.value : coerced).slice(0, PREVIEW_SAMPLE);
+        const errors = validation.ok ? [] : validation.error.slice(0, PREVIEW_ERRORS);
+        return ok({
+          format,
+          headers: grid.headers,
+          mapping,
+          rowCount: grid.rows.length,
+          sample,
+          errors,
+          valid: validation.ok,
+        });
+      });
+    },
+
+    /** Enregistre une révision à partir d'un import, jusqu'à `maxRows` du type (pas le plafond de saisie). */
+    async importCommit(
+      ctx: OrgContext,
+      projectId: string,
+      datasetId: string,
+      input: ImportInput,
+      expectedVersion: number,
+    ): Promise<Result<DatasetRevisionRecord, AppError>> {
+      return inProject(uow, ctx, projectId, WRITE, async (pctx, repos) => {
+        const dataset = await repos.datasets.findById(ctx.organization.id, projectId, datasetId);
         if (!dataset) return err(notFound('Jeu de données'));
         if (dataset.version !== expectedVersion) return err(staleVersion());
         if (!isDatasetKind(dataset.kind)) {
           return err(appError('VALIDATION', 'DATASET_KIND_UNKNOWN', 'Type de données inconnu.'));
         }
-        const rows = validateRows(dataset.kind, input.rows);
-        if (!rows.ok) {
+        const columns = DATASET_KINDS[dataset.kind].columns;
+        let grid;
+        try {
+          grid = readGrid(input.content, input.delimiter);
+        } catch {
           return err(
             appError(
               'VALIDATION',
-              'DATASET_ROWS_INVALID',
-              'Certaines lignes sont invalides : rien n’a été enregistré.',
-              rows.error.map((e) => ({
-                path: `rows.${String(e.row)}.${e.column}`,
-                code: 'ROW_INVALID',
-                message: `Ligne ${String(e.row)} — ${e.message}`,
-              })),
+              'IMPORT_UNREADABLE',
+              'Fichier illisible : format non reconnu ou corrompu.',
             ),
           );
         }
-        const id = ids.next();
-        const number = await repos.datasets.nextRevisionNumber(datasetId);
-        const note = input.note?.trim() ? input.note.trim() : null;
-        const created = await repos.datasets.createRevision({
-          id,
-          organizationId: orgId,
+        const mapping = input.mapping ?? autoMap(columns, grid.headers);
+        const rawRows = gridToRows(columns, grid, mapping, input.units ?? {});
+        return writeRevision(
+          pctx,
+          repos,
           projectId,
           datasetId,
-          number,
-          rows: rows.value,
-          note,
-          authorId: ctx.actor.userId,
-        });
-        if (!created.ok) return err(staleVersion());
-        if (!(await repos.datasets.setCurrentRevision(orgId, datasetId, id, expectedVersion))) {
-          return err(staleVersion());
-        }
-        await appendActivity(
-          repos,
-          pctx,
-          'dataset.revised',
-          { title: dataset.title, number, rows: rows.value.length },
-          { type: 'dataset', id: datasetId },
+          dataset,
+          rawRows,
+          input.note,
+          expectedVersion,
         );
-        await repos.audit.append({
-          ...auditBase(ctx, orgId),
-          action: 'dataset.revision_created',
-          targetType: 'dataset_revision',
-          targetId: id,
-          metadata: { datasetId, projectId, number, rows: rows.value.length },
-        });
-        return ok(reread(await repos.datasets.findRevision(orgId, datasetId, id), 'Révision'));
       });
     },
 

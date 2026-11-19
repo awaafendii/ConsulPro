@@ -8,7 +8,7 @@ function workbookBytes(aoa: readonly (readonly unknown[])[]): Uint8Array {
   const sheet = utils.aoa_to_sheet(aoa as unknown[][]);
   const workbook = utils.book_new();
   utils.book_append_sheet(workbook, sheet, 'Feuille1');
-  return write(workbook, { type: 'array', bookType: 'xlsx' }) as Uint8Array;
+  return new Uint8Array(write(workbook, { type: 'array', bookType: 'xlsx' }) as ArrayBuffer);
 }
 
 describe('parseXlsx', () => {

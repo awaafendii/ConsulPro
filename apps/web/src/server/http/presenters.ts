@@ -8,6 +8,7 @@ import type {
   TopographyDashboard,
   LinkableOutput,
   DatasetRevisionRecord,
+  ImportPreview,
   NotificationRecord,
   RevisionSummary,
   RevisionView,
@@ -35,6 +36,7 @@ import type {
   AuditLogDto,
   CalculationDto,
   DatasetDto,
+  DatasetImportPreviewDto,
   DatasetKindDto,
   DatasetRevisionDto,
   ElecDashboardDto,
@@ -430,6 +432,17 @@ export const datasetRevisionDto = (r: DatasetRevisionRecord): DatasetRevisionDto
   note: r.note,
   authorName: r.authorName,
   createdAt: r.createdAt.toISOString(),
+});
+
+export const datasetImportPreviewDto = (p: ImportPreview): DatasetImportPreviewDto => ({
+  format: p.format,
+  headers: [...p.headers],
+  mapping: p.mapping.map((m) => ({ key: m.key, sourceIndex: m.sourceIndex })),
+  rowCount: p.rowCount,
+  // Les cellules coercées sont déjà de forme `cell` (chaîne, nombre, grandeur ou null).
+  sample: p.sample.map((row) => ({ ...row }) as DatasetImportPreviewDto['sample'][number]),
+  errors: p.errors.map((e) => ({ row: e.row, column: e.column, message: e.message })),
+  valid: p.valid,
 });
 
 export const notificationDto = (n: NotificationRecord): NotificationDto => ({

@@ -32,7 +32,12 @@ export {
   type LinkableOutput,
   type RevisionView,
 } from './calculations/calculation-service';
-export { createDatasetService, type DatasetService } from './calculations/dataset-service';
+export {
+  createDatasetService,
+  type DatasetService,
+  type ImportInput,
+  type ImportPreview,
+} from './calculations/dataset-service';
 export {
   createElecDashboardService,
   type ElecDashboard,

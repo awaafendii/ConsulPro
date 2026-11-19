@@ -75,6 +75,8 @@ const SUCCESS: Readonly<Record<string, number>> = {
   'datasets.get': 200,
   'datasets.revisions': 200,
   'datasets.saveRevision': 201,
+  'datasets.import.preview': 200,
+  'datasets.import': 201,
   search: 200,
   'organization.transfer': 204,
   'notifications.list': 200,
@@ -519,6 +521,21 @@ const projectRequests: Readonly<Record<string, (projectId: string) => Promise<Ca
   'datasets.saveRevision': async (projectId) => ({
     params: { datasetId: await datasetOf(projectId) },
     body: { rows: [{ name: 'Séjour', area: { value: 24, unit: 'm2' } }] },
+    headers: { 'if-match': '"1"' },
+  }),
+  'datasets.import.preview': async (projectId) => ({
+    params: { datasetId: await datasetOf(projectId) },
+    body: {
+      content: Buffer.from('name,area\nSéjour,24', 'utf8').toString('base64'),
+      units: { area: 'm2' },
+    },
+  }),
+  'datasets.import': async (projectId) => ({
+    params: { datasetId: await datasetOf(projectId) },
+    body: {
+      content: Buffer.from('name,area\nSéjour,24', 'utf8').toString('base64'),
+      units: { area: 'm2' },
+    },
     headers: { 'if-match': '"1"' },
   }),
   'takeoff.get': () => Promise.resolve({}),
