@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "@consulpro/calc-core": "workspace:*",
-    "@consulpro/domain": "workspace:*"
+    "@consulpro/domain": "workspace:*",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {
     "@consulpro/config-eslint": "workspace:*",

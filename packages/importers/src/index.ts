@@ -16,3 +16,7 @@ export { applyMapping, autoMap } from './mapping';
 export type { ColumnMapping } from './mapping';
 
 export { coerceCell, coerceRow, parseNumber } from './coerce';
+
+export { parseXlsx } from './xlsx';
+
+export { gridToRows } from './pipeline';
