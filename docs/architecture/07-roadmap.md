@@ -318,6 +318,10 @@ DQE, présentation agrégée au choix.
 
 ## Phase 7 — Topographie + cœur du pipeline d'import *(ajustement I3)*
 
+**État (2026-11-19)** : partie **Topographie livrée et testée** (moteurs `topo.*`, jeux de
+points et d'observations, module, E2E). Le **cœur du pipeline d'import** (package `importers`)
+**n'est pas encore réalisé** ; les critères de sortie ci-dessous restent ouverts.
+
 **Livrables** : moteurs `topo.*`, jeux de points et d'observations, conventions
 d'angles paramétrables, tolérances paramétrables ; **package `importers`** (XLSX, CSV,
 copier-coller Excel et Word ; détection, mapping, validation, aperçu, import) appliqué
