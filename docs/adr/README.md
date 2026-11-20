@@ -16,3 +16,4 @@ Statuts : `Proposé` → `Accepté` | `Rejeté` | `Remplacé par ADR-XXXX`.
 | [0009](0009-authentification.md)                      | Authentification (Better Auth)                             | Accepté |
 | [0010](0010-stockage-fichiers.md)                     | Stockage de fichiers compatible S3                         | Accepté |
 | [0011](0011-sorties-ventilees.md)                     | Sorties ventilées et présentation du quantitatif (Phase 6) | Accepté |
+| [0012](0012-stockage-jsonb-jeux-de-donnees.md)        | Stockage des lignes de jeux de données en `jsonb` (Phase 7) | Accepté |
