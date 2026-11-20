@@ -1,0 +1,236 @@
+{
+  "engine": "topo.radiation-survey",
+  "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+  "cases": [
+    {
+      "id": "topo.radiation-survey/both-heights-horizontal-sight",
+      "engine": "topo.radiation-survey",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Station (1000;1000;100), h_i = 1,60 m, h_v = 1,80 m. G0 = 0, Hz = 50 gon → G = π/4. Visée horizontale V = 100 gon : D_h = 100·sin(π/2) = 100 m ; Δh = 100·cos(π/2) + 1,60 − 1,80 = −0,20 m. X = 1000 + 100·sin(π/4) = 1070,7106781187 ; Y = 1070,7106781187 ; Z = 99,80.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "xS": { "value": 1000, "unit": "m" },
+        "yS": { "value": 1000, "unit": "m" },
+        "zS": { "value": 100, "unit": "m" },
+        "instrumentHeight": { "value": 1.6, "unit": "m" },
+        "orientation": { "value": 0, "unit": "gon" },
+        "horizontalReading": { "value": 50, "unit": "gon" },
+        "slopeDistance": { "value": 100, "unit": "m" },
+        "zenithAngle": { "value": 100, "unit": "gon" },
+        "targetHeight": { "value": 1.8, "unit": "m" }
+      },
+      "expected": {
+        "resultStatus": "OK",
+        "outputs": {
+          "x": { "value": 1070.7106781186546, "tolerance": 1e-9 },
+          "y": { "value": 1070.7106781186549, "tolerance": 1e-9 },
+          "z": { "value": 99.8, "tolerance": 1e-9 },
+          "horizontalDistance": { "value": 100, "tolerance": 1e-9 },
+          "deltaH": { "value": -0.2, "tolerance": 1e-9 },
+          "bearing": { "value": 0.7853981633974483, "tolerance": 1e-9 }
+        },
+        "checks": [],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.radiation-survey/default-heights-steep-sight",
+      "engine": "topo.radiation-survey",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Station (0;0;50), hauteurs non saisies (0 retenu → hypothèses DEFAULT). G0 = 50 gon, Hz = 50 gon → G = π/2. V = 80 gon : D_h = 40·sin(0,4π) = 38,0422606518 ; Δh = 40·cos(0,4π) = 12,3606797750 ; X = 38,0422606518 ; Y = 0 ; Z = 62,3606797750.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "xS": { "value": 0, "unit": "m" },
+        "yS": { "value": 0, "unit": "m" },
+        "zS": { "value": 50, "unit": "m" },
+        "orientation": { "value": 50, "unit": "gon" },
+        "horizontalReading": { "value": 50, "unit": "gon" },
+        "slopeDistance": { "value": 40, "unit": "m" },
+        "zenithAngle": { "value": 80, "unit": "gon" }
+      },
+      "expected": {
+        "resultStatus": "OK",
+        "outputs": {
+          "x": { "value": 38.04226065180614, "tolerance": 1e-9 },
+          "y": { "value": 0, "tolerance": 1e-9 },
+          "z": { "value": 62.3606797749979, "tolerance": 1e-9 },
+          "horizontalDistance": { "value": 38.04226065180614, "tolerance": 1e-9 },
+          "deltaH": { "value": 12.360679774997898, "tolerance": 1e-9 },
+          "bearing": { "value": 1.5707963267948966, "tolerance": 1e-9 }
+        },
+        "checks": [],
+        "hypotheses": ["DEFAULT.instrumentHeight", "DEFAULT.targetHeight", "TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.radiation-survey/instrument-height-only",
+      "engine": "topo.radiation-survey",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Station (200;300;10), h_i = 1,70 m, h_v non saisi (0 retenu → DEFAULT.targetHeight). G0 = 0, Hz = 0 → G = 0. V = 100 gon : D_h = 25 m ; Δh = 1,70 m. X = 200 ; Y = 325 ; Z = 11,70.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "xS": { "value": 200, "unit": "m" },
+        "yS": { "value": 300, "unit": "m" },
+        "zS": { "value": 10, "unit": "m" },
+        "instrumentHeight": { "value": 1.7, "unit": "m" },
+        "orientation": { "value": 0, "unit": "gon" },
+        "horizontalReading": { "value": 0, "unit": "gon" },
+        "slopeDistance": { "value": 25, "unit": "m" },
+        "zenithAngle": { "value": 100, "unit": "gon" }
+      },
+      "expected": {
+        "resultStatus": "OK",
+        "outputs": {
+          "x": { "value": 200, "tolerance": 1e-9 },
+          "y": { "value": 325, "tolerance": 1e-9 },
+          "z": { "value": 11.7, "tolerance": 1e-9 },
+          "horizontalDistance": { "value": 25, "tolerance": 1e-9 },
+          "deltaH": { "value": 1.7, "tolerance": 1e-9 },
+          "bearing": { "value": 0, "tolerance": 1e-9 }
+        },
+        "checks": [],
+        "hypotheses": ["DEFAULT.targetHeight", "TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.radiation-survey/zenith-upward-boundary",
+      "engine": "topo.radiation-survey",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Cas limite : angle zénithal 0 gon (zénith, borne basse). Visée verticale vers le haut : D_h = 30·sin(0) = 0 ; Δh = 30·cos(0) = +30 m. Station (0;0;100) : X = 0 ; Y = 0 ; Z = 130. Hauteurs non saisies (DEFAULT).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "xS": { "value": 0, "unit": "m" },
+        "yS": { "value": 0, "unit": "m" },
+        "zS": { "value": 100, "unit": "m" },
+        "orientation": { "value": 0, "unit": "gon" },
+        "horizontalReading": { "value": 0, "unit": "gon" },
+        "slopeDistance": { "value": 30, "unit": "m" },
+        "zenithAngle": { "value": 0, "unit": "gon" }
+      },
+      "expected": {
+        "resultStatus": "OK",
+        "outputs": {
+          "x": { "value": 0, "tolerance": 1e-9 },
+          "y": { "value": 0, "tolerance": 1e-9 },
+          "z": { "value": 130, "tolerance": 1e-9 },
+          "horizontalDistance": { "value": 0, "tolerance": 1e-9 },
+          "deltaH": { "value": 30, "tolerance": 1e-9 },
+          "bearing": { "value": 0, "tolerance": 1e-9 }
+        },
+        "checks": [],
+        "hypotheses": ["DEFAULT.instrumentHeight", "DEFAULT.targetHeight", "TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.radiation-survey/bearing-wraps-past-400gon",
+      "engine": "topo.radiation-survey",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Cas limite de normalisation du gisement : G0 = 300 gon, Hz = 150 gon → somme 450 gon ramenée à 50 gon (G = π/4). V = 100 gon, D = 20 m. Station (0;0;5) : X = Y = 14,1421356237 ; Δh = 0 ; Z = 5.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "xS": { "value": 0, "unit": "m" },
+        "yS": { "value": 0, "unit": "m" },
+        "zS": { "value": 5, "unit": "m" },
+        "orientation": { "value": 300, "unit": "gon" },
+        "horizontalReading": { "value": 150, "unit": "gon" },
+        "slopeDistance": { "value": 20, "unit": "m" },
+        "zenithAngle": { "value": 100, "unit": "gon" }
+      },
+      "expected": {
+        "resultStatus": "OK",
+        "outputs": {
+          "x": { "value": 14.14213562373095, "tolerance": 1e-9 },
+          "y": { "value": 14.142135623730951, "tolerance": 1e-9 },
+          "z": { "value": 5, "tolerance": 1e-9 },
+          "horizontalDistance": { "value": 20, "tolerance": 1e-9 },
+          "deltaH": { "value": 0, "tolerance": 1e-9 },
+          "bearing": { "value": 0.7853981633974483, "tolerance": 1e-9 }
+        },
+        "checks": [],
+        "hypotheses": ["DEFAULT.instrumentHeight", "DEFAULT.targetHeight", "TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.radiation-survey/null-slope-distance",
+      "engine": "topo.radiation-survey",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Distance inclinée nulle : hors du domaine admissible (strictement positive), entrée refusée au schéma (OUT_OF_RANGE sur slopeDistance.value).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "xS": { "value": 0, "unit": "m" },
+        "yS": { "value": 0, "unit": "m" },
+        "zS": { "value": 10, "unit": "m" },
+        "orientation": { "value": 0, "unit": "gon" },
+        "horizontalReading": { "value": 0, "unit": "gon" },
+        "slopeDistance": { "value": 0, "unit": "m" },
+        "zenithAngle": { "value": 100, "unit": "gon" }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [{ "path": "slopeDistance.value", "code": "OUT_OF_RANGE" }]
+      }
+    },
+    {
+      "id": "topo.radiation-survey/zenith-beyond-nadir",
+      "engine": "topo.radiation-survey",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Angle zénithal 250 gon (> 200 gon = nadir) : hors de l’intervalle admissible [0 ; 200 gon], entrée refusée au schéma (OUT_OF_RANGE sur zenithAngle.value).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "xS": { "value": 0, "unit": "m" },
+        "yS": { "value": 0, "unit": "m" },
+        "zS": { "value": 10, "unit": "m" },
+        "orientation": { "value": 0, "unit": "gon" },
+        "horizontalReading": { "value": 0, "unit": "gon" },
+        "slopeDistance": { "value": 25, "unit": "m" },
+        "zenithAngle": { "value": 250, "unit": "gon" }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [{ "path": "zenithAngle.value", "code": "OUT_OF_RANGE" }]
+      }
+    }
+  ]
+}

@@ -176,6 +176,7 @@ function TwoFactorStep({ redirectTo }: { redirectTo: string | null }) {
 
 export function SignUpForm({ redirectTo }: { redirectTo: string | null }) {
   const t = useTranslations('auth');
+  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [sentTo, setSentTo] = useState<string | null>(null);
   const schema = useMemo(
@@ -207,7 +208,7 @@ export function SignUpForm({ redirectTo }: { redirectTo: string | null }) {
 
   const onSubmit = form.handleSubmit(async ({ name, email, password }) => {
     setError(null);
-    const { error: failure } = await authClient.signUp.email({
+    const { data, error: failure } = await authClient.signUp.email({
       name,
       email,
       password,
@@ -219,6 +220,14 @@ export function SignUpForm({ redirectTo }: { redirectTo: string | null }) {
       );
       return;
     }
+    // Vérification d'e-mail désactivée (déploiement sans SMTP) : Better Auth ouvre la session
+    // immédiatement et renvoie un jeton. L'utilisateur entre alors directement dans l'application.
+    if (data.token) {
+      router.push(safeRedirect(redirectTo));
+      router.refresh();
+      return;
+    }
+    // Vérification exigée (SMTP configuré) : un e-mail de confirmation a été envoyé.
     setSentTo(email);
   });
 

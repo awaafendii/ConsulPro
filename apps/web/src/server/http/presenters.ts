@@ -5,8 +5,10 @@ import type {
   DatasetListItem,
   ElecDashboard,
   PlumbingDashboard,
+  TopographyDashboard,
   LinkableOutput,
   DatasetRevisionRecord,
+  ImportPreview,
   NotificationRecord,
   RevisionSummary,
   RevisionView,
@@ -34,10 +36,12 @@ import type {
   AuditLogDto,
   CalculationDto,
   DatasetDto,
+  DatasetImportPreviewDto,
   DatasetKindDto,
   DatasetRevisionDto,
   ElecDashboardDto,
   PlumbingDashboardDto,
+  TopographyDashboardDto,
   EngineDto,
   NotificationDto,
   RevisionDto,
@@ -430,6 +434,17 @@ export const datasetRevisionDto = (r: DatasetRevisionRecord): DatasetRevisionDto
   createdAt: r.createdAt.toISOString(),
 });
 
+export const datasetImportPreviewDto = (p: ImportPreview): DatasetImportPreviewDto => ({
+  format: p.format,
+  headers: [...p.headers],
+  mapping: p.mapping.map((m) => ({ key: m.key, sourceIndex: m.sourceIndex })),
+  rowCount: p.rowCount,
+  // Les cellules coercées sont déjà de forme `cell` (chaîne, nombre, grandeur ou null).
+  sample: p.sample.map((row) => ({ ...row }) as DatasetImportPreviewDto['sample'][number]),
+  errors: p.errors.map((e) => ({ row: e.row, column: e.column, message: e.message })),
+  valid: p.valid,
+});
+
 export const notificationDto = (n: NotificationRecord): NotificationDto => ({
   id: n.id,
   type: n.type,
@@ -468,6 +483,17 @@ export const plumbingDashboardDto = (d: PlumbingDashboard): PlumbingDashboardDto
     project: { ...p.project },
     calculations: { ...p.calculations },
     flows: p.flows.map((f) => ({ ...f })),
+    nonCompliant: p.nonCompliant.map((c) => ({ ...c })),
+  })),
+  truncated: d.truncated,
+  engines: { ...d.engines },
+});
+
+export const topographyDashboardDto = (d: TopographyDashboard): TopographyDashboardDto => ({
+  projects: d.projects.map((p) => ({
+    project: { ...p.project },
+    calculations: { ...p.calculations },
+    traverses: p.traverses.map((t) => ({ ...t })),
     nonCompliant: p.nonCompliant.map((c) => ({ ...c })),
   })),
   truncated: d.truncated,

@@ -24,6 +24,15 @@ export function createSmtpMailer(config: SmtpConfig): Mailer {
   };
 }
 
+/**
+ * Mailer neutre : aucun envoi. Utilisé quand aucun SMTP n'est configuré (déploiement sans
+ * service mail). L'inscription ne requiert alors pas de vérification par e-mail ; les envois
+ * facultatifs (réinitialisation de mot de passe, invitations) sont simplement ignorés.
+ */
+export function createNoopMailer(): Mailer {
+  return { send: () => Promise.resolve() };
+}
+
 /** Boîte de réception en mémoire (tests). */
 export class MemoryMailer implements Mailer {
   readonly sent: { to: string; subject: string; text: string }[] = [];

@@ -1,0 +1,76 @@
+{
+  "standard": {
+    "code": "CONSULPRO-TOPO-TOL",
+    "title": "ConsulPro — Tolérances topographiques (fermetures de cheminement, de nivellement et de contrôle)",
+    "publisher": "ConsulPro",
+    "discipline": "TOPO",
+    "nature": "PRACTICE"
+  },
+  "version": {
+    "label": "2026",
+    "sourceNotes": "Les tolérances de fermeture n’ont pas de source normative universelle (03-modules.md §3.4) : ce sont des paramètres explicites du projet ou de l’organisation. Les valeurs ci-dessous sont des ordres de grandeur d’usage, toutes à vérifier et à adapter au matériel et au cahier des charges du levé."
+  },
+  "parameters": [
+    {
+      "key": "topo.traverse.angular_tolerance_coeff",
+      "label": "Coefficient de tolérance de fermeture angulaire (T = coeff × √n)",
+      "kind": "SCALAR",
+      "value": 0.015,
+      "unit": "gon",
+      "source": {
+        "document": "ConsulPro — tolérances topographiques",
+        "note": "Tolérance appliquée à la fermeture angulaire d’une polygonale encadrée : T_a = coeff × racine du nombre d’angles mesurés. Valeur d’usage, à vérifier."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "topo.traverse.relative_precision_min",
+      "label": "Précision relative planimétrique minimale exigée (f_L / ΣD)",
+      "kind": "SCALAR",
+      "value": 0.0002,
+      "unit": "1",
+      "source": {
+        "document": "ConsulPro — tolérances topographiques",
+        "note": "La fermeture planimétrique f_L rapportée au périmètre doit être au plus égale à cette valeur (soit une précision relative d’au moins 1/5000). Valeur d’usage, à vérifier."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "topo.leveling.closure_tolerance_coeff",
+      "label": "Coefficient de tolérance de fermeture de nivellement (T = coeff × √n)",
+      "kind": "SCALAR",
+      "value": 4,
+      "unit": "mm",
+      "source": {
+        "document": "ConsulPro — tolérances topographiques",
+        "note": "Tolérance de fermeture d’un nivellement direct : T = coeff × racine du nombre de stations. Valeur d’usage pour un nivellement ordinaire, à vérifier."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "topo.control.planimetric_tolerance",
+      "label": "Tolérance d’écart planimétrique au contrôle",
+      "kind": "SCALAR",
+      "value": 0.05,
+      "unit": "m",
+      "source": {
+        "document": "ConsulPro — tolérances topographiques",
+        "note": "Écart planimétrique maximal admis entre coordonnées théoriques et levées. Valeur d’usage, à vérifier."
+      },
+      "verification": "TO_VERIFY"
+    },
+    {
+      "key": "topo.control.altimetric_tolerance",
+      "label": "Tolérance d’écart altimétrique au contrôle",
+      "kind": "SCALAR",
+      "value": 0.05,
+      "unit": "m",
+      "source": {
+        "document": "ConsulPro — tolérances topographiques",
+        "note": "Écart altimétrique maximal admis entre altitude théorique et levée. Valeur d’usage, à vérifier."
+      },
+      "verification": "TO_VERIFY"
+    }
+  ],
+  "rules": []
+}

@@ -2,6 +2,8 @@ import { ok } from '@consulpro/calc-core';
 import {
   calculationBodySchema,
   datasetBodySchema,
+  datasetImportCommitBodySchema,
+  datasetImportPreviewBodySchema,
   datasetRevisionBodySchema,
   notificationQuerySchema,
   preferencesBodySchema,
@@ -18,6 +20,7 @@ import { z } from 'zod';
 import {
   calculationDto,
   datasetDto,
+  datasetImportPreviewDto,
   datasetKindDto,
   datasetRevisionDto,
   elecDashboardDto,
@@ -393,6 +396,56 @@ export function createCalculationRoutes(deps: ServerDeps): RouteDefinition[] {
           params.projectId,
           params.datasetId,
           body,
+          version,
+        );
+        return result.ok
+          ? ok({ status: 201, body: datasetRevisionDto(result.value), etag: version + 1 })
+          : result;
+      },
+    }),
+
+    // --- Import de données (Phase 7) -------------------------------------------------------
+    projectRoute(deps, 'dataset.write', {
+      id: 'datasets.import.preview',
+      method: 'POST',
+      path: `${PROJECT}/datasets/:datasetId/import/preview`,
+      params: dataset,
+      body: datasetImportPreviewBodySchema,
+      // Fichier source encodé en base64 : corps plus volumineux que la saisie.
+      maxBodyBytes: 21_000_000,
+      async run({ ctx, params, body }) {
+        const result = await app.datasets.importPreview(ctx, params.projectId, params.datasetId, {
+          content: Buffer.from(body.content, 'base64'),
+          delimiter: body.delimiter,
+          mapping: body.mapping,
+          units: body.units,
+        });
+        return result.ok
+          ? ok({ status: 200, body: datasetImportPreviewDto(result.value) })
+          : result;
+      },
+    }),
+
+    projectRoute(deps, 'dataset.write', {
+      id: 'datasets.import',
+      method: 'POST',
+      path: `${PROJECT}/datasets/:datasetId/import`,
+      params: dataset,
+      body: datasetImportCommitBodySchema,
+      ifMatch: true,
+      maxBodyBytes: 21_000_000,
+      async run({ ctx, params, body, version }) {
+        const result = await app.datasets.importCommit(
+          ctx,
+          params.projectId,
+          params.datasetId,
+          {
+            content: Buffer.from(body.content, 'base64'),
+            delimiter: body.delimiter,
+            mapping: body.mapping,
+            units: body.units,
+            note: body.note,
+          },
           version,
         );
         return result.ok

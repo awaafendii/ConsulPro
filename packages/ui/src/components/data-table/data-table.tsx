@@ -275,7 +275,7 @@ export function DataTable<T>({
       )}
 
       {/* relative : contient les éléments positionnés des cellules (ex. textes sr-only). */}
-      <div className="relative overflow-x-auto rounded-lg border">
+      <div className="relative overflow-x-auto rounded-xl border bg-card shadow-xs">
         <table
           ref={gridRef}
           role="grid"
@@ -283,7 +283,7 @@ export function DataTable<T>({
           aria-rowcount={rowCount + 1}
           className="w-full caption-bottom text-sm"
         >
-          <thead className="bg-muted/50">
+          <thead className="bg-muted/60">
             <tr aria-rowindex={1}>
               {columns.map((column) => {
                 const sorted = sort?.columnId === column.id ? sort.direction : undefined;
@@ -293,14 +293,14 @@ export function DataTable<T>({
                     scope="col"
                     aria-sort={sorted ?? (column.sortValue ? 'none' : undefined)}
                     className={cn(
-                      'h-10 px-3 text-left align-middle font-medium whitespace-nowrap text-muted-foreground',
+                      'h-10 px-3 text-left align-middle text-xs font-medium tracking-wide whitespace-nowrap text-muted-foreground uppercase',
                       column.align === 'end' && 'text-right',
                     )}
                   >
                     {column.sortValue ? (
                       <button
                         type="button"
-                        className="-mx-1 inline-flex items-center gap-1 rounded px-1 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                        className="-mx-1 inline-flex items-center gap-1 rounded px-1 tracking-wide uppercase hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                         onClick={() => {
                           toggleSort(column.id);
                         }}

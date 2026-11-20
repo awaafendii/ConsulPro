@@ -1,5 +1,6 @@
 import {
   createInfrastructure,
+  createNoopMailer,
   createSmtpMailer,
   type Infrastructure,
 } from '@consulpro/infrastructure';
@@ -26,19 +27,26 @@ export function getServer(): Server {
   if (!globalStore.__consulproServer) {
     const env = loadEnv();
     const logger = pino({ level: env.NODE_ENV === 'production' ? 'info' : 'debug' });
-    const mailer = createSmtpMailer({
-      host: env.SMTP_HOST,
-      port: env.SMTP_PORT,
-      secure: env.SMTP_SECURE,
-      user: env.SMTP_USER || undefined,
-      password: env.SMTP_PASSWORD || undefined,
-      from: env.MAIL_FROM,
-    });
+    // Sans SMTP configuré : mailer neutre et inscription sans vérification par e-mail
+    // (déploiement sans service mail). Avec SMTP : comportement complet (vérification exigée).
+    const mailEnabled = Boolean(env.SMTP_HOST && env.SMTP_PORT);
+    const mailer =
+      env.SMTP_HOST && env.SMTP_PORT
+        ? createSmtpMailer({
+            host: env.SMTP_HOST,
+            port: env.SMTP_PORT,
+            secure: env.SMTP_SECURE,
+            user: env.SMTP_USER || undefined,
+            password: env.SMTP_PASSWORD || undefined,
+            from: env.MAIL_FROM ?? 'ConsulPro <no-reply@localhost>',
+          })
+        : createNoopMailer();
     const infra = createInfrastructure({
       databaseUrl: env.DATABASE_URL,
       appUrl: env.APP_URL,
       authSecret: env.BETTER_AUTH_SECRET,
       mailer,
+      requireEmailVerification: mailEnabled,
       demoEngines: env.CONSULPRO_DEMO_ENGINES,
       defaultTimeZone: env.APP_TIME_ZONE,
     });

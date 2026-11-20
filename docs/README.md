@@ -24,6 +24,7 @@ Approfondissements :
 | 12  | [Sécurité et RBAC](architecture/12-securite-rbac.md)                             |
 | 13  | [Pipelines d'import et de rapport](architecture/13-imports-et-rapports.md)       |
 | 14  | [Design system](architecture/14-design-system.md)                                |
+| 15  | [Déploiement (Vercel + PostgreSQL managé)](architecture/15-deploiement.md)       |
 
 ## Décisions d'architecture (ADR)
 

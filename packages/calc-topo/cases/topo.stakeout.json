@@ -1,0 +1,204 @@
+{
+  "engine": "topo.stakeout",
+  "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+  "cases": [
+    {
+      "id": "topo.stakeout/oriented-zero-limbe",
+      "engine": "topo.stakeout",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Station (0;0) orientée au Nord (G0 = 0), point à implanter (3;4). Gisement station → point G = atan2(3,4) = 0,6435011088 rad (40,6460 gon) ; angle horizontal Hz = G − G0 = 0,6435011088 ; distance D = 5 m.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "xS": { "value": 0, "unit": "m" },
+        "yS": { "value": 0, "unit": "m" },
+        "orientation": { "value": 0, "unit": "gon" },
+        "xT": { "value": 3, "unit": "m" },
+        "yT": { "value": 4, "unit": "m" }
+      },
+      "expected": {
+        "resultStatus": "OK",
+        "outputs": {
+          "horizontalAngle": { "value": 0.6435011087932844, "tolerance": 1e-9 },
+          "distance": { "value": 5, "tolerance": 1e-9 },
+          "bearing": { "value": 0.6435011087932844, "tolerance": 1e-9 }
+        },
+        "checks": [],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.stakeout/angle-wraps-below-zero",
+      "engine": "topo.stakeout",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Station (1000;1000), orientation G0 = 50 gon (π/4), point (1000;1100) plein Nord : G = 0. Hz = G − G0 = −π/4 ramené à 7π/4 = 5,4977871438 rad (350 gon) ; D = 100 m.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "xS": { "value": 1000, "unit": "m" },
+        "yS": { "value": 1000, "unit": "m" },
+        "orientation": { "value": 50, "unit": "gon" },
+        "xT": { "value": 1000, "unit": "m" },
+        "yT": { "value": 1100, "unit": "m" }
+      },
+      "expected": {
+        "resultStatus": "OK",
+        "outputs": {
+          "horizontalAngle": { "value": 5.497787143782138, "tolerance": 1e-9 },
+          "distance": { "value": 100, "tolerance": 1e-9 },
+          "bearing": { "value": 0, "tolerance": 1e-9 }
+        },
+        "checks": [],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.stakeout/due-west-target",
+      "engine": "topo.stakeout",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Station (500;500), orientation G0 = 100 gon (π/2), point (400;500) plein Ouest : G = atan2(−100,0) = 3π/2 (300 gon). Hz = G − G0 = π (200 gon) = 3,1415926536 ; D = 100 m.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "xS": { "value": 500, "unit": "m" },
+        "yS": { "value": 500, "unit": "m" },
+        "orientation": { "value": 100, "unit": "gon" },
+        "xT": { "value": 400, "unit": "m" },
+        "yT": { "value": 500, "unit": "m" }
+      },
+      "expected": {
+        "resultStatus": "OK",
+        "outputs": {
+          "horizontalAngle": { "value": 3.141592653589793, "tolerance": 1e-9 },
+          "distance": { "value": 100, "tolerance": 1e-9 },
+          "bearing": { "value": 4.71238898038469, "tolerance": 1e-9 }
+        },
+        "checks": [],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.stakeout/target-on-station",
+      "engine": "topo.stakeout",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Cas limite : point à implanter confondu avec la station (10;10). Distance nulle, angle indéterminé (0 retenu) ; avertissement TOPO.NULL_DISTANCE → état OK_WITH_WARNINGS.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "xS": { "value": 10, "unit": "m" },
+        "yS": { "value": 10, "unit": "m" },
+        "orientation": { "value": 0, "unit": "gon" },
+        "xT": { "value": 10, "unit": "m" },
+        "yT": { "value": 10, "unit": "m" }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "horizontalAngle": { "value": 0, "tolerance": 1e-9 },
+          "distance": { "value": 0, "tolerance": 1e-9 },
+          "bearing": { "value": 0, "tolerance": 1e-9 }
+        },
+        "checks": [],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.stakeout/orientation-300gon-wrap",
+      "engine": "topo.stakeout",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Cas limite de normalisation : station (0;0), orientation G0 = 300 gon (3π/2), point (100;0) plein Est : G = π/2 (100 gon). Hz = G − G0 = −π ramené à π (200 gon) = 3,1415926536 ; D = 100 m.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "xS": { "value": 0, "unit": "m" },
+        "yS": { "value": 0, "unit": "m" },
+        "orientation": { "value": 300, "unit": "gon" },
+        "xT": { "value": 100, "unit": "m" },
+        "yT": { "value": 0, "unit": "m" }
+      },
+      "expected": {
+        "resultStatus": "OK",
+        "outputs": {
+          "horizontalAngle": { "value": 3.141592653589793, "tolerance": 1e-9 },
+          "distance": { "value": 100, "tolerance": 1e-9 },
+          "bearing": { "value": 1.5707963267948966, "tolerance": 1e-9 }
+        },
+        "checks": [],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.stakeout/orientation-wrong-unit",
+      "engine": "topo.stakeout",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Unité de longueur (m) fournie pour l’orientation (un gisement) : incompatible avec la grandeur angle, entrée refusée au schéma (UNIT_INCOMPATIBLE sur orientation.unit).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "xS": { "value": 0, "unit": "m" },
+        "yS": { "value": 0, "unit": "m" },
+        "orientation": { "value": 50, "unit": "m" },
+        "xT": { "value": 3, "unit": "m" },
+        "yT": { "value": 4, "unit": "m" }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [{ "path": "orientation.unit", "code": "UNIT_INCOMPATIBLE" }]
+      }
+    },
+    {
+      "id": "topo.stakeout/station-coordinate-out-of-range",
+      "engine": "topo.stakeout",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Abscisse de station de 200 000 km (2e8 m) : au-delà du domaine admissible (±100 000 km), entrée refusée au schéma (OUT_OF_RANGE sur xS.value).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "xS": { "value": 200000000, "unit": "m" },
+        "yS": { "value": 0, "unit": "m" },
+        "orientation": { "value": 0, "unit": "gon" },
+        "xT": { "value": 3, "unit": "m" },
+        "yT": { "value": 4, "unit": "m" }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [{ "path": "xS.value", "code": "OUT_OF_RANGE" }]
+      }
+    }
+  ]
+}

@@ -33,7 +33,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ orgS
                 {isModuleAvailable(m) ? (
                   <Link
                     href={`/${ctx.organization.slug}/${m.path}`}
-                    className="flex flex-wrap items-center justify-between gap-2 rounded-lg border bg-card p-4 transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                    className="flex flex-wrap items-center justify-between gap-2 rounded-lg border bg-card p-4 shadow-xs transition-[box-shadow,border-color,translate] duration-200 hover:-translate-y-0.5 hover:border-brand hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                   >
                     <span className="font-medium">{label}</span>
                     <Badge variant="success">{t('available')}</Badge>

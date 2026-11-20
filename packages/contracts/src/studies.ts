@@ -341,3 +341,52 @@ export const plumbingDashboardSchema = z.object({
   }),
 });
 export type PlumbingDashboardDto = z.infer<typeof plumbingDashboardSchema>;
+
+// --- Tableau de bord Topographie ------------------------------------------------------------
+
+export const topographyDashboardSchema = z.object({
+  projects: z.array(
+    z.object({
+      project: z.object({ id: z.uuid(), code: z.string(), name: z.string() }),
+      calculations: z.object({
+        total: z.number().int(),
+        notComputed: z.number().int(),
+        verified: z.number().int(),
+        toVerify: z.number().int(),
+        rejected: z.number().int(),
+        nonCompliant: z.number().int(),
+        obsolete: z.number().int(),
+      }),
+      traverses: z.array(
+        z.object({
+          calculationId: z.uuid(),
+          title: z.string(),
+          engineId: z.string(),
+          revisionNumber: z.number().int(),
+          workflowStatus: workflowStatusSchema,
+          resultStatus: resultStatusSchema,
+          perimeter: z.number().nullable(),
+          closure: z.number().nullable(),
+          relativePrecision: z.number().nullable(),
+          obsolete: z.boolean(),
+        }),
+      ),
+      nonCompliant: z.array(
+        z.object({
+          calculationId: z.uuid(),
+          title: z.string(),
+          engineId: z.string(),
+          engineTitle: z.string(),
+        }),
+      ),
+    }),
+  ),
+  truncated: z.boolean(),
+  engines: z.object({
+    total: z.number().int(),
+    verified: z.number().int(),
+    cases: z.number().int(),
+    checkedCases: z.number().int(),
+  }),
+});
+export type TopographyDashboardDto = z.infer<typeof topographyDashboardSchema>;

@@ -2,6 +2,7 @@ import { createApplication, type Application, type Mailer } from '@consulpro/app
 import { BTP_ENGINES } from '@consulpro/calc-btp';
 import { ELEC_ENGINES } from '@consulpro/calc-elec';
 import { PLUMBING_ENGINES } from '@consulpro/calc-plumbing';
+import { TOPO_ENGINES } from '@consulpro/calc-topo';
 import { EngineRegistry } from '@consulpro/calc-core';
 import { DEMO_ENGINES } from '@consulpro/calc-demo';
 import { createDatabase, type Database } from '@consulpro/db';
@@ -11,7 +12,12 @@ import { createUnitOfWork } from './persistence/unit-of-work';
 import { sha256Hasher, systemClock, tokenService, uuidV7Generator } from './system/services';
 
 export { createAuth, type Auth, type AuthConfig } from './auth/auth';
-export { createSmtpMailer, MemoryMailer, type SmtpConfig } from './mail/smtp-mailer';
+export {
+  createNoopMailer,
+  createSmtpMailer,
+  MemoryMailer,
+  type SmtpConfig,
+} from './mail/smtp-mailer';
 export { createRepositories } from './persistence/repositories';
 export { createUnitOfWork } from './persistence/unit-of-work';
 export { loadStandard, setPlatformAdmin, type LoadResult } from './standards/load-standard';
@@ -24,6 +30,8 @@ export interface InfrastructureConfig {
   readonly authSecret: string;
   readonly mailer: Mailer;
   readonly rateLimit?: boolean;
+  /** Exiger la vérification e-mail à l'inscription (défaut : true ; false sans SMTP). */
+  readonly requireEmailVerification?: boolean;
   /**
    * Moteurs de démonstration (sans valeur technique) : développement et test uniquement
    * (CONSULPRO_DEMO_ENGINES=true). Les moteurs métier sont toujours enregistrés.
@@ -39,6 +47,7 @@ export function createEngineRegistry(options: { demoEngines: boolean }): EngineR
   for (const engine of BTP_ENGINES) registry.register(engine);
   for (const engine of ELEC_ENGINES) registry.register(engine);
   for (const engine of PLUMBING_ENGINES) registry.register(engine);
+  for (const engine of TOPO_ENGINES) registry.register(engine);
   if (options.demoEngines) for (const engine of DEMO_ENGINES) registry.register(engine);
   return registry;
 }
@@ -70,6 +79,9 @@ export function createInfrastructure(config: InfrastructureConfig): Infrastructu
     mailer: config.mailer,
     audit: app.audit,
     ...(config.rateLimit === undefined ? {} : { rateLimit: config.rateLimit }),
+    ...(config.requireEmailVerification === undefined
+      ? {}
+      : { requireEmailVerification: config.requireEmailVerification }),
   });
   return { db, app, auth };
 }

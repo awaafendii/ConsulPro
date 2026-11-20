@@ -77,6 +77,7 @@ If-Match obligatoire sur PATCH et DELETE).
 | 4 — BTP (quantités) | Validée (2026-10-13) |
 | 5 — Électricité | Validée (2026-10-13) |
 | 6 — Plomberie & Sanitaire | Validée (2026-10-14) |
-| 7 à 10           | À faire |
+| 7 — Topographie + cœur d'import | Validée (2026-11-20) |
+| 8 à 10           | À faire |
 
 Critères de sortie de chaque phase : `docs/architecture/07-roadmap.md`.

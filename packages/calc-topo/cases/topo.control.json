@@ -1,0 +1,218 @@
+{
+  "engine": "topo.control",
+  "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+  "cases": [
+    {
+      "id": "topo.control/planimetric-only-within",
+      "engine": "topo.control",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Contrôle planimétrique seul. Théorique (1000;2000), levé (1000,02;2000,03) : ΔX = 0,02 ; ΔY = 0,03 ; e_p = √(0,02²+0,03²) = 0,0360555128 m ≤ 0,05 → conforme. Pas d’altitude : ΔZ et écart altimétrique nuls (null).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "xT": { "value": 1000, "unit": "m" },
+        "yT": { "value": 2000, "unit": "m" },
+        "xM": { "value": 1000.02, "unit": "m" },
+        "yM": { "value": 2000.03, "unit": "m" }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "deltaX": { "value": 0.02, "tolerance": 1e-9 },
+          "deltaY": { "value": 0.03, "tolerance": 1e-9 },
+          "deltaZ": { "value": null, "tolerance": 0 },
+          "planimetricDeviation": { "value": 0.036055512754607104, "tolerance": 1e-9 },
+          "altimetricDeviation": { "value": null, "tolerance": 0 }
+        },
+        "checks": [{ "rule": "topo.control.planimetric", "status": "PASS" }],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.control/3d-within-tolerance",
+      "engine": "topo.control",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Contrôle 3D. Théorique (500;500;100), levé (500,01;500,02;100,015) : ΔX = 0,01 ; ΔY = 0,02 ; e_p = 0,0223606798 m ≤ 0,05 ; ΔZ = 0,015 ; |ΔZ| = 0,015 ≤ 0,05 → conforme (planimétrique et altimétrique).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "xT": { "value": 500, "unit": "m" },
+        "yT": { "value": 500, "unit": "m" },
+        "zT": { "value": 100, "unit": "m" },
+        "xM": { "value": 500.01, "unit": "m" },
+        "yM": { "value": 500.02, "unit": "m" },
+        "zM": { "value": 100.015, "unit": "m" }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "deltaX": { "value": 0.01, "tolerance": 1e-9 },
+          "deltaY": { "value": 0.02, "tolerance": 1e-9 },
+          "deltaZ": { "value": 0.015, "tolerance": 1e-9 },
+          "planimetricDeviation": { "value": 0.022360679774977563, "tolerance": 1e-9 },
+          "altimetricDeviation": { "value": 0.015, "tolerance": 1e-9 }
+        },
+        "checks": [
+          { "rule": "topo.control.planimetric", "status": "PASS" },
+          { "rule": "topo.control.altimetric", "status": "PASS" }
+        ],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.control/3d-planimetric-over-tolerance",
+      "engine": "topo.control",
+      "engineVersionRange": "^1.0.0",
+      "category": "NOMINAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Contrôle 3D hors tolérance planimétrique. Théorique (0;0;10), levé (0,04;0,04;10,02) : ΔX = ΔY = 0,04 ; e_p = √(0,04²+0,04²) = 0,0565685425 m > 0,05 → non conforme (BLOQUANT). ΔZ = 0,02 ≤ 0,05 → altimétrique conforme.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "xT": { "value": 0, "unit": "m" },
+        "yT": { "value": 0, "unit": "m" },
+        "zT": { "value": 10, "unit": "m" },
+        "xM": { "value": 0.04, "unit": "m" },
+        "yM": { "value": 0.04, "unit": "m" },
+        "zM": { "value": 10.02, "unit": "m" }
+      },
+      "expected": {
+        "resultStatus": "NON_COMPLIANT",
+        "outputs": {
+          "deltaX": { "value": 0.04, "tolerance": 1e-9 },
+          "deltaY": { "value": 0.04, "tolerance": 1e-9 },
+          "deltaZ": { "value": 0.02, "tolerance": 1e-9 },
+          "planimetricDeviation": { "value": 0.05656854249492381, "tolerance": 1e-9 },
+          "altimetricDeviation": { "value": 0.02, "tolerance": 1e-9 }
+        },
+        "checks": [
+          { "rule": "topo.control.planimetric", "status": "FAIL" },
+          { "rule": "topo.control.altimetric", "status": "PASS" }
+        ],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.control/planimetric-near-tolerance",
+      "engine": "topo.control",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Cas limite sous la tolérance planimétrique : théorique (1000;1000), levé (1000;1000,048) : ΔX = 0 ; ΔY = 0,048 ; e_p = 0,048 m ≤ 0,05 → conforme.",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "xT": { "value": 1000, "unit": "m" },
+        "yT": { "value": 1000, "unit": "m" },
+        "xM": { "value": 1000, "unit": "m" },
+        "yM": { "value": 1000.048, "unit": "m" }
+      },
+      "expected": {
+        "resultStatus": "OK_WITH_WARNINGS",
+        "outputs": {
+          "deltaX": { "value": 0, "tolerance": 1e-9 },
+          "deltaY": { "value": 0.048, "tolerance": 1e-9 },
+          "deltaZ": { "value": null, "tolerance": 0 },
+          "planimetricDeviation": { "value": 0.048, "tolerance": 1e-9 },
+          "altimetricDeviation": { "value": null, "tolerance": 0 }
+        },
+        "checks": [{ "rule": "topo.control.planimetric", "status": "PASS" }],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.control/planimetric-just-over-tolerance",
+      "engine": "topo.control",
+      "engineVersionRange": "^1.0.0",
+      "category": "LIMIT",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Cas limite au-dessus de la tolérance planimétrique : théorique (1000;1000), levé (1000;1000,052) : ΔX = 0 ; ΔY = 0,052 ; e_p = 0,052 m > 0,05 → non conforme (BLOQUANT).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "xT": { "value": 1000, "unit": "m" },
+        "yT": { "value": 1000, "unit": "m" },
+        "xM": { "value": 1000, "unit": "m" },
+        "yM": { "value": 1000.052, "unit": "m" }
+      },
+      "expected": {
+        "resultStatus": "NON_COMPLIANT",
+        "outputs": {
+          "deltaX": { "value": 0, "tolerance": 1e-9 },
+          "deltaY": { "value": 0.052, "tolerance": 1e-9 },
+          "deltaZ": { "value": null, "tolerance": 0 },
+          "planimetricDeviation": { "value": 0.052, "tolerance": 1e-9 },
+          "altimetricDeviation": { "value": null, "tolerance": 0 }
+        },
+        "checks": [{ "rule": "topo.control.planimetric", "status": "FAIL" }],
+        "hypotheses": ["TOPO.ANGLE_CONVENTION"]
+      }
+    },
+    {
+      "id": "topo.control/altitude-pair-incomplete",
+      "engine": "topo.control",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Altitude théorique fournie sans altitude levée : il faut fournir les deux ou aucune, entrée refusée au schéma (ALTITUDE_PAIR sur zM).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "xT": { "value": 0, "unit": "m" },
+        "yT": { "value": 0, "unit": "m" },
+        "zT": { "value": 10, "unit": "m" },
+        "xM": { "value": 0.01, "unit": "m" },
+        "yM": { "value": 0.01, "unit": "m" }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [{ "path": "zM", "code": "ALTITUDE_PAIR" }]
+      }
+    },
+    {
+      "id": "topo.control/surveyed-coordinate-out-of-range",
+      "engine": "topo.control",
+      "engineVersionRange": "^1.0.0",
+      "category": "REFUSAL",
+      "source": {
+        "kind": "HAND_CALCULATION",
+        "reference": "Abscisse levée de 200 000 km (2e8 m) : au-delà du domaine admissible (±100 000 km), entrée refusée au schéma (OUT_OF_RANGE sur xM.value).",
+        "checkedBy": null,
+        "checkedAt": null
+      },
+      "parameterSet": { "standard": "CONSULPRO-TOPO-TOL", "version": "2026" },
+      "inputs": {
+        "xT": { "value": 0, "unit": "m" },
+        "yT": { "value": 0, "unit": "m" },
+        "xM": { "value": 200000000, "unit": "m" },
+        "yM": { "value": 0, "unit": "m" }
+      },
+      "expected": {
+        "resultStatus": "INVALID",
+        "errors": [{ "path": "xM.value", "code": "OUT_OF_RANGE" }]
+      }
+    }
+  ]
+}

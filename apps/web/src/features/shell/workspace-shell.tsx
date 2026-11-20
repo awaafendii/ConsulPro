@@ -42,6 +42,7 @@ import type { ReactNode } from 'react';
 import { useSignOut } from '@/components/sign-out-button';
 
 import { NotificationsBell } from './notifications-bell';
+import { InstallButton } from './pwa/install-button';
 
 const ICONS: Readonly<Record<string, LucideIcon>> = {
   dashboard: LayoutDashboard,
@@ -237,6 +238,7 @@ export function WorkspaceShell({
               <Search aria-hidden />
             </AppLink>
           </Button>
+          <InstallButton />
           <NotificationsBell />
           <ThemeToggle label={tCommon('theme')} />
         </>

@@ -6,3 +6,7 @@
 *.pdf  binary
 *.xlsx binary
 *.docx binary
+
+# Corpus de fixtures d'import : stocké verbatim — fins de ligne (CRLF) et encodage
+# (Windows-1252) font partie du cas testé et ne doivent pas être normalisés.
+packages/importers/__fixtures__/** binary

@@ -1,0 +1,5 @@
+.vercel
+.env*
+
+# Fichier d'instructions agent (local, non versionné)
+AGENTS.md

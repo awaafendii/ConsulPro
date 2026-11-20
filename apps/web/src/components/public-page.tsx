@@ -22,6 +22,7 @@ export async function PublicPage({
       description={description}
       footer={footer}
       corner={<ThemeToggle label={t('theme')} />}
+      tagline={t('tagline')}
     >
       {children}
     </AuthLayout>

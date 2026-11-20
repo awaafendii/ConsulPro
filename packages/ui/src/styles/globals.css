@@ -1,5 +1,6 @@
 /*
  * ConsulPro — design system : tokens et styles de base.
+ * Direction « Encre & Laiton » : papier ivoire, encre bleu nuit, accent laiton.
  * Documentation : docs/architecture/14-design-system.md
  * Les contrastes WCAG 2.2 AA de chaque paire de tokens sont vérifiés par
  * src/styles/__tests__/contrast.test.ts (clair ET sombre).
@@ -8,6 +9,7 @@
 @import 'tw-animate-css';
 @import '@fontsource-variable/inter';
 @import '@fontsource-variable/jetbrains-mono';
+@import '@fontsource-variable/fraunces';
 @import 'katex/dist/katex.min.css';
 
 /* Classes utilisées par les composants du package. */
@@ -19,56 +21,67 @@
 /* Thème clair                                                                */
 /* -------------------------------------------------------------------------- */
 :root {
-  --radius: 0.5rem;
+  --radius: 0.625rem;
 
-  --background: oklch(0.985 0.002 250);
-  --foreground: oklch(0.21 0.02 258);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.21 0.02 258);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.21 0.02 258);
+  /* Surfaces : papier ivoire, cartes blanc chaud. */
+  --background: oklch(0.983 0.005 85);
+  --foreground: oklch(0.2 0.03 262);
+  --card: oklch(0.998 0.002 85);
+  --card-foreground: oklch(0.2 0.03 262);
+  --popover: oklch(0.998 0.002 85);
+  --popover-foreground: oklch(0.2 0.03 262);
 
-  /* Bleu « ingénierie » : action principale, liens, focus. */
-  --primary: oklch(0.46 0.14 256);
-  --primary-foreground: oklch(0.99 0.003 250);
-  --secondary: oklch(0.955 0.006 250);
-  --secondary-foreground: oklch(0.25 0.02 258);
-  --muted: oklch(0.955 0.006 250);
-  --muted-foreground: oklch(0.47 0.02 258);
-  --accent: oklch(0.94 0.013 250);
-  --accent-foreground: oklch(0.23 0.03 258);
+  /* Encre bleu nuit : action principale, liens. */
+  --primary: oklch(0.27 0.065 262);
+  --primary-foreground: oklch(0.985 0.008 85);
+  --secondary: oklch(0.955 0.009 85);
+  --secondary-foreground: oklch(0.25 0.03 262);
+  --muted: oklch(0.96 0.008 85);
+  --muted-foreground: oklch(0.46 0.02 262);
+  --accent: oklch(0.94 0.018 85);
+  --accent-foreground: oklch(0.23 0.03 262);
+
+  /* Laiton : accent de marque, décoratif (filets, repères, pastilles). */
+  --brand: oklch(0.74 0.12 82);
+  --brand-foreground: oklch(0.22 0.04 262);
 
   /* Statuts : plein (badge, bouton) et atténué (encadré). */
   --destructive: oklch(0.52 0.19 27);
-  --destructive-foreground: oklch(0.99 0.003 250);
+  --destructive-foreground: oklch(0.99 0.005 85);
   --destructive-subtle: oklch(0.965 0.018 25);
   --destructive-subtle-foreground: oklch(0.44 0.16 27);
   --success: oklch(0.5 0.12 152);
-  --success-foreground: oklch(0.99 0.003 250);
+  --success-foreground: oklch(0.99 0.005 85);
   --success-subtle: oklch(0.965 0.025 152);
   --success-subtle-foreground: oklch(0.4 0.1 152);
   --warning: oklch(0.79 0.15 78);
   --warning-foreground: oklch(0.26 0.05 60);
   --warning-subtle: oklch(0.975 0.035 88);
   --warning-subtle-foreground: oklch(0.43 0.1 60);
-  --info: oklch(0.5 0.12 242);
-  --info-foreground: oklch(0.99 0.003 250);
-  --info-subtle: oklch(0.965 0.018 242);
-  --info-subtle-foreground: oklch(0.42 0.11 245);
+  --info: oklch(0.5 0.12 250);
+  --info-foreground: oklch(0.99 0.005 85);
+  --info-subtle: oklch(0.965 0.018 250);
+  --info-subtle-foreground: oklch(0.42 0.11 252);
 
-  --border: oklch(0.91 0.008 250);
+  --border: oklch(0.905 0.011 85);
   /* Contour des champs : contraste ≥ 3:1 (WCAG 1.4.11). */
-  --input: oklch(0.62 0.02 258);
-  --ring: oklch(0.52 0.14 256);
+  --input: oklch(0.62 0.02 262);
+  /* Focus : laiton foncé, ≥ 3:1 sur les surfaces claires. */
+  --ring: oklch(0.58 0.12 75);
 
-  --sidebar: oklch(0.97 0.004 250);
-  --sidebar-foreground: oklch(0.3 0.02 258);
-  --sidebar-primary: oklch(0.46 0.14 256);
-  --sidebar-primary-foreground: oklch(0.99 0.003 250);
-  --sidebar-accent: oklch(0.925 0.013 250);
-  --sidebar-accent-foreground: oklch(0.2 0.02 258);
-  --sidebar-border: oklch(0.9 0.008 250);
-  --sidebar-ring: oklch(0.52 0.14 256);
+  /* Barre latérale : encre, dans les deux thèmes. */
+  --sidebar: oklch(0.21 0.035 262);
+  --sidebar-foreground: oklch(0.9 0.012 85);
+  --sidebar-primary: oklch(0.78 0.11 82);
+  --sidebar-primary-foreground: oklch(0.2 0.035 262);
+  --sidebar-accent: oklch(0.285 0.045 262);
+  --sidebar-accent-foreground: oklch(0.97 0.008 85);
+  --sidebar-border: oklch(0.31 0.035 262);
+  --sidebar-ring: oklch(0.78 0.11 82);
+
+  /* Ombres : teintées d'encre, superposées. */
+  --shadow-tint: 0.2 0.03 262;
+  --shadow-strength: 1;
 
   /* Mouvement */
   --duration-fast: 120ms;
@@ -80,61 +93,71 @@
 /* Thème sombre                                                               */
 /* -------------------------------------------------------------------------- */
 .dark {
-  --background: oklch(0.17 0.012 258);
-  --foreground: oklch(0.95 0.005 250);
-  --card: oklch(0.205 0.014 258);
-  --card-foreground: oklch(0.95 0.005 250);
-  --popover: oklch(0.215 0.015 258);
-  --popover-foreground: oklch(0.95 0.005 250);
+  --background: oklch(0.165 0.022 262);
+  --foreground: oklch(0.95 0.008 85);
+  --card: oklch(0.205 0.026 262);
+  --card-foreground: oklch(0.95 0.008 85);
+  --popover: oklch(0.225 0.028 262);
+  --popover-foreground: oklch(0.95 0.008 85);
 
-  --primary: oklch(0.74 0.12 250);
-  --primary-foreground: oklch(0.17 0.02 258);
-  --secondary: oklch(0.26 0.015 258);
-  --secondary-foreground: oklch(0.95 0.005 250);
-  --muted: oklch(0.25 0.015 258);
-  --muted-foreground: oklch(0.73 0.015 250);
-  --accent: oklch(0.29 0.02 258);
-  --accent-foreground: oklch(0.97 0.005 250);
+  /* En sombre, l'action principale passe au champagne. */
+  --primary: oklch(0.82 0.1 85);
+  --primary-foreground: oklch(0.19 0.03 262);
+  --secondary: oklch(0.26 0.028 262);
+  --secondary-foreground: oklch(0.95 0.008 85);
+  --muted: oklch(0.25 0.026 262);
+  --muted-foreground: oklch(0.74 0.015 85);
+  --accent: oklch(0.29 0.032 262);
+  --accent-foreground: oklch(0.97 0.008 85);
+
+  --brand: oklch(0.82 0.1 85);
+  --brand-foreground: oklch(0.19 0.03 262);
 
   --destructive: oklch(0.7 0.17 25);
-  --destructive-foreground: oklch(0.17 0.02 258);
+  --destructive-foreground: oklch(0.17 0.02 262);
   --destructive-subtle: oklch(0.27 0.05 25);
   --destructive-subtle-foreground: oklch(0.85 0.08 25);
   --success: oklch(0.74 0.14 152);
-  --success-foreground: oklch(0.17 0.02 258);
+  --success-foreground: oklch(0.17 0.02 262);
   --success-subtle: oklch(0.26 0.04 152);
   --success-subtle-foreground: oklch(0.85 0.09 152);
   --warning: oklch(0.82 0.14 80);
   --warning-foreground: oklch(0.2 0.03 60);
   --warning-subtle: oklch(0.27 0.04 75);
   --warning-subtle-foreground: oklch(0.88 0.09 85);
-  --info: oklch(0.75 0.11 242);
-  --info-foreground: oklch(0.17 0.02 258);
-  --info-subtle: oklch(0.26 0.04 245);
-  --info-subtle-foreground: oklch(0.85 0.07 240);
+  --info: oklch(0.75 0.11 250);
+  --info-foreground: oklch(0.17 0.02 262);
+  --info-subtle: oklch(0.26 0.04 252);
+  --info-subtle-foreground: oklch(0.85 0.07 248);
 
-  --border: oklch(0.3 0.015 258);
-  --input: oklch(0.52 0.02 258);
-  --ring: oklch(0.74 0.12 250);
+  --border: oklch(0.3 0.026 262);
+  --input: oklch(0.52 0.025 262);
+  --ring: oklch(0.82 0.1 85);
 
-  --sidebar: oklch(0.19 0.013 258);
-  --sidebar-foreground: oklch(0.86 0.01 250);
-  --sidebar-primary: oklch(0.74 0.12 250);
-  --sidebar-primary-foreground: oklch(0.17 0.02 258);
-  --sidebar-accent: oklch(0.27 0.018 258);
-  --sidebar-accent-foreground: oklch(0.97 0.005 250);
-  --sidebar-border: oklch(0.28 0.015 258);
-  --sidebar-ring: oklch(0.74 0.12 250);
+  --sidebar: oklch(0.14 0.02 262);
+  --sidebar-foreground: oklch(0.88 0.012 85);
+  --sidebar-primary: oklch(0.82 0.1 85);
+  --sidebar-primary-foreground: oklch(0.19 0.03 262);
+  --sidebar-accent: oklch(0.245 0.03 262);
+  --sidebar-accent-foreground: oklch(0.97 0.008 85);
+  --sidebar-border: oklch(0.26 0.026 262);
+  --sidebar-ring: oklch(0.82 0.1 85);
+
+  --shadow-tint: 0.05 0.01 262;
+  --shadow-strength: 4;
 }
 
 @theme inline {
   --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono Variable', ui-monospace, 'Cascadia Code', monospace;
+  /* Titres : sérif d'affichage. */
+  --font-display: 'Fraunces Variable', ui-serif, Georgia, 'Times New Roman', serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -150,6 +173,8 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-destructive-subtle: var(--destructive-subtle);
@@ -178,6 +203,18 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
+  /* Élévation : quatre niveaux, teinte et intensité pilotées par le thème. */
+  --shadow-xs: 0 1px 2px 0 oklch(var(--shadow-tint) / calc(0.05 * var(--shadow-strength)));
+  --shadow-sm:
+    0 1px 2px 0 oklch(var(--shadow-tint) / calc(0.05 * var(--shadow-strength))),
+    0 2px 8px -2px oklch(var(--shadow-tint) / calc(0.06 * var(--shadow-strength)));
+  --shadow-md:
+    0 2px 4px -1px oklch(var(--shadow-tint) / calc(0.05 * var(--shadow-strength))),
+    0 8px 20px -6px oklch(var(--shadow-tint) / calc(0.1 * var(--shadow-strength)));
+  --shadow-lg:
+    0 4px 8px -2px oklch(var(--shadow-tint) / calc(0.05 * var(--shadow-strength))),
+    0 20px 40px -12px oklch(var(--shadow-tint) / calc(0.16 * var(--shadow-strength)));
+
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
 }
 
@@ -195,10 +232,46 @@
     @apply bg-background text-foreground font-sans antialiased;
     font-feature-settings: 'cv11', 'ss03';
   }
+  /* Titre de page : sérif d'affichage (un seul <h1> par page). */
+  h1 {
+    font-family: var(--font-display);
+    font-feature-settings: normal;
+    font-optical-sizing: auto;
+    letter-spacing: -0.015em;
+  }
+  ::selection {
+    background-color: var(--brand);
+    color: var(--brand-foreground);
+  }
   /* Chiffres alignés dans les tableaux et résultats. */
   table,
   .tabular {
     font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer utilities {
+  /* Filet laiton : signature de marque sous un titre ou en tête d'une surface. */
+  .brand-rule {
+    background-image: linear-gradient(
+      90deg,
+      var(--brand),
+      color-mix(in oklab, var(--brand) 0%, transparent)
+    );
+  }
+  /* Trame « plan d'exécution » : quadrillage discret pour les surfaces d'encre. */
+  .blueprint-grid {
+    background-image:
+      linear-gradient(
+        color-mix(in oklab, var(--sidebar-foreground) 6%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        90deg,
+        color-mix(in oklab, var(--sidebar-foreground) 6%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 32px 32px;
   }
 }
 

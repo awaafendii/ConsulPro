@@ -11,6 +11,12 @@ export const config = defineConfig({
     include: ['src/**/*.test.{ts,tsx}'],
     setupFiles: ['./vitest.setup.ts'],
     css: false,
+    // Les tests d'interaction (jsdom + Radix/cmdk) attendent des mises à jour asynchrones ;
+    // sous couverture et exécution parallèle sur une machine chargée, le délai par défaut
+    // (5 s) est trop court et provoque des échecs intermittents. On l'élargit (les assertions
+    // sont inchangées : on attend seulement plus longtemps un résultat attendu).
+    testTimeout: 20_000,
+    hookTimeout: 20_000,
     coverage: {
       provider: 'v8',
       include: ['src/**/*.{ts,tsx}'],

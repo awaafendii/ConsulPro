@@ -159,7 +159,7 @@ function ShellLayout({
           <div className="min-w-0 flex-1">{headerStart}</div>
           <Button
             variant="outline"
-            className="h-9 gap-2 px-2 text-muted-foreground sm:w-56 sm:justify-start sm:px-3"
+            className="h-9 gap-2 bg-card px-2 text-muted-foreground sm:w-64 sm:justify-start sm:px-3"
             onClick={() => {
               setPaletteOpen(true);
             }}
@@ -176,7 +176,7 @@ function ShellLayout({
         <main
           id="contenu-principal"
           tabIndex={-1}
-          className="flex-1 px-4 py-6 outline-none sm:px-6 lg:px-8"
+          className="mx-auto w-full max-w-[100rem] flex-1 px-4 py-6 outline-none sm:px-6 sm:py-8 lg:px-10"
         >
           {children}
         </main>

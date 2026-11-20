@@ -1,10 +1,14 @@
 import '@testing-library/jest-dom/vitest';
 
-import { cleanup } from '@testing-library/react';
+import { cleanup, configure } from '@testing-library/react';
 import { afterEach } from 'vitest';
 
 // Certains tests (tokens) s'exécutent sans DOM : les bouchons ne s'appliquent qu'avec jsdom.
 if (typeof window !== 'undefined') {
+  // Les utilitaires asynchrones (findBy, waitFor) ont par défaut 1 s : trop court sous charge
+  // (couverture + exécution parallèle). On élargit l'attente sans changer les assertions.
+  configure({ asyncUtilTimeout: 5000 });
+
   afterEach(() => {
     cleanup();
   });

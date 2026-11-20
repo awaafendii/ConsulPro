@@ -11,6 +11,7 @@ const COLORS = [
   ['secondary', 'secondary-foreground'],
   ['muted', 'muted-foreground'],
   ['accent', 'accent-foreground'],
+  ['brand', 'brand-foreground'],
   ['destructive', 'destructive-foreground'],
   ['destructive-subtle', 'destructive-subtle-foreground'],
   ['success', 'success-foreground'],
@@ -43,7 +44,9 @@ export const Couleurs: StoryObj = {
 export const Typographie: StoryObj = {
   render: () => (
     <div className="space-y-3">
-      <p className="text-3xl font-semibold tracking-tight">Titre de page — text-2xl/3xl</p>
+      <p className="font-display text-3xl font-medium tracking-tight">
+        Titre de page — font-display (Fraunces)
+      </p>
       <p className="text-xl font-semibold">Titre de section — text-xl</p>
       <p className="text-base">Texte courant — text-base (Inter)</p>
       <p className="text-sm text-muted-foreground">Texte secondaire — text-sm muted</p>
