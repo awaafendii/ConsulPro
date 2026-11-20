@@ -318,9 +318,11 @@ DQE, présentation agrégée au choix.
 
 ## Phase 7 — Topographie + cœur du pipeline d'import *(ajustement I3)*
 
-**État (2026-11-19)** : partie **Topographie livrée et testée** (moteurs `topo.*`, jeux de
-points et d'observations, module, E2E). Le **cœur du pipeline d'import** (package `importers`)
-**n'est pas encore réalisé** ; les critères de sortie ci-dessous restent ouverts.
+**État (2026-11-20)** : **Validée**. Topographie livrée et testée (moteurs `topo.*`, jeux de
+points et d'observations, module, E2E) ; **cœur du pipeline d'import** livré (package
+`importers` : détection, décodage UTF-8/Windows-1252, délimité, XLSX, tableau HTML, mapping,
+coercition dont angles DMS, aperçu et import) avec UI dans l'onglet Données. Les trois critères
+de sortie ci-dessous sont atteints.
 
 **Livrables** : moteurs `topo.*`, jeux de points et d'observations, conventions
 d'angles paramétrables, tolérances paramétrables ; **package `importers`** (XLSX, CSV,
@@ -328,9 +330,10 @@ copier-coller Excel et Word ; détection, mapping, validation, aperçu, import) 
 aux jeux de points et d'observations.
 
 **Critères de sortie**
-- [ ] Propriétés : fermeture nulle après Bowditch, cohérence du nivellement compensé.
-- [ ] Corpus de fixtures d'import ([06 §5](06-strategie-de-tests.md)) entièrement passant.
-- [ ] Mesure des performances sur un levé de 50 000 points (décision sur le stockage `jsonb`).
+- [x] Propriétés : fermeture nulle après Bowditch, cohérence du nivellement compensé.
+- [x] Corpus de fixtures d'import ([06 §5](06-strategie-de-tests.md)) entièrement passant.
+- [x] Mesure des performances sur un levé de 50 000 points (décision sur le stockage `jsonb`,
+  [ADR-0012](../adr/0012-stockage-jsonb-jeux-de-donnees.md) : ≈ 265 ms, blob ≈ 7,1 Mio).
 
 ---
 
