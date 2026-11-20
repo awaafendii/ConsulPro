@@ -1,0 +1,4 @@
+Repère du tronçon;Tronçon amont (repère);Longueur;Altitude du point aval (par rapport à l’origine);Emplacement;Appareils desservis;Nombre d’appareils
+T0;;12,5;-1,2;Sous-sol ou vide sanitaire;;
+T1;T0;8;2,4;En étage;Évier;1
+T2;T0;5,25;2,8;En étage;Lavabo;2

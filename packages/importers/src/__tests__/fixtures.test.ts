@@ -16,6 +16,9 @@ const bytes = (name: string): Uint8Array =>
 const ROOMS = DATASET_KINDS.ROOMS.columns;
 const POINTS = DATASET_KINDS.TOPO_POINTS.columns;
 const OBS = DATASET_KINDS.TOPO_OBSERVATIONS.columns;
+const BOARD = DATASET_KINDS.ELEC_BOARD_TREE.columns;
+const SANITARY = DATASET_KINDS.SANITARY_FIXTURES.columns;
+const NETWORK = DATASET_KINDS.PLUMBING_NETWORK.columns;
 
 describe('détection par le contenu', () => {
   it('reconnaît un classeur XLSX à sa signature, un texte sinon (extension ignorée)', () => {
@@ -115,5 +118,55 @@ describe('classeur XLSX', () => {
     expect(rows).toHaveLength(3);
     expect(rows[0]).toMatchObject({ pointId: 'P1', x: { value: 1000.25, unit: 'm' } });
     expect(rows[2]).toMatchObject({ pointId: 'P3', y: { value: 2030.8, unit: 'm' } });
+  });
+});
+
+describe('arborescence électrique (ÉLEC, CSV FR)', () => {
+  it('rapproche les choix par libellé, lit kW et les coefficients décimaux, valide l’arbre', () => {
+    const grid = readGrid(bytes('elec-board-fr.csv'));
+    const rows = gridToRows(BOARD, grid, undefined, { power: 'kW' });
+    const result = validateRows('ELEC_BOARD_TREE', rows);
+    expect(result.ok).toBe(true);
+    // « Tableau » / « Départ / récepteurs » rapprochés vers les valeurs BOARD / LOAD.
+    expect(rows.map((r) => r.type)).toEqual(['BOARD', 'LOAD', 'LOAD']);
+    expect(rows[0]).toMatchObject({ code: 'TGBT', parent: null, ks: 0.9 });
+    expect(rows[1]).toMatchObject({
+      code: 'D1',
+      parent: 'TGBT',
+      power: { value: 3.5, unit: 'kW' },
+      count: 6,
+      ku: 0.8,
+      cosPhi: 0.85,
+    });
+    expect(rows[2]).toMatchObject({ code: 'D2', power: { value: 2, unit: 'kW' }, cosPhi: 0.9 });
+  });
+});
+
+describe('appareils sanitaires (PLOMBERIE, CSV FR)', () => {
+  it('rapproche le type d’appareil par libellé et lit le nombre entier', () => {
+    const grid = readGrid(bytes('sanitary-fixtures.csv'));
+    const rows = gridToRows(SANITARY, grid);
+    expect(validateRows('SANITARY_FIXTURES', rows).ok).toBe(true);
+    expect(rows.map((r) => r.fixture)).toEqual(['SINK', 'WC_CISTERN', 'WASHBASIN']);
+    expect(rows[0]).toMatchObject({ level: 'RDC', room: 'Cuisine', count: 1 });
+    expect(rows[2]).toMatchObject({ level: 'Étage', count: 2 });
+  });
+});
+
+describe('réseau d’alimentation (PLOMBERIE, CSV FR)', () => {
+  it('lit longueurs et altitudes (négative admise), rapproche l’emplacement, valide l’arbre', () => {
+    const grid = readGrid(bytes('plumbing-network.csv'));
+    const rows = gridToRows(NETWORK, grid, undefined, { length: 'm', elevation: 'm' });
+    const result = validateRows('PLUMBING_NETWORK', rows);
+    expect(result.ok).toBe(true);
+    expect(rows[0]).toMatchObject({
+      code: 'T0',
+      parent: null,
+      length: { value: 12.5, unit: 'm' },
+      elevation: { value: -1.2, unit: 'm' },
+      location: 'BASEMENT',
+    });
+    expect(rows[1]).toMatchObject({ code: 'T1', parent: 'T0', location: 'FLOOR', fixture: 'SINK', count: 1 });
+    expect(rows[2]).toMatchObject({ code: 'T2', fixture: 'WASHBASIN', count: 2 });
   });
 });

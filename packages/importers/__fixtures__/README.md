@@ -4,7 +4,10 @@ Jeux d'essai versionnés du cœur d'import (Phase 7, critère de sortie
 [07 §Phase 7](../../../docs/architecture/07-roadmap.md), spécifié par
 [06 §5](../../../docs/architecture/06-strategie-de-tests.md)). Chaque fichier
 exerce une difficulté réelle de lecture, de rapprochement ou de coercition.
-Parcourus par `src/__tests__/fixtures.test.ts`.
+Parcourus par `src/__tests__/fixtures.test.ts`. Les fixtures ÉLEC et PLOMBERIE
+ont été ajoutées en Phase 8 (imports généralisés aux autres métiers) : le moteur
+étant indépendant du type de jeu, elles prouvent l'import de bout en bout pour
+chaque métier.
 
 | Fichier | Difficulté couverte |
 | --- | --- |
@@ -15,6 +18,9 @@ Parcourus par `src/__tests__/fixtures.test.ts`.
 | `observations-angles.csv` | Angles en degrés-minutes-secondes et en décimal (gon) |
 | `rooms-formula-injection.csv` | Cellules hostiles commençant par `=`, `+`, `-`, `@` (importées en texte) |
 | `points.xlsx` | Classeur XLSX : deux feuilles (seule la 1re est lue), ligne vide, formule (valeur en cache) |
+| `elec-board-fr.csv` | ÉLEC (`ELEC_BOARD_TREE`) : choix par libellé, puissance kW, coefficients décimaux FR, arbre tableaux/départs |
+| `sanitary-fixtures.csv` | PLOMBERIE (`SANITARY_FIXTURES`) : type d'appareil par libellé, nombre entier |
+| `plumbing-network.csv` | PLOMBERIE (`PLUMBING_NETWORK`) : longueurs/altitudes (négative admise), emplacement par libellé, arbre de réseau |
 
 Cas sans fichier, vérifiés directement dans les tests : extension trompeuse
 (détection par le contenu, pas par le nom), classeur surdimensionné (garde
